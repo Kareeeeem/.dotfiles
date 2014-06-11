@@ -45,13 +45,13 @@ Plugin 'scrooloose/nerdtree'
 call vundle#end()
 
 " Set up colorscheme
-set background=light
+set background=dark
 colorscheme solarized
 " Toggle between dark and light themes
 nnoremap <Leader><tab> :call ToggleBg()<CR>
 
 function! ToggleBg()
-    if &background=="dark"
+    if &background=="light"
         set background=dark
     else
         set background=light
