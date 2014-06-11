@@ -28,13 +28,7 @@ call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'Lokaltog/vim-distinguished'
-Plugin 'tomasr/molokai'
 Plugin 'altercation/vim-colors-solarized'
-Plugin 'wesgibbs/vim-irblack'
-Plugin 'tpope/vim-vividchalk'
-Plugin 'nanotech/jellybeans.vim'
-Plugin 'fugalh/desert.vim'
 Plugin 'fholgado/minibufexpl.vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'bling/vim-airline'
