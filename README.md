@@ -1,4 +1,7 @@
 vimrc
 =====
+Just a personal backup of my .dotfiles.
 
-just a personal backup of my .vimrc
+* .vimrc
+* .tmux.conf
+* .bashrc
