@@ -51,7 +51,7 @@ colorscheme solarized
 nnoremap <Leader><tab> :call ToggleBg()<CR>
 
 function! ToggleBg()
-    if &background=="light"
+    if &background=="dark"
         set background=dark
     else
         set background=light
