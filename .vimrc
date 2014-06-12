@@ -2,7 +2,7 @@ set nocompatible
 filetype off
 
 " Backspace through lines
-set backspace=2
+set backspace=indent,eol,start
 
 " Show line numbers
 set number
@@ -26,15 +26,16 @@ set autoindent
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-Plugin 'gmarik/Vundle.vim'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'fholgado/minibufexpl.vim'
-Plugin 'scrooloose/syntastic'
-Plugin 'bling/vim-airline'
-Plugin 'sjl/gundo.vim'
-Plugin 'moll/vim-bbye'
-Plugin 'scrooloose/nerdtree'
+Plugin 'gmarik/Vundle.vim' " Package manager
+Plugin 'Valloric/YouCompleteMe' " Autocompletion
+Plugin 'altercation/vim-colors-solarized' " Solarized colorscheme
+Plugin 'fholgado/minibufexpl.vim' " Buffer bar
+Plugin 'scrooloose/syntastic' " Syntax checking
+Plugin 'bling/vim-airline' " Statusline
+Plugin 'sjl/gundo.vim' " Undo through saves
+Plugin 'moll/vim-bbye' " Delete buffer without closing window
+Plugin 'scrooloose/nerdtree' " Folder tree
+Plugin 'tpope/vim-commentary' " Easily comment stuff out
 
 call vundle#end()
 
@@ -61,13 +62,12 @@ nnoremap <C-h> :MBEbp<CR>
 set foldmethod=indent
 set foldnestmax=1
 nnoremap <space> za
+set foldlevelstart=99
 
 " Bind leader-q to close buffer while keeping window
 nnoremap <Leader>q :Bdelete<CR>
 
 " Airline config
-"let g:airline_section_x = ""
-"let g:airline_section_y = ""
 let g:airline#extensions#default#section_truncate_width = {'z': 0, 'x': 80, 'y': 80}
 
 " Syntastic
@@ -77,6 +77,9 @@ let g:syntastic_python_checkers = ['flake8']
 let g:NERDTreeDirArrows=0
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 map <C-n> :NERDTreeToggle<CR>
+
+" Toggle Gundo
+nnoremap <Leader>z :GundoToggle<CR>
 
 filetype plugin indent on
 syntax on
