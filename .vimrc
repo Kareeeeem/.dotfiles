@@ -10,6 +10,8 @@ set number
 " Show satus line with one file buffer open
 set laststatus=2
 
+set wildignore+=*/venv/*,*.pyc
+
 " Start cli options with semicolon
 nnoremap ; :
 
@@ -36,6 +38,8 @@ Plugin 'sjl/gundo.vim' " Undo through saves
 Plugin 'moll/vim-bbye' " Delete buffer without closing window
 Plugin 'scrooloose/nerdtree' " Folder tree
 Plugin 'tpope/vim-commentary' " Easily comment stuff out
+Plugin 'mattn/emmet-vim' " html/css abbreviations
+Plugin 'kien/ctrlp.vim'
 
 call vundle#end()
 
@@ -53,7 +57,6 @@ function! ToggleBg()
     endif
 endfunction
 
-
 " MiniBufExplorer
 nnoremap <C-l> :MBEbn<CR>
 nnoremap <C-h> :MBEbp<CR>
@@ -61,8 +64,8 @@ nnoremap <C-h> :MBEbp<CR>
 " Folding
 set foldmethod=indent
 set foldnestmax=1
-nnoremap <space> za
 set foldlevelstart=99
+nnoremap <space> za
 
 " Bind leader-q to close buffer while keeping window
 nnoremap <Leader>q :Bdelete<CR>
@@ -75,11 +78,18 @@ let g:syntastic_python_checkers = ['flake8']
 
 " Nerdtree
 let g:NERDTreeDirArrows=0
+let NERDTreeIgnore = ['\.pyc$']
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 map <C-n> :NERDTreeToggle<CR>
 
 " Toggle Gundo
 nnoremap <Leader>z :GundoToggle<CR>
+
+" Emmet
+let g:user_emmet_leader_key='<Leader>'
+" Only use emmet for html css
+let g:user_emmet_install_global = 0
+autocmd FileType html,css EmmetInstall
 
 filetype plugin indent on
 syntax on
