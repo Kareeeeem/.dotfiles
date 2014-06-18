@@ -48,6 +48,7 @@ set background=dark
 colorscheme solarized
 " Toggle between dark and light themes
 nnoremap <Leader><tab> :call ToggleBg()<CR>
+lksjdhgfkjsdhfk,dsjh
 
 function! ToggleBg()
     if &background=="light"
@@ -89,7 +90,9 @@ nnoremap <Leader>z :GundoToggle<CR>
 let g:user_emmet_leader_key='<Leader>'
 " Only use emmet for html css
 let g:user_emmet_install_global = 0
-autocmd FileType html,css EmmetInstall
+autocmd FileType html,css,htmldjango EmmetInstall
 
+" Gundo
+let g:gundo_close_on_revert=1
 filetype plugin indent on
 syntax on
