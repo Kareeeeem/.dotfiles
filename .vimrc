@@ -48,7 +48,6 @@ set background=dark
 colorscheme solarized
 " Toggle between dark and light themes
 nnoremap <Leader><tab> :call ToggleBg()<CR>
-lksjdhgfkjsdhfk,dsjh
 
 function! ToggleBg()
     if &background=="light"
