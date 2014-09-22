@@ -1,6 +1,49 @@
 set nocompatible
 filetype off
 
+" Set up vundle
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'gmarik/Vundle.vim' " Package manager
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'altercation/vim-colors-solarized' " Solarized colorscheme
+Plugin 'fholgado/minibufexpl.vim' " Buffer bar
+Plugin 'scrooloose/syntastic' " Syntax checking
+Plugin 'bling/vim-airline' " Statusline
+Plugin 'sjl/gundo.vim' " Undo through saves
+Plugin 'moll/vim-bbye' " Delete buffer without closing window
+Plugin 'scrooloose/nerdtree' " Folder tree
+Plugin 'tpope/vim-commentary' " Easily comment stuff out
+Plugin 'mattn/emmet-vim' " html/css abbreviations
+Plugin 'kien/ctrlp.vim'
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
+Plugin 'Raimondi/delimitMate'
+Plugin 'Lokaltog/vim-easymotion'
+
+call vundle#end()
+
+" Map leader to ,
+let mapleader = ","
+
+map , <Plug>(easymotion-prefix)
+map <Leader>l <Plug>(easymotion-lineforward)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+map <Leader>h <Plug>(easymotion-linebackward)
+let g:EasyMotion_startofline = 0
+
+set colorcolumn=80
+
+let g:vim_markdown_folding_disabled=1
+
+" insert single char with space
+nmap <space> i_<esc>r
+
+" split lines with K
+nmap K i<cr><esc>k$
+
 " Backspace through lines
 set backspace=indent,eol,start
 
@@ -15,39 +58,11 @@ set wildignore+=*/venv/*,*.pyc
 " Start cli options with semicolon
 nnoremap ; :
 
-" Map leader to ,
-let mapleader = ","
-
 " default indent settings
 set shiftwidth=4
 set softtabstop=4
 set expandtab
 set autoindent
-
-" Set up vundle
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-Plugin 'gmarik/Vundle.vim' " Package manager
-Plugin 'Valloric/YouCompleteMe' " Autocompletion
-Plugin 'altercation/vim-colors-solarized' " Solarized colorscheme
-Plugin 'fholgado/minibufexpl.vim' " Buffer bar
-Plugin 'scrooloose/syntastic' " Syntax checking
-Plugin 'bling/vim-airline' " Statusline
-Plugin 'sjl/gundo.vim' " Undo through saves
-Plugin 'moll/vim-bbye' " Delete buffer without closing window
-Plugin 'scrooloose/nerdtree' " Folder tree
-Plugin 'tpope/vim-commentary' " Easily comment stuff out
-Plugin 'mattn/emmet-vim' " html/css abbreviations
-Plugin 'kien/ctrlp.vim'
-
-call vundle#end()
-
-" Set up colorscheme
-set background=dark
-colorscheme solarized
-" Toggle between dark and light themes
-nnoremap <Leader><tab> :call ToggleBg()<CR>
 
 function! ToggleBg()
     if &background=="light"
@@ -56,6 +71,12 @@ function! ToggleBg()
         set background=light
     endif
 endfunction
+
+set background=dark
+colorscheme solarized
+
+" Toggle between dark and light themes
+nnoremap <Leader><tab> :call ToggleBg()<CR>
 
 " MiniBufExplorer
 nnoremap <C-l> :MBEbn<CR>
@@ -93,5 +114,6 @@ autocmd FileType html,css,htmldjango EmmetInstall
 
 " Gundo
 let g:gundo_close_on_revert=1
+
 filetype plugin indent on
 syntax on
