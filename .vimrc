@@ -34,35 +34,35 @@ map <Leader>k <Plug>(easymotion-k)
 map <Leader>h <Plug>(easymotion-linebackward)
 let g:EasyMotion_startofline = 0
 
-set colorcolumn=80
-
 let g:vim_markdown_folding_disabled=1
 
 " insert single char with space
-nmap <space> i_<esc>r
+nnoremap <space> i_<esc>r
 
 " split lines with K
-nmap K i<cr><esc>k$
+nnoremap K i<cr><esc>k$
 
-" Backspace through lines
+inoremap jj <Esc>
+
+set colorcolumn=80
 set backspace=indent,eol,start
-
-" Show line numbers
+set relativenumber
 set number
-
-" Show satus line with one file buffer open
 set laststatus=2
-
 set wildignore+=*/venv/*,*.pyc
-
-" Start cli options with semicolon
-nnoremap ; :
-
-" default indent settings
 set shiftwidth=4
 set softtabstop=4
 set expandtab
 set autoindent
+set foldmethod=indent
+set foldnestmax=1
+set foldlevelstart=99
+
+nnoremap <space> za
+
+" Start cli options with semicolon
+nnoremap ; :
+
 
 function! ToggleBg()
     if &background=="light"
@@ -82,11 +82,6 @@ nnoremap <Leader><tab> :call ToggleBg()<CR>
 nnoremap <C-l> :MBEbn<CR>
 nnoremap <C-h> :MBEbp<CR>
 
-" Folding
-set foldmethod=indent
-set foldnestmax=1
-set foldlevelstart=99
-nnoremap <space> za
 
 " Bind leader-q to close buffer while keeping window
 nnoremap <Leader>q :Bdelete<CR>
@@ -108,7 +103,6 @@ nnoremap <Leader>z :GundoToggle<CR>
 
 " Emmet
 let g:user_emmet_leader_key='<Leader>'
-" Only use emmet for html css
 let g:user_emmet_install_global = 0
 autocmd FileType html,css,htmldjango EmmetInstall
 
