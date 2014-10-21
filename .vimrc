@@ -18,11 +18,12 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'Raimondi/delimitMate'
-Plugin 'Lokaltog/vim-easymotion'
+" Plugin 'Lokaltog/vim-easymotion'
 Plugin 'sophacles/vim-bundle-mako'
 Plugin 'tpope/vim-surround'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-fugitive'
+Plugin 'chriskempson/base16-vim'
 
 call vundle#end()
 
@@ -55,14 +56,16 @@ inoremap jj <Esc>
 " insert single char with space
 nnoremap <Leader><space> i_<esc>r
 
-" split lines with K
-nnoremap K i<cr><esc>k$
+" join lines with leader j
+nnoremap <Leader>j J
+" split lines with leader k
+nnoremap <Leader>k i<cr><esc>k$
 
 " Move between splits
-nnoremap <C-Y> <C-W><C-H>
-nnoremap <C-O> <C-W><C-L>
-nnoremap <C-I> <C-W><C-K>
-nnoremap <C-U> <C-W><C-J>
+nnoremap <C-H> <C-W><C-H>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-J> <C-W><C-J>
 
 " Folding
 nnoremap <space> za
@@ -78,8 +81,8 @@ map Y y$
 map 0 ^
 
 " MiniBufExplorer
-nnoremap <C-l> :MBEbn<CR>
-nnoremap <C-h> :MBEbp<CR>
+nnoremap K :MBEbn<CR>
+nnoremap J :MBEbp<CR>
 nnoremap <Leader>q :MBEbd<CR>
 
 " Airline config
@@ -101,15 +104,6 @@ let g:gundo_close_on_revert=1
 
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
-
-" Easymotion
-map <Leader> <Plug>(easymotion-prefix)
-map <Leader>l <Plug>(easymotion-lineforward)
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
-map <Leader>h <Plug>(easymotion-linebackward)
-nmap s <Plug>(easymotion-s2)
-let g:EasyMotion_startofline = 0
 
 " NERDTree
 nmap <Leader>o :NERDTreeToggle<CR>
