@@ -111,6 +111,9 @@ let NERDTreeQuitOnOpen=1
 
 let g:vim_markdown_folding_disabled=1
 
+" YouCompleteMe
+let g:ycm_global_ycm_extra_conf = '~/.dotfiles/.ycm_extra_conf.py'
+
 " Toggle between dark and light themes
 function! ToggleBg()
     if &background=="light"
