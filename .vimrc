@@ -18,38 +18,41 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'Raimondi/delimitMate'
-" Plugin 'Lokaltog/vim-easymotion'
-Plugin 'sophacles/vim-bundle-mako'
 Plugin 'tpope/vim-surround'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-fugitive'
-Plugin 'chriskempson/base16-vim'
+Plugin 'Chiel92/vim-autoformat'
 
 call vundle#end()
 
 set hidden
-set t_Co=256
 set colorcolumn=80
 set backspace=indent,eol,start
-set relativenumber
 set number
 set laststatus=2
 set wildignore+=*/bin/*,*/venv/*,*.pyc
+set autoindent
+set encoding=utf-8
+set cindent
 set shiftwidth=4
 set softtabstop=4
 set expandtab
-set autoindent
 set foldmethod=indent
 set foldnestmax=10
 set foldlevelstart=99
 set background=dark
 set modelines=0
-colorscheme solarized
+set formatprg=par\ -79
+set nocursorline
 
 nnoremap ; :
+nnoremap : ;
+
 let mapleader = ","
 
-nnoremap <Leader><tab> :call ToggleBg()<CR>
+" nnoremap <Leader><tab> :call ToggleBg()<CR>
+
+inoremap kj <Esc>/[]})'"]<CR>a
 
 inoremap jj <Esc>
 
@@ -85,6 +88,8 @@ nnoremap K :MBEbn<CR>
 nnoremap J :MBEbp<CR>
 nnoremap <Leader>q :MBEbd<CR>
 
+vnoremap <Leader>t :Tab/\(const\\|static\)\@<!\s\+/l0l0l0<CR>
+
 " Airline config
 let g:airline#extensions#default#section_truncate_width = {'z': 0, 'x': 80, 'y': 80}
 
@@ -114,6 +119,14 @@ let g:vim_markdown_folding_disabled=1
 " YouCompleteMe
 let g:ycm_global_ycm_extra_conf = '~/.dotfiles/.ycm_extra_conf.py'
 
+" Autoformat
+let g:formatprg_c = "astyle"
+" let g:formatprg_args_expr_c = '"--style=java --S"'
+
+autocmd FileType mkd set textwidth=79 
+
+autocmd FileType c inoremap {<CR> <CR>{<CR>}<Esc>O
+
 " Toggle between dark and light themes
 function! ToggleBg()
     if &background=="light"
@@ -125,3 +138,8 @@ endfunction
 
 filetype plugin indent on
 syntax on
+
+highlight Comment ctermfg=240
+highlight ColorColumn ctermbg=236
+highlight LineNr ctermfg=240
+" highlight link PythonDecorator Special
