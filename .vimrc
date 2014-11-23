@@ -7,7 +7,7 @@ call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim' " Package manager
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'altercation/vim-colors-solarized' " Solarized colorscheme
+" Plugin 'altercation/vim-colors-solarized' " Solarized colorscheme
 Plugin 'fholgado/minibufexpl.vim' " Buffer bar
 Plugin 'scrooloose/syntastic' " Syntax checking
 Plugin 'bling/vim-airline' " Statusline
@@ -25,6 +25,7 @@ Plugin 'Chiel92/vim-autoformat'
 
 call vundle#end()
 
+set ttyfast
 set hidden
 set colorcolumn=80
 set backspace=indent,eol,start
@@ -32,7 +33,6 @@ set number
 set laststatus=2
 set wildignore+=*/bin/*,*/venv/*,*.pyc
 set autoindent
-set encoding=utf-8
 set cindent
 set shiftwidth=4
 set softtabstop=4
@@ -49,6 +49,8 @@ nnoremap ; :
 nnoremap : ;
 
 let mapleader = ","
+
+nnoremap \ ,
 
 " nnoremap <Leader><tab> :call ToggleBg()<CR>
 
@@ -71,7 +73,7 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-J> <C-W><C-J>
 
 " Folding
-nnoremap <space> za
+" nnoremap <space> za
 
 " j and k on columns rather than lines
 nnoremap j gj
