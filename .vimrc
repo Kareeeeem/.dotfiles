@@ -22,6 +22,8 @@ Plugin 'tpope/vim-surround'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-fugitive'
 Plugin 'Chiel92/vim-autoformat'
+Plugin 'zenorocha/dracula-theme'
+Plugin 'flazz/vim-colorschemes'
 
 call vundle#end()
 
@@ -140,8 +142,14 @@ endfunction
 
 filetype plugin indent on
 syntax on
+" color gruvbox
 
-highlight Comment ctermfg=240
+if &term == "screen-256color"
+"     highlight Comment cterm=standout
+    highlight htmlItalic cterm=standout
+"     highlight Folded cterm=standout
+endif
 highlight ColorColumn ctermbg=236
+highlight Comment ctermfg=240
 highlight LineNr ctermfg=240
 " highlight link PythonDecorator Special
