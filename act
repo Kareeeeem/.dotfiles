@@ -15,7 +15,7 @@ directory="$PWD"
 for (( n=${#slashes}; n>1; --n ))
 do
     if [ -d "$directory/$VENV" ]; then
-        source "${directory}/$VENV/bin/activate"
+        source "$directory/$VENV/bin/activate"
     else
         directory="$directory/.."
     fi
