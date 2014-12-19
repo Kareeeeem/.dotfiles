@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Simple script that will activate a virtualenv located in a folder above your
+# current pwd. The default name of the virtualenv is "venv". Has to be sourced
+# rather than just ran.
+
+if [ -z "$1" ]; then
+    VENV="venv"
+else
+    VENV=$1
+fi
+
+slashes=${PWD//[^\/]/}
+directory="$PWD"
+for (( n=${#slashes}; n>1; --n ))
+do
+    if [ -d "$directory/$VENV" ]; then
+        source "${directory}/$VENV/bin/activate"
+    else
+        directory="$directory/.."
+    fi
+done
