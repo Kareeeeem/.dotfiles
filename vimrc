@@ -190,6 +190,11 @@ endfunction
 " Start the find and replace command across the entire file
 vnoremap <C-r> <Esc>:%s/<c-r>=GetVisual()<cr>/
 
+" Resize vertical splits
+nnoremap <Leader>vr :vertical resize 
+nnoremap <Leader>] :vertical resize +5<CR>
+nnoremap <Leader>[ :vertical resize -5<CR>
+
 " ###############################
 " SECTION 4: Plugin configuration
 " ###############################
