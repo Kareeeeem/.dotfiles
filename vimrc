@@ -66,13 +66,18 @@ set formatprg=par\ -79 " format paragraphs with par
 " SECTION 3: Key mappings
 " ###############################
 
-nnoremap <C-t> :buffers<CR>:buffer<Space>
-
 " because backslash is in a awkward place
 let mapleader = ","
 
+" Switch buffers the native way
+nnoremap <C-t> :buffers<CR>:buffer<Space>
+
 " put the original functionality of , on \
 nnoremap \ ,
+
+" Bubble multiple lines
+vnoremap <C-k> xkP`[V`]
+vnoremap <C-j> xp`[V`]
 
 " swap ; and : because the latter is used much more often
 nnoremap ; :
@@ -272,4 +277,3 @@ highlight LineNr ctermfg=240
 if &term == "screen-256color"
     highlight htmlItalic cterm=standout
 endif
-
