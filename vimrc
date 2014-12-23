@@ -76,38 +76,19 @@ set cursorline
 " because backslash is in a awkward place
 let mapleader = ","
 
+" ===========
+" Normal mode
+" ===========
+
 " Switch buffers the native way
 nnoremap <C-t> :buffers<CR>:buffer<Space>
 
 " put the original functionality of , on \
 nnoremap \ ,
 
-" Bubble multiple lines
-vnoremap <C-k> xkP`[V`]
-vnoremap <C-j> xp`[V`]
-
-" from http://got-ravings.blogspot.com/2008/07/vim-pr0n-visual-search-mappings.html
-
-" makes * and # work on visual mode too.
-function! s:VSetSearch(cmdtype)
-  let temp = @s
-  norm! gv"sy
-  let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
-  let @s = temp
-endfunction
-
-xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
-xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
-
 " swap ; and : because the latter is used much more often
 nnoremap ; :
 nnoremap : ;
-
-" jump outside delimiters
-inoremap kj <Esc>/[]})`'"]<CR>:noh<CR>a
-
-" because esc is too far away and when are you gonna type jj?
-inoremap jj <Esc>
 
 " quickly insert a single char
 nnoremap <Leader><space> i_<esc>r
@@ -132,31 +113,22 @@ nnoremap j gj
 nnoremap k gk
 
 " Y yanks till eol
-map Y y$
-
-" keep the visual selection after changing indentation
-vnoremap < <gv
-vnoremap > >gv
+nnoremap Y y$
 
 " 0 puts cursor at first non whitespace char
-map 0 ^
+nnoremap 0 ^
 
-" format C code variable assignments
-vnoremap <Leader>t :Tab/\(const\\|static\)\@<!\s\+/l0l0l0<CR>
+" Resize vertical splits
+nnoremap <Leader>vr :vertical resize 
+nnoremap <Leader>] :vertical resize +5<CR>
+nnoremap <Leader>[ :vertical resize -5<CR>
 
 " Search replace word under cursor
 nnoremap <C-r> :%s/\<<C-r><C-w>\>/
 
-" Find delimiter without search highlighting or putting it as the last search
-" in search history
-function! <SID>FindDelimiter()
-    set nohlsearch
-    let _s=@/
-    execute "normal! /[]})`'\"]\<CR>"
-    let @/=_s
-    set hlsearch
-endfunction
-inoremap <silent> kj <Esc>:call <SID>FindDelimiter()<CR>a
+" Navigating buffers
+nnoremap K :bn<CR>
+nnoremap J :bp<CR>
 
 " Strip whitespace withour changing cursor position or having it in the search
 " history
@@ -172,6 +144,53 @@ function! <SID>StripTrailingWhitespaces()
     call cursor(l, c)
 endfunction
 nnoremap <silent> <Leader>w :call <SID>StripTrailingWhitespaces()<CR>
+
+" ===========
+" Insert mode
+" ===========
+
+" jump outside delimiters
+inoremap kj <Esc>/[]})`'"]<CR>:noh<CR>a
+
+" because esc is too far away and when are you gonna type jj?
+inoremap jj <Esc>
+
+" Find delimiter without search highlighting or putting it as the last search
+" in search history
+function! <SID>FindDelimiter()
+    set nohlsearch
+    let _s=@/
+    execute "normal! /[]})`'\"]\<CR>"
+    let @/=_s
+    set hlsearch
+endfunction
+inoremap <silent> kj <Esc>:call <SID>FindDelimiter()<CR>a
+
+" ===========
+" Visual mode
+" ===========
+
+" Bubble multiple lines
+vnoremap <C-k> xkP`[V`]
+vnoremap <C-j> xp`[V`]
+
+" from http://got-ravings.blogspot.com/2008/07/vim-pr0n-visual-search-mappings.html
+" makes * and # work on visual mode too.
+function! s:VSetSearch(cmdtype)
+  let temp = @s
+  norm! gv"sy
+  let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
+  let @s = temp
+endfunction
+
+xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
+xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
+" keep the visual selection after changing indentation
+vnoremap < <gv
+vnoremap > >gv
+
+" format C code variable assignments
+vnoremap <Leader>t :Tab/\(const\\|static\)\@<!\s\+/l0l0l0<CR>
 
 " I got the following from:
 " https://github.com/bryankennedy/vimrc/blob/master/vimrc#L562-L599
@@ -215,11 +234,6 @@ endfunction
 " Start the find and replace command across the entire file
 vnoremap <C-r> <Esc>:%s/<c-r>=GetVisual()<cr>/
 
-" Resize vertical splits
-nnoremap <Leader>vr :vertical resize 
-nnoremap <Leader>] :vertical resize +5<CR>
-nnoremap <Leader>[ :vertical resize -5<CR>
-
 " Function for argslist and quickfix things. Come back to this to figure it
 " out
 command! -nargs=0 -bar Qargs execute 'args' QuickfixFilenames()
@@ -236,11 +250,7 @@ endfunction
 " SECTION 4: Plugin configuration
 " ===============================
 
-nnoremap K :bn<CR>
-nnoremap J :bp<CR>
-" MiniBufExplorer next and previous buffer
-" nnoremap K :MBEbn<CR>
-" nnoremap J :MBEbp<CR>
+" MiniBufExplorer 
 nnoremap <Leader>m :MBEToggle<CR>
 let g:miniBufExplorerAutoStart = 0
 
