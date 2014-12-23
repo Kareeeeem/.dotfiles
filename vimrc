@@ -301,11 +301,13 @@ if hostname() == "idle"
 else
     colorscheme ron
     highlight ColorColumn ctermbg=236
-    highlight Comment cterm=standout ctermfg=240
+    highlight Comment ctermfg=240
     highlight LineNr ctermfg=240
     highlight CursorLine cterm=none ctermbg=000
+
     " tmux doesn't render italics properly, so let's just remap to standout
     if &term == "screen-256color"
         highlight htmlItalic cterm=standout
+        highlight Comment cterm=standout
     endif
 endif
