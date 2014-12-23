@@ -33,8 +33,13 @@ Plugin 'Raimondi/delimitMate' " easier handling of delimiters
 Plugin 'tpope/vim-surround' " easily wrap text in delimiters or change them
 Plugin 'scrooloose/nerdtree' " a filetree
 Plugin 'tpope/vim-fugitive' " git intergration
-Plugin 'hynek/vim-python-pep8-indent' " Proper python indentation
 Plugin 'moll/vim-bbye' " a better way to delete buffers
+Plugin 'hynek/vim-python-pep8-indent' " Better python indentation
+Plugin 'sophacles/vim-bundle-mako' " Mako syntax highlighting
+
+if hostname() == "idle"
+    Plugin 'morhetz/gruvbox' " Colorscheme for work
+endif
 
 call vundle#end()
 
@@ -61,6 +66,7 @@ set foldlevelstart=99
 set background=dark
 set modelines=0 " http://www.techrepublic.com/blog/it-security/turn-off-modeline-support-in-vim/
 set formatprg=par\ -79 " format paragraphs with par
+set scrolloff=3
 
 " ###############################
 " SECTION 3: Key mappings
@@ -213,6 +219,18 @@ nnoremap <Leader>vr :vertical resize
 nnoremap <Leader>] :vertical resize +5<CR>
 nnoremap <Leader>[ :vertical resize -5<CR>
 
+" Function for argslist and quickfix things. Come back to this to figure it
+" out
+command! -nargs=0 -bar Qargs execute 'args' QuickfixFilenames()
+function! QuickfixFilenames()
+    " Building a hash ensures we get each buffer only once
+    let buffer_numbers = {}
+    for quickfix_item in getqflist()
+        let buffer_numbers[quickfix_item['bufnr']] = bufname(quickfix_item['bufnr'])
+    endfor
+    return join(map(values(buffer_numbers), 'fnameescape(v:val)'))
+endfunction
+
 " ###############################
 " SECTION 4: Plugin configuration
 " ###############################
@@ -274,19 +292,19 @@ syntax on
 " SECTION 6: Colorscheme settings
 " ###############################
 
-colorscheme ron
-set cursorline
-hi CursorLine cterm=none ctermbg=000
-
-highlight ColorColumn ctermbg=236
-highlight Comment cterm=standout ctermfg=240
-highlight LineNr ctermfg=240
-
-" if hostname() == "idle"
-"     highlight LineNr ctermfg=240
-" endif
-
-" tmux doesn't render italics properly, so let's just remap to standout
-if &term == "screen-256color"
-    highlight htmlItalic cterm=standout
+if hostname() == "idle"
+    colorscheme gruvbox
+    highlight Comment cterm=none
+    highlight htmlItalic cterm=none
+    highlight Folded cterm=none
+else
+    colorscheme ron
+    highlight ColorColumn ctermbg=236
+    highlight Comment cterm=standout ctermfg=240
+    highlight LineNr ctermfg=240
+    highlight CursorLine cterm=none ctermbg=000
+    " tmux doesn't render italics properly, so let's just remap to standout
+    if &term == "screen-256color"
+        highlight htmlItalic cterm=standout
+    endif
 endif
