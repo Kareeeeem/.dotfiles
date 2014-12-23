@@ -1,4 +1,4 @@
-" ###############################
+" ===============================
 " Table of contents
 "
 " SECTION 1: Vundle plugin setup
@@ -6,14 +6,14 @@
 " SECTION 3: Key mappings
 " SECTION 4: Plugin configuration
 " SECTION 5: Autocommands
-" ###############################
+" ===============================
 
 set nocompatible
 filetype off
 
-" ###############################
+" ===============================
 " SECTION 1: Vundle plugin setup
-" ###############################
+" ===============================
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -43,9 +43,9 @@ endif
 
 call vundle#end()
 
-" ###############################
+" ===============================
 " SECTION 2: Basic settings
-" ###############################
+" ===============================
 
 set hidden
 set colorcolumn=80
@@ -67,10 +67,11 @@ set background=dark
 set modelines=0 " http://www.techrepublic.com/blog/it-security/turn-off-modeline-support-in-vim/
 set formatprg=par\ -79 " format paragraphs with par
 set scrolloff=3
+set cursorline
 
-" ###############################
+" ===============================
 " SECTION 3: Key mappings
-" ###############################
+" ===============================
 
 " because backslash is in a awkward place
 let mapleader = ","
@@ -231,9 +232,9 @@ function! QuickfixFilenames()
     return join(map(values(buffer_numbers), 'fnameescape(v:val)'))
 endfunction
 
-" ###############################
+" ===============================
 " SECTION 4: Plugin configuration
-" ###############################
+" ===============================
 
 nnoremap K :bn<CR>
 nnoremap J :bp<CR>
@@ -288,9 +289,9 @@ autocmd FileType c inoremap {<CR> <CR>{<CR>}<Esc>O
 filetype plugin indent on
 syntax on
 
-" ###############################
+" ===============================
 " SECTION 6: Colorscheme settings
-" ###############################
+" ===============================
 
 if hostname() == "idle"
     colorscheme gruvbox
