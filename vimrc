@@ -36,6 +36,7 @@ Plugin 'tpope/vim-fugitive' " git intergration
 Plugin 'moll/vim-bbye' " a better way to delete buffers
 Plugin 'hynek/vim-python-pep8-indent' " Better python indentation
 Plugin 'sophacles/vim-bundle-mako' " Mako syntax highlighting
+Plugin 'junegunn/goyo.vim' " distraction free writing
 
 if hostname() == "idle"
     Plugin 'morhetz/gruvbox' " Colorscheme for work
@@ -48,6 +49,8 @@ call vundle#end()
 " ===============================
 
 set hidden
+set spelllang=nl
+set encoding=utf-8
 set colorcolumn=80
 set backspace=indent,eol,start " make backspace work as expected
 set number
@@ -65,7 +68,7 @@ set foldnestmax=10
 set foldlevelstart=99
 set background=dark
 set modelines=0 " http://www.techrepublic.com/blog/it-security/turn-off-modeline-support-in-vim/
-set formatprg=par\ -79 " format paragraphs with par
+" set formatprg=par\ -79 " format paragraphs with par
 set scrolloff=3
 set cursorline
 
@@ -124,11 +127,13 @@ nnoremap <Leader>] :vertical resize +5<CR>
 nnoremap <Leader>[ :vertical resize -5<CR>
 
 " Search replace word under cursor
-nnoremap <C-r> :%s/\<<C-r><C-w>\>/
+nnoremap <Leader>r :%s/\<<C-r><C-w>\>/
 
 " Navigating buffers
 nnoremap K :bn<CR>
 nnoremap J :bp<CR>
+nnoremap <Left> :bp<CR>
+nnoremap <Right> :bn<CR>
 
 " Strip whitespace withour changing cursor position or having it in the search
 " history
@@ -250,6 +255,10 @@ endfunction
 " SECTION 4: Plugin configuration
 " ===============================
 
+" Goyo
+nnoremap <Leader>g :Goyo<CR>
+let g:goyo_linenr = 1
+
 " MiniBufExplorer 
 nnoremap <Leader>m :MBEToggle<CR>
 let g:miniBufExplorerAutoStart = 0
@@ -290,8 +299,13 @@ let g:ycm_global_ycm_extra_conf = '~/dotfiles/.ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
+" =======================
 " SECTION 5: Autocommands
-autocmd FileType mkd set textwidth=79
+" =======================
+
+autocmd FileType mkd :set textwidth=79
+autocmd FileType mkd :set formatoptions+=t
+autocmd FileType mkd :set formatprg=par\ 79
 
 " format opening brackets in C code, vim is being annoying about this
 autocmd FileType c inoremap {<CR> <CR>{<CR>}<Esc>O
