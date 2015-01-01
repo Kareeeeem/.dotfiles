@@ -15,6 +15,8 @@ filetype off
 " SECTION 1: Vundle plugin setup
 " ===============================
 
+" always do this first on a new install
+" git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
@@ -295,7 +297,7 @@ let g:NERDTreeDirArrows=0
 let g:vim_markdown_folding_disabled=1
 
 " YouCompleteMe
-let g:ycm_global_ycm_extra_conf = '~/dotfiles/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '~/.dotfiles/.ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 

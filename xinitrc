@@ -21,6 +21,10 @@ if (xrandr | grep "$EXT connected"); then
     xrandr --output $EXT --auto --right-of $IN
 fi
 
+if [ -f ~/.Xresources ]; then
+    xrdb -merge ~/.Xresources
+fi
+
 # Make touchpad work like in Chromeos.
 synclient TapButton1=1
 synclient TapButton2=3
