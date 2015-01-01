@@ -1,5 +1,6 @@
 xterm*termName: xterm-256color
 XTerm*locale: true
+Xterm*loginSell: true
 XTerm*metaSendsEscape: true
 Xterm*saveLines: true
 
