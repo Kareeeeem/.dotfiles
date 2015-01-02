@@ -41,7 +41,7 @@ new_window none
 # installed.
 bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
-bindsym $mod+b exec --no-startup-id iceweasel
+bindsym $mod+b exec --no-startup-id chromium
 
 # change focus
 bindsym $mod+h focus left
