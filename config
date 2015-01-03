@@ -32,6 +32,7 @@ bindsym $mod+Return exec i3-sensible-terminal
 # kill focused window
 bindsym $mod+Shift+q kill
 
+# no window decorations
 new_window none
 
 # start dmenu (a program launcher)
@@ -91,7 +92,9 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 
 # focus the child container
-#bindsym $mod+d focus child
+# bindsym $mod+d focus child
+
+workspace_auto_back_and_forth yes
 
 # switch to workspace
 bindsym $mod+1 workspace 1
@@ -158,4 +161,4 @@ bar {
         status_command i3status --config ~/.i3/i3status.conf
 }
 
-exec --no-startup-id feh --bg-fill ~/Downloads/images/6-Zatoichi-and-Yojimbo-1970-di-Kihachi-Okamoto.jpg
+exec --no-startup-id feh --bg-fill ~/Downloads/images/akira.jpg

@@ -53,6 +53,7 @@ call vundle#end()
 set hidden
 set spelllang=nl
 set encoding=utf-8
+set fileencoding=utf-8
 set colorcolumn=80
 set backspace=indent,eol,start " make backspace work as expected
 set number
@@ -190,14 +191,13 @@ function! s:VSetSearch(cmdtype)
   let @s = temp
 endfunction
 
+" * and # search for visual selection
 xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
 xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
+
 " keep the visual selection after changing indentation
 vnoremap < <gv
 vnoremap > >gv
-
-" format C code variable assignments
-vnoremap <Leader>t :Tab/\(const\\|static\)\@<!\s\+/l0l0l0<CR>
 
 " I got the following from:
 " https://github.com/bryankennedy/vimrc/blob/master/vimrc#L562-L599
@@ -307,7 +307,7 @@ let g:ycm_autoclose_preview_window_after_insertion = 1
 
 autocmd FileType mkd :set textwidth=79
 autocmd FileType mkd :set formatoptions+=t
-autocmd FileType mkd :set formatprg=par\ 79
+autocmd FileType mkd :set formatprg=par\ -79
 
 " format opening brackets in C code, vim is being annoying about this
 autocmd FileType c inoremap {<CR> <CR>{<CR>}<Esc>O
@@ -334,6 +334,5 @@ else
     " tmux doesn't render italics properly, so let's just remap to standout
     if &term == "screen-256color"
         highlight htmlItalic cterm=standout
-        highlight Comment cterm=standout
     endif
 endif

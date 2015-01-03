@@ -28,6 +28,7 @@ fi
 # Make touchpad work like in Chromeos.
 synclient TapButton1=1
 synclient TapButton2=3
+synclient TapButton3=2
 synclient VertScrollDelta=-19
 synclient HorizScrollDelta=-19
 synclient PalmDetect=1
