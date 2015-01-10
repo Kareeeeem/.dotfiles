@@ -15,36 +15,43 @@ filetype off
 " SECTION 1: Vundle plugin setup
 " ===============================
 
-" always do this first on a new install
-" git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-Plugin 'gmarik/Vundle.vim' " Package manager
-Plugin 'Valloric/YouCompleteMe' " Autocompletion (needs to be compiled)
-Plugin 'fholgado/minibufexpl.vim' " Buffer bar
-Plugin 'scrooloose/syntastic' " Syntax checking
-Plugin 'bling/vim-airline' " Statusline
-Plugin 'sjl/gundo.vim' " Undo through saves
-Plugin 'tpope/vim-commentary' " Easily comment stuff out
-Plugin 'mattn/emmet-vim' " html/css abbreviations
-Plugin 'kien/ctrlp.vim' " search for files/buffers
-Plugin 'godlygeek/tabular' " line up text
-Plugin 'plasticboy/vim-markdown' " markdown highlighting
-Plugin 'Raimondi/delimitMate' " easier handling of delimiters
-Plugin 'tpope/vim-surround' " easily wrap text in delimiters or change them
-Plugin 'scrooloose/nerdtree' " a filetree
-Plugin 'tpope/vim-fugitive' " git intergration
-Plugin 'moll/vim-bbye' " a better way to delete buffers
-Plugin 'hynek/vim-python-pep8-indent' " Better python indentation
-Plugin 'sophacles/vim-bundle-mako' " Mako syntax highlighting
-Plugin 'junegunn/goyo.vim' " distraction free writing
-
-if hostname() == "idle"
-    Plugin 'morhetz/gruvbox' " Colorscheme for work
+" if Plug doesn't exist yet
+if empty(glob("~/.vim/autoload/plug.vim"))
+    execute '~/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 endif
 
-call vundle#end()
+call plug#begin('~/.vim/plugged')
+
+Plug 'fholgado/minibufexpl.vim' " Buffer bar
+Plug 'scrooloose/syntastic' " Syntax checking
+Plug 'bling/vim-airline' " Statusline
+Plug 'sjl/gundo.vim' " Undo through saves
+Plug 'tpope/vim-commentary' " Easily comment stuff out
+Plug 'kien/ctrlp.vim' " search for files/buffers
+Plug 'godlygeek/tabular' " line up text
+Plug 'Raimondi/delimitMate' " easier handling of delimiters
+Plug 'tpope/vim-surround' " easily wrap text in delimiters or change them
+Plug 'tpope/vim-fugitive' " git intergration
+Plug 'moll/vim-bbye' " a better way to delete buffers
+
+" Plugins that require compiling or something
+Plug 'Valloric/YouCompleteMe', {'do': './install.sh --clang-completer'}
+"
+" Plugins loaded for specific filetypes
+Plug 'plasticboy/vim-markdown', {'for': 'mkd'} " markdown highlighting
+Plug 'mattn/emmet-vim', {'for': ['html', 'css', 'htmldjango']} " html/css abbreviations
+Plug 'hynek/vim-python-pep8-indent', {'for': 'python'} " Better python indentation
+Plug 'sophacles/vim-bundle-mako', {'for': 'mako'} " Mako syntax highlighting
+
+" Plugins loaded on running a command
+Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'} " a filetree
+Plug 'junegunn/goyo.vim', {'on': 'mkd'} " distraction free writing
+
+if hostname() == "idle"
+    Plug 'morhetz/gruvbox' " Colorscheme for work
+endif
+
+call plug#end()
 
 " ===============================
 " SECTION 2: Basic settings
@@ -305,12 +312,19 @@ let g:ycm_autoclose_preview_window_after_insertion = 1
 " SECTION 5: Autocommands
 " =======================
 
-autocmd FileType mkd :set textwidth=79
-autocmd FileType mkd :set formatoptions+=t
-autocmd FileType mkd :set formatprg=par\ -79
 
-" format opening brackets in C code, vim is being annoying about this
-autocmd FileType c inoremap {<CR> <CR>{<CR>}<Esc>O
+augroup filetype_mkd
+    autocmd!
+    autocmd FileType mkd :set textwidth=79
+    autocmd FileType mkd :set formatoptions+=t
+    autocmd FileType mkd :set formatprg=par\ -79
+augroup END
+
+augroup filetype_c
+    autocmd!
+    " autocmd FileType c inoremap {<CR> <CR>{<CR>}<Esc>O
+    autocmd FileType c noremap <Leader>v :Tab/\(const\\|static\)\@<!\s\+/l0l0l0<CR>
+augroup END
 
 filetype plugin indent on
 syntax on
@@ -330,6 +344,7 @@ else
     highlight Comment ctermfg=240
     highlight LineNr ctermfg=240
     highlight CursorLine cterm=none ctermbg=000
+    highlight SpellCap ctermfg=15
 
     " tmux doesn't render italics properly, so let's just remap to standout
     if &term == "screen-256color"
