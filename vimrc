@@ -16,13 +16,14 @@ filetype off
 " ===============================
 
 " if Plug doesn't exist yet
-if empty(glob("~/.vim/autoload/plug.vim"))
-    execute '~/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall
 endif
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'fholgado/minibufexpl.vim' " Buffer bar
 Plug 'scrooloose/syntastic' " Syntax checking
 Plug 'bling/vim-airline' " Statusline
 Plug 'sjl/gundo.vim' " Undo through saves
@@ -39,13 +40,13 @@ Plug 'Valloric/YouCompleteMe', {'do': './install.sh --clang-completer'}
 "
 " Plugins loaded for specific filetypes
 Plug 'plasticboy/vim-markdown', {'for': 'mkd'} " markdown highlighting
-Plug 'mattn/emmet-vim', {'for': ['html', 'css', 'htmldjango']} " html/css abbreviations
+Plug 'mattn/emmet-vim', {'for': ['html', 'css', 'htmldjango', 'mako']} " html/css abbreviations
 Plug 'hynek/vim-python-pep8-indent', {'for': 'python'} " Better python indentation
 Plug 'sophacles/vim-bundle-mako', {'for': 'mako'} " Mako syntax highlighting
+Plug 'junegunn/goyo.vim', {'for': 'mkd'} " distraction free writing
 
 " Plugins loaded on running a command
 Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'} " a filetree
-Plug 'junegunn/goyo.vim', {'on': 'mkd'} " distraction free writing
 
 if hostname() == "idle"
     Plug 'morhetz/gruvbox' " Colorscheme for work
@@ -78,7 +79,6 @@ set foldnestmax=10
 set foldlevelstart=99
 set background=dark
 set modelines=0 " http://www.techrepublic.com/blog/it-security/turn-off-modeline-support-in-vim/
-" set formatprg=par\ -79 " format paragraphs with par
 set scrolloff=3
 set cursorline
 
@@ -94,7 +94,9 @@ let mapleader = ","
 " ===========
 
 " Switch buffers the native way
-nnoremap <C-t> :buffers<CR>:buffer<Space>
+nnoremap <Leader>b :buffers<CR>:buffer<Space>
+nnoremap K :bn<CR>
+nnoremap J :bp<CR>
 
 " put the original functionality of , on \
 nnoremap \ ,
@@ -106,7 +108,7 @@ nnoremap : ;
 " quickly insert a single char
 nnoremap <Leader><space> i_<esc>r
 
-" because we map MBEpb to J
+" because we map bp to J
 nnoremap <Leader>j J
 
 " break line and return to the previous one
@@ -139,12 +141,6 @@ nnoremap <Leader>[ :vertical resize -5<CR>
 " Search replace word under cursor
 nnoremap <Leader>r :%s/\<<C-r><C-w>\>/
 
-" Navigating buffers
-nnoremap K :bn<CR>
-nnoremap J :bp<CR>
-nnoremap <Left> :bp<CR>
-nnoremap <Right> :bn<CR>
-
 " Strip whitespace withour changing cursor position or having it in the search
 " history
 function! <SID>StripTrailingWhitespaces()
@@ -163,9 +159,6 @@ nnoremap <silent> <Leader>w :call <SID>StripTrailingWhitespaces()<CR>
 " ===========
 " Insert mode
 " ===========
-
-" jump outside delimiters
-inoremap kj <Esc>/[]})`'"]<CR>:noh<CR>a
 
 " because esc is too far away and when are you gonna type jj?
 inoremap jj <Esc>
@@ -268,21 +261,17 @@ endfunction
 nnoremap <Leader>g :Goyo<CR>
 let g:goyo_linenr = 1
 
-" MiniBufExplorer 
-nnoremap <Leader>m :MBEToggle<CR>
-let g:miniBufExplorerAutoStart = 0
-
-let g:ctrlp_open_new_file = 'r'
+" CtrlP
 let g:ctrlp_match_window = 'max:13,results:13'
-
-nnoremap <Leader>p :CtrlPBuffer<CR>
+let g:ctrlp_open_multiple_files = '1r'
+let g:ctrlp_open_new_file = 'r'
 
 nnoremap <Leader>q :Bdelete<CR>
 
-" Airline config
+" Airline
 let g:airline#extensions#default#section_truncate_width = {'z': 0, 'x': 80, 'y': 80}
 
-" Syntastic (install flake8 system wide
+" Syntastic (install flake8 system wide)
 let g:syntastic_python_checkers = ['flake8']
 
 " Gundo
@@ -301,8 +290,6 @@ nnoremap <C-n> :NERDTreeToggle<CR>
 let NERDTreeQuitOnOpen=1
 let g:NERDTreeDirArrows=0
 
-let g:vim_markdown_folding_disabled=1
-
 " YouCompleteMe
 let g:ycm_global_ycm_extra_conf = '~/.dotfiles/.ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1
@@ -311,7 +298,6 @@ let g:ycm_autoclose_preview_window_after_insertion = 1
 " =======================
 " SECTION 5: Autocommands
 " =======================
-
 
 augroup filetype_mkd
     autocmd!
@@ -322,7 +308,6 @@ augroup END
 
 augroup filetype_c
     autocmd!
-    " autocmd FileType c inoremap {<CR> <CR>{<CR>}<Esc>O
     autocmd FileType c noremap <Leader>v :Tab/\(const\\|static\)\@<!\s\+/l0l0l0<CR>
 augroup END
 
@@ -333,21 +318,18 @@ syntax on
 " SECTION 6: Colorscheme settings
 " ===============================
 
-if hostname() == "idle"
-    colorscheme gruvbox
-    highlight Comment cterm=none
-    highlight htmlItalic cterm=none
-    highlight Folded cterm=none
-else
-    colorscheme ron
-    highlight ColorColumn ctermbg=236
-    highlight Comment ctermfg=240
-    highlight LineNr ctermfg=240
-    highlight CursorLine cterm=none ctermbg=000
-    highlight SpellCap ctermfg=15
+colorscheme ron
+hi ColorColumn ctermbg=8
+hi Comment ctermfg=8
+hi LineNr ctermfg=8
+hi CursorLine cterm=none ctermbg=0
 
-    " tmux doesn't render italics properly, so let's just remap to standout
-    if &term == "screen-256color"
-        highlight htmlItalic cterm=standout
-    endif
+hi SpellBad ctermfg=0
+hi SpellCap ctermfg=0
+
+hi link pythonOperator Statement
+
+" tmux doesn't render italics properly, so let's just remap to standout
+if &term == "screen-256color"
+    highlight htmlItalic cterm=standout
 endif

@@ -11,7 +11,7 @@ xterm*background: rgb:10/10/10
 xterm*foreground: rgb:f0/f0/f0
 
 ! Slightly tweaked default xterm colors. Color picked from the defaults as
-! shown in ChromeOSs secure shell extension. They're just a bit more muted.
+! shown in ChromeOSs secure shell extension. Theyre just a bit more muted.
 xterm*color0: rgb:00/00/00
 xterm*color1: rgb:cc/00/00
 xterm*color2: rgb:4e/9a/06
