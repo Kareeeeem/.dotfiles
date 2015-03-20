@@ -1,6 +1,7 @@
 #!/usr/bin/python
-import subprocess
+import os
 import shlex
+import subprocess
 
 
 colors = {
@@ -31,9 +32,12 @@ dirty = git_command('git status --porcelain')
 
 if branch:
     prompt = ' git:'
-    prompt += colors['FAIL'] if dirty else colors['OKGREEN']
-    # branch[:-1] to slice up until '\n'
-    prompt += branch[:-1]
-    prompt += colors['ENDC']
+    if os.getenv('COLORS'):
+        prompt += colors['FAIL'] if dirty else colors['OKGREEN']
+        # branch[:-1] to slice up until '\n'
+        prompt += branch[:-1]
+        prompt += colors['ENDC']
+    else:
+        prompt += '{}{}'.format(branch[:-1], '*' if dirty else '')
 
     print prompt
