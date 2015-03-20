@@ -3,6 +3,18 @@ import subprocess
 import shlex
 
 
+colors = {
+    'HEADER': '\033[95m',
+    'OKBLUE': '\033[94m',
+    'OKGREEN': '\033[92m',
+    'WARNING': '\033[93m',
+    'FAIL': '\033[91m',
+    'ENDC': '\033[0m',
+    'BOLD': '\033[1m',
+    'UNDERLINE': '\033[4m',
+}
+
+
 def git_command(command):
     command = command
     tokenized_command = shlex.split(command)
@@ -18,5 +30,10 @@ branch = git_command('git rev-parse --abbrev-ref HEAD')
 dirty = git_command('git status --porcelain')
 
 if branch:
+    prompt = ' git:'
+    prompt += colors['FAIL'] if dirty else colors['OKGREEN']
     # branch[:-1] to slice up until '\n'
-    print ' ({}{})'.format(branch[:-1], '*' if dirty else '')
+    prompt += branch[:-1]
+    prompt += colors['ENDC']
+
+    print prompt
