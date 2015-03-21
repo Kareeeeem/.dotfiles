@@ -38,8 +38,7 @@ Plug 'tpope/vim-fugitive' " git intergration
 Plug 'moll/vim-bbye' " a better way to delete buffers
 Plug 'w0ng/vim-hybrid' " colorscheme
 Plug 'jmcantrell/vim-virtualenv' " virtulenv support
-" Plug 'xolox/vim-easytags'
-" Plug 'xolox/vim-misc'
+Plug 'majutsushi/tagbar' " Browse tags for current file
 
 " Plugins that require compiling or something
 Plug 'Valloric/YouCompleteMe', {'do': './install.sh --clang-completer'}
@@ -104,6 +103,8 @@ let mapleader = ","
 " ===========
 " Normal mode
 " ===========
+
+nnoremap <F8> :TagbarToggle<CR>
 
 " Switch buffers the native way
 nnoremap <Leader>b :buffers<CR>:buffer<Space>
@@ -256,6 +257,12 @@ augroup filetype_mkd
     autocmd FileType mkd setlocal formatprg=par\ -79
 augroup END
 
+" If git-tags git hook installed run it on every save
+autocmd BufWritePost *
+            \ if exists('b:git_dir') && executable(b:git_dir.'/hooks/git-tags') |
+            \   call system('"'.b:git_dir.'/hooks/git-tags" &') |
+            \ endif
+
 " augroup filetype_c
 "     autocmd!
 "     autocmd FileType c vnoremap <Leader>v :Tab/\(const\\|static\)\@<!\s\+/l0l0l0<CR>
@@ -287,13 +294,6 @@ endif
 " ===========================
 " SECTION 7: Helper Functions
 " ===========================
-
-nnoremap <Leader>e :call GenerateTagsInGitRepo()<CR>
-
-function GenerateTagsInGitRepo()
-    execute "silent !maketags"
-    execute "redraw!"
-endfunction
 
 function! <SID>StripTrailingWhitespaces()
     " Preparation: save last search, and cursor position.
