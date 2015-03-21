@@ -1,0 +1,13 @@
+--recurse=yes
+--tag-relative=yes
+
+--exclude=Makefile
+--exclude=bin
+
+--python-kinds=-iv
+--exclude=venv
+--exclude=__pycache__
+--exclude=build
+--exclude=dist
+--exclude=*.pyc
+--exclude=requirements.txt
