@@ -1,4 +1,8 @@
 #!/usr/bin/python
+"""A script that will generate tags for a git project in the .git folder.  Use
+these in git hooks like so:
+http://tbaggery.com/2011/08/08/effortless-ctags-with-git.html"""
+
 import os
 import sys
 import subprocess

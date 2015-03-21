@@ -1,4 +1,8 @@
 #!/usr/bin/python
+"""A script for use in a bash prompt, will show the current git branch.  If you
+export a ENV variable COLORS it will also show the branch in red if the branch
+is dirty, and green otherwise"""
+
 import os
 import shlex
 import subprocess
