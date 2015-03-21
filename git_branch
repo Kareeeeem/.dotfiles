@@ -34,7 +34,7 @@ branch = git_command('git rev-parse --abbrev-ref HEAD')
 dirty = git_command('git status --porcelain')
 
 if branch:
-    prompt = ' git:'
+    prompt = 'git:'
     if os.getenv('COLORS'):
         prompt += colors['FAIL'] if dirty else colors['OKGREEN']
         # branch[:-1] to slice up until '\n'
@@ -42,5 +42,7 @@ if branch:
         prompt += colors['ENDC']
     else:
         prompt += '{}{}'.format(branch[:-1], '*' if dirty else '')
+
+    prompt += ' '
 
     print prompt
