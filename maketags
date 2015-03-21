@@ -13,7 +13,7 @@ def run_command(command):
                          stderr=subprocess.PIPE)
 
     stdout = p.stdout.read()
-    return stdout.rstrip(),
+    return stdout.rstrip()
 
 
 git_dir = run_command('git rev-parse --git-dir')
@@ -24,8 +24,11 @@ if not git_dir:
 temp_tags = "{}/tags.temp".format(git_dir)
 tags = "{}/tags".format(git_dir)
 
-# remove the old temp file if for whatever reason it's still there
-os.remove(temp_tags)
+try:
+    # remove the old temp file if for whatever reason it's still there
+    os.remove(temp_tags)
+except OSError:
+    pass
 
 ctags_command = "ctags -R -o {} {}".format(temp_tags, git_dir + '/..')
 run_command(ctags_command)
