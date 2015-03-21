@@ -8,18 +8,18 @@
 IN="eDP1"
 EXT="HDMI1"
 
-if (xrandr | grep "$EXT connected"); then
+# if (xrandr | grep "$EXT connected"); then
 
-    # turn off the internal screen first otherwise I can't get the external 
-    # to be recognized as primary.
-    xrandr --output $IN --off
-    xrandr --output $EXT --primary
+#     # turn off the internal screen first otherwise I can't get the external 
+#     # to be recognized as primary.
+#     xrandr --output $IN --off
+#     xrandr --output $EXT --primary
 
-    # turn the internal screen back on left of the external with the right 
-    # resolutions.
-    xrandr --output $IN --auto --left-of $EXT
-    xrandr --output $EXT --auto --right-of $IN
-fi
+#     # turn the internal screen back on left of the external with the right 
+#     # resolutions.
+#     xrandr --output $IN --auto --left-of $EXT
+#     xrandr --output $EXT --auto --right-of $IN
+# fi
 
 if [ -f ~/.Xresources ]; then
     xrdb -merge ~/.Xresources
