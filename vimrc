@@ -38,6 +38,8 @@ Plug 'tpope/vim-fugitive' " git intergration
 Plug 'moll/vim-bbye' " a better way to delete buffers
 Plug 'w0ng/vim-hybrid' " colorscheme
 Plug 'jmcantrell/vim-virtualenv' " virtulenv support
+" Plug 'xolox/vim-easytags'
+" Plug 'xolox/vim-misc'
 
 " Plugins that require compiling or something
 Plug 'Valloric/YouCompleteMe', {'do': './install.sh --clang-completer'}
@@ -90,7 +92,7 @@ set foldlevelstart=10
 
 set modelines=0 " http://www.techrepublic.com/blog/it-security/turn-off-modeline-support-in-vim/
 set scrolloff=3
-set lazyredraw
+" set lazyredraw
 
 " ===============================
 " SECTION 3: Key mappings
@@ -196,6 +198,8 @@ vnoremap <Leader>r <Esc>:%s/<c-r>=GetVisual()<cr>/
 let g:ctrlp_match_window = 'max:13,results:13'
 let g:ctrlp_open_multiple_files = '1r'
 let g:ctrlp_open_new_file = 'r'
+let g:ctrlp_extensions = ['tag']
+
 nnoremap <Leader>t :CtrlPTag<CR>
 
 " bbye
@@ -229,6 +233,7 @@ let g:ycm_global_ycm_extra_conf = '~/.dotfiles/.ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_filetype_blacklist = {'mkd': 1}
+
 
 " =======================
 " SECTION 5: Autocommands
@@ -282,6 +287,13 @@ endif
 " ===========================
 " SECTION 7: Helper Functions
 " ===========================
+
+nnoremap <Leader>e :call GenerateTagsInGitRepo()<CR>
+
+function GenerateTagsInGitRepo()
+    execute "silent !maketags"
+    execute "redraw!"
+endfunction
 
 function! <SID>StripTrailingWhitespaces()
     " Preparation: save last search, and cursor position.
