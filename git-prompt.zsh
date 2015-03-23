@@ -1,8 +1,7 @@
-autoload -U colors && colors # Enable colors in prompt
-# Modify the colors and symbols in these variables as desired.
-GIT_PROMPT_UNTRACKED="%{$fg_bold[red]%}*%{$reset_color%}"
-GIT_PROMPT_MODIFIED="%{$fg_bold[yellow]%}*%{$reset_color%}"
-GIT_PROMPT_STAGED="%{$fg_bold[green]%}*%{$reset_color%}"
+# modified version of https://gist.github.com/joshdick/4415470
+GIT_PROMPT_UNTRACKED="%F{red}*%f"
+GIT_PROMPT_MODIFIED="%F{yellow}*%f"
+GIT_PROMPT_STAGED="%F{green}*%f"
 
 # Show Git branch/tag, or name-rev if on detached head
 parse_git_branch() {
@@ -31,7 +30,6 @@ parse_git_state() {
     if [[ -n $GIT_STATE ]]; then
         echo "$GIT_STATE"
     fi
-
 }
 
 # If inside a Git repository, print its branch and state
