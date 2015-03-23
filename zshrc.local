@@ -162,6 +162,7 @@ zstyle ':prompt:grml:right:setup' items sad-smiley
 ## changed completer settings
 zstyle ':completion:*' completer _complete _correct _approximate
 #zstyle ':completion:*' expand prefix suffix
+zstyle ':completion:*:*:git:*' script ~/.dotfiles/.git-completion.zsh
 
 ## another different completer setting: expand shell aliases
 #zstyle ':completion:*' completer _expand_alias _complete _approximate
@@ -366,5 +367,7 @@ stty erase "^?"
 #showINC ()    { perl -e 'for (@INC) { printf "%d %s\n", $i++, $_ }' }
 #vimpm ()      { vim `perldoc -l $1 | sed -e 's/pod$/pm/'` }
 #vimhelp ()    { vim -c "help $1" -c on -c "au! VimEnter *" }
+
+
 
 ## END OF FILE #################################################################
