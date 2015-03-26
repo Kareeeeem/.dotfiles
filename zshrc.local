@@ -49,16 +49,15 @@ function virtual_env_prompt () {
 }
 grml_theme_add_token  virtual-env -f virtual_env_prompt '%F{magenta}' '%f'
 
-# Simple git prompt that just shows a green branch name or a red brnach name if
-# the branc is not clean
+# Simple git prompt
+
 # Show Git branch/tag, or name-rev if on detached head
 parse_git_branch() {
     (git symbolic-ref -q HEAD || git name-rev --name-only \
         --no-undefined --always HEAD) 2> /dev/null
 }
 
-# Show different symbols as appropriate for various Git repository states
-autoload -U colors && colors
+# Get clean or dirty state
 parse_git_state() {
     if [[ -n $(git status --porcelain 2> /dev/null) ]]; then
         echo "%B%F{red}"
@@ -67,10 +66,17 @@ parse_git_state() {
     fi
 }
 
+git_stashes_count () {
+    st_num=$(/usr/bin/git stash list 2> /dev/null | wc -l | tr -d ' ')
+    if [[ $st_num != "0" ]]; then
+        echo "%B%F{red}($st_num)%f"
+    fi
+}
+
 git_prompt_string() {
     local git_where="$(parse_git_branch)"
     [ -n "$git_where" ] && \
-        echo "git:$(parse_git_state)${git_where#(refs/heads/|tags/)}%b%f "
+        echo "git:$(parse_git_state)${git_where#(refs/heads/|tags/)}$(git_stashes_count)%b%f "
 }
 
 function git_branch_prompt () {
@@ -90,10 +96,10 @@ zstyle ':prompt:grml:right:setup' items sad-smiley
 ## ZLE tweaks ##
 
 ## use the vi navigation keys (hjkl) besides cursor keys in menu completion
-#bindkey -M menuselect 'h' vi-backward-char        # left
-#bindkey -M menuselect 'k' vi-up-line-or-history   # up
-#bindkey -M menuselect 'l' vi-forward-char         # right
-#bindkey -M menuselect 'j' vi-down-line-or-history # bottom
+bindkey -M menuselect 'h' vi-backward-char        # left
+bindkey -M menuselect 'k' vi-up-line-or-history   # up
+bindkey -M menuselect 'l' vi-forward-char         # right
+bindkey -M menuselect 'j' vi-down-line-or-history # bottom
 
 ## set command prediction from history, see 'man 1 zshcontrib'
 #is4 && zrcautoload predict-on && \
@@ -119,20 +125,20 @@ zstyle ':prompt:grml:right:setup' items sad-smiley
 #WORDCHARS='${WORDCHARS:s@/@}'
 
 # just type '...' to get '../..'
-#rationalise-dot() {
-#local MATCH
-#if [[ $LBUFFER =~ '(^|/| |	|'$'\n''|\||;|&)\.\.$' ]]; then
-#  LBUFFER+=/
-#  zle self-insert
-#  zle self-insert
-#else
-#  zle self-insert
-#fi
-#}
-#zle -N rationalise-dot
-#bindkey . rationalise-dot
+rationalise-dot() {
+local MATCH
+if [[ $LBUFFER =~ '(^|/| |	|'$'\n''|\||;|&)\.\.$' ]]; then
+  LBUFFER+=/
+  zle self-insert
+  zle self-insert
+else
+  zle self-insert
+fi
+}
+zle -N rationalise-dot
+bindkey . rationalise-dot
 ## without this, typing a . aborts incremental history search
-#bindkey -M isearch . self-insert
+bindkey -M isearch . self-insert
 
 #bindkey '\eq' push-line-or-edit
 
@@ -160,7 +166,7 @@ zstyle ':prompt:grml:right:setup' items sad-smiley
 ## compsys related snippets ##
 
 ## changed completer settings
-zstyle ':completion:*' completer _complete _correct _approximate
+# zstyle ':completion:*' completer _complete _correct _approximate
 #zstyle ':completion:*' expand prefix suffix
 zstyle ':completion:*:*:git:*' script ~/.dotfiles/.git-completion.zsh
 
@@ -368,6 +374,11 @@ stty erase "^?"
 #vimpm ()      { vim `perldoc -l $1 | sed -e 's/pod$/pm/'` }
 #vimhelp ()    { vim -c "help $1" -c on -c "au! VimEnter *" }
 
-
+# Aliases
+alias ta='tmux attach -t'
+alias ts='tmux new-session -s'
+alias tl='tmux list-sessions'
+alias tksv='tmux kill-server'
+alias tkss='tmux kill-session -t'
 
 ## END OF FILE #################################################################

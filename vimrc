@@ -39,6 +39,7 @@ Plug 'moll/vim-bbye' " a better way to delete buffers
 Plug 'w0ng/vim-hybrid' " colorscheme
 Plug 'jmcantrell/vim-virtualenv' " virtulenv support
 Plug 'majutsushi/tagbar' " Browse tags for current file
+Plug 'noahfrederick/vim-hemisu'
 
 " Plugins that require compiling or something
 Plug 'Valloric/YouCompleteMe', {'do': './install.sh --clang-completer'}
@@ -285,6 +286,7 @@ hi SpellBad ctermfg=0
 hi SpellCap ctermfg=0
 
 hi link pythonOperator Statement
+hi link pythonNumber Structure
 
 " tmux doesn't render italics properly, so let's just remap to standout
 if &term == "screen-256color"
