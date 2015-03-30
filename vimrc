@@ -74,7 +74,7 @@ set number
 
 set backspace=indent,eol,start " make backspace work as expected
 set laststatus=2 "always show the status line
-set wildignore+=*/venv/*,*.pyc,*.egg,*.egg-info/*,*.o,*/__pycache__/*
+set wildignore+=*/venv/*,*.pyc,*.egg,*.egg-info/*,*.o,*/__pycache__/*,*/*~/*
 
 set hlsearch
 set incsearch
@@ -178,19 +178,25 @@ inoremap <silent> kj <Esc>:call <SID>FindDelimiter()<CR>a
 " ===========
 
 " Bubble multiple lines
-vnoremap <C-k> xkP`[V`]
-vnoremap <C-j> xp`[V`]
+" vnoremap <C-j> xp`[V`]
+" vnoremap <C-k> xkP`[V`]
+
 
 " * and # search for visual selection
 xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
 xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
 
 " keep the visual selection after changing indentation
-vnoremap < <gv
-vnoremap > >gv
+xnoremap < <gv
+xnoremap > >gv
 
 " Start the find and replace command for visually selected text
-vnoremap <Leader>r <Esc>:%s/<c-r>=GetVisual()<cr>/
+xnoremap <Leader>r <Esc>:%s/<c-r>=GetVisual()<cr>/
+
+nnoremap <silent> <C-Up>   :move-2<CR>==
+nnoremap <silent> <C-Down> :move+<CR>==
+xnoremap <silent> <C-Up>   :move-2<CR>gv=gv
+xnoremap <silent> <C-Down> :move'>+<CR>gv=gv
 
 " ===============================
 " SECTION 4: Plugin configuration

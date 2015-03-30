@@ -5,6 +5,7 @@
 --exclude=bin
 
 --python-kinds=-iv
+--exclude=*~
 --exclude=venv
 --exclude=__pycache__
 --exclude=build

@@ -88,7 +88,9 @@ grml_theme_add_token  colon ':' '' ''
 
 # show only two directories deep
 zstyle ':prompt:grml:*:items:path' token '%2~ '
+
 zstyle ':prompt:grml:*:items:user' pre ''
+
 zstyle ':prompt:grml:left:setup' items rc virtual-env git-branch-prompt user \
     colon path percent
 zstyle ':prompt:grml:right:setup' items sad-smiley
@@ -167,8 +169,9 @@ bindkey -M isearch . self-insert
 
 ## changed completer settings
 # zstyle ':completion:*' completer _complete _correct _approximate
-#zstyle ':completion:*' expand prefix suffix
-zstyle ':completion:*:*:git:*' script ~/.dotfiles/.git-completion.zsh
+# zstyle ':completion:*' expand prefix suffix
+# zstyle ':completion:*:*:git:*' script ~/.dotfiles/git-completion.zsh
+# zstyle ':completion:*:*:curl:*' script ~/.dotfiles/curl-completion.zsh
 
 ## another different completer setting: expand shell aliases
 #zstyle ':completion:*' completer _expand_alias _complete _approximate
@@ -374,11 +377,19 @@ stty erase "^?"
 #vimpm ()      { vim `perldoc -l $1 | sed -e 's/pod$/pm/'` }
 #vimhelp ()    { vim -c "help $1" -c on -c "au! VimEnter *" }
 
+# seperate global and local history
+# http://superuser.com/questions/446594/separate-up-arrow-lookback-for-local-and-global-zsh-history
+
 # Aliases
 alias ta='tmux attach -t'
 alias ts='tmux new-session -s'
 alias tl='tmux list-sessions'
 alias tksv='tmux kill-server'
 alias tkss='tmux kill-session -t'
+alias nv='nvim'
+alias rmpyc='find . -name "*.pyc" -delete'
+alias rmswp='find . -name ".*.swp" -delete'
+
+fpath=(~/.zsh $fpath)
 
 ## END OF FILE #################################################################
