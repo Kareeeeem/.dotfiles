@@ -83,6 +83,11 @@ function git_branch_prompt () {
     REPLY=$(git_prompt_string)
 }
 
+# function task_prompt () {
+#     REPLY=$(task-prompt)
+# }
+
+# grml_theme_add_token  task_prompt -f task_prompt '' ''
 grml_theme_add_token  git-branch-prompt -f git_branch_prompt '' ''
 grml_theme_add_token  colon ':' '' ''
 
@@ -91,7 +96,7 @@ zstyle ':prompt:grml:*:items:path' token '%2~ '
 
 zstyle ':prompt:grml:*:items:user' pre ''
 
-zstyle ':prompt:grml:left:setup' items rc virtual-env git-branch-prompt user \
+zstyle ':prompt:grml:left:setup' items rc virtual-env git-branch-prompt task_prompt user \
     colon path percent
 zstyle ':prompt:grml:right:setup' items sad-smiley
 
@@ -390,6 +395,7 @@ alias nv='nvim'
 alias rmpyc='find . -name "*.pyc" -delete'
 alias rmswp='find . -name ".*.swp" -delete'
 
+source ~/.dotfiles/z.sh
 fpath=(~/.zsh $fpath)
 
 ## END OF FILE #################################################################

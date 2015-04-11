@@ -1,4 +1,4 @@
-" ===============================
+") ===============================
 " TABLE OF CONTENTS
 "
 " SECTION 1: Vim-plug setup
@@ -27,8 +27,7 @@ endif
 call plug#begin('~/.vim/plugged')
 
 Plug 'scrooloose/syntastic' " Syntax checking
-Plug 'bling/vim-airline' " Statusline
-Plug 'sjl/gundo.vim' " Undo through saves
+Plug 'ap/vim-buftabline'
 Plug 'tpope/vim-commentary' " Easily comment stuff out
 Plug 'kien/ctrlp.vim' " search for files/buffers
 Plug 'godlygeek/tabular' " line up text
@@ -36,24 +35,26 @@ Plug 'Raimondi/delimitMate' " easier handling of delimiters
 Plug 'tpope/vim-surround' " easily wrap text in delimiters or change them
 Plug 'tpope/vim-fugitive' " git intergration
 Plug 'moll/vim-bbye' " a better way to delete buffers
-Plug 'w0ng/vim-hybrid' " colorscheme
 Plug 'jmcantrell/vim-virtualenv' " virtulenv support
-Plug 'majutsushi/tagbar' " Browse tags for current file
-Plug 'noahfrederick/vim-hemisu'
+Plug 'christoomey/vim-tmux-navigator' " Navigate vim and tmux with Ctrl-[hjkl]
+Plug 'jpalardy/vim-slime' " Send input from vim to screen/tmux
 
-" Plugins that require compiling or something
+" Plugins that have a postinstall hook
 Plug 'Valloric/YouCompleteMe', {'do': './install.sh --clang-completer'}
+Plug 'Shougo/vimproc.vim', {'do': 'make'} " Dependency for ghc-mod
 
 " Plugins loaded for specific filetypes
-Plug 'plasticboy/vim-markdown', {'for': 'mkd'} " markdown highlighting
-Plug 'mattn/emmet-vim', {'for': ['html', 'css', 'htmldjango', 'mako']} " html/css abbreviations
+Plug 'plasticboy/vim-markdown', {'for': 'mkd'} " markdown syntax highlighting
+Plug 'mattn/emmet-vim', {'for': ['html', 'css', 'htmldjango']} " html/css abbreviations
 Plug 'hynek/vim-python-pep8-indent', {'for': 'python'} " Better python indentation
-Plug 'sophacles/vim-bundle-mako', {'for': 'mako'} " Mako syntax highlighting
-Plug 'junegunn/goyo.vim', {'for': 'mkd'} " distraction free writing
 Plug 'jmcantrell/vim-virtualenv', {'for': 'python'} " virtualenv support
+Plug 'eagletmt/neco-ghc', {'for': 'haskell'} " haskell autocomplete
+Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'} "
+Plug 'raichoo/haskell-vim', {'for': 'haskell'} " Haskell syntax highlighting and indentation
 
 " Plugins loaded on running a command
 Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'} " a filetree
+Plug 'mbbill/undotree', {'on': 'UndotreeToggle'} "  Undo through saves
 
 call plug#end()
 
@@ -63,49 +64,70 @@ call plug#end()
 
 set hidden " enable hidden buffers
 set spelllang=nl
-
 set encoding=utf-8
 set fileencoding=utf-8
-
 set colorcolumn=80
 set background=dark
 set cursorline
 set number
-
 set backspace=indent,eol,start " make backspace work as expected
 set laststatus=2 "always show the status line
-set wildignore+=*/venv/*,*.pyc,*.egg,*.egg-info/*,*.o,*/__pycache__/*,*/*~/*
-
+set wildignore+=*/venv/*,*.pyc,*.egg,*.egg-info/*,*.o,*/__pycache__/*
 set hlsearch
 set incsearch
 " set ignorecase
-
 set autoindent
 set shiftwidth=4
 set softtabstop=4
 set expandtab
-
 set foldenable
 set foldmethod=indent
 set foldnestmax=10
 set foldlevelstart=10
-
 set modelines=0 " http://www.techrepublic.com/blog/it-security/turn-off-modeline-support-in-vim/
-set scrolloff=3
-" set lazyredraw
+set undodir=~/.vim/undodir/
+set undofile
+
+" statusline
+" cf the default statusline: %<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P
+" format markers:
+"   %< truncation point
+"   %n buffer number
+"   %f relative path to file
+"   %m modified flag [+] (modified), [-] (unmodifiable) or nothing
+"   %r readonly flag [RO]
+"   %y filetype [python]
+"   %= split point for left and right justification
+"   %-14. width specification
+"   %l current line number
+"   %L number of lines in buffer
+"   %c current column number
+"   %V current virtual column number (-n), if different from %c
+"   %P percentage through buffer
+"   %) end of width specification
+
+set statusline=%<%f\ %y\ %{fugitive#statusline()}%h%m%r%=%-14.(%l,%c%V%)\ %P
+
+" set winwidth=84
+
+" We have to have a winheight bigger than we want to set winminheight. But if
+" we set winheight to be huge before winminheight, the winminheight set will
+" fail.
+
+" set winheight=5
+" set winminheight=5
+" set winheight=999
 
 " ===============================
 " SECTION 3: Key mappings
 " ===============================
 
-" because backslash is in a awkward place
+" a because backslash is in a awkward place
 let mapleader = ","
 
 " ===========
 " Normal mode
 " ===========
-
-nnoremap <F8> :TagbarToggle<CR>
 
 " Switch buffers the native way
 nnoremap <Leader>b :buffers<CR>:buffer<Space>
@@ -129,13 +151,13 @@ nnoremap <Leader>j J
 nnoremap <Leader>k i<cr><esc>k$
 
 " Clear searchhighlighting
-nnoremap <Leader>n :nohl<CR>
+nnoremap <CR> :nohl<CR>
 
 " Move between splits
-nnoremap <C-H> <C-W><C-H>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-J> <C-W><C-J>
+" nnoremap <C-H> <C-W><C-H>
+" nnoremap <C-L> <C-W><C-L>
+" nnoremap <C-K> <C-W><C-K>
+" nnoremap <C-J> <C-W><C-J>
 
 " j and k on columns rather than lines
 nnoremap j gj
@@ -202,54 +224,70 @@ xnoremap <silent> <C-Down> :move'>+<CR>gv=gv
 " SECTION 4: Plugin configuration
 " ===============================
 
+" Buftabline
+let g:buftabline_indicators = 1 " Show modified indicator
+
+
+" Tagbar
+nnoremap <F8> :TagbarToggle<CR>
+
+" Slime
+let g:slime_target = 'tmux'
+let g:slime_python_ipython = 1
+
 " CtrlP
 let g:ctrlp_match_window = 'max:13,results:13'
 let g:ctrlp_open_multiple_files = '1r'
 let g:ctrlp_open_new_file = 'r'
-let g:ctrlp_extensions = ['tag']
-
+let g:ctrlp_by_filename = 1
 nnoremap <Leader>t :CtrlPTag<CR>
+nnoremap <Leader>m :CtrlPMRUFiles<CR>
+nnoremap <Leader>b :CtrlPBuffer<CR>
+
 
 " bbye
 nnoremap <Leader>q :Bdelete<CR>
 
-" Airline
-let g:airline#extensions#default#section_truncate_width = {'z': 0, 'x': 80, 'y': 80}
-let g:airline#extensions#tabline#enabled = 1 " Enable the list of buffers
-let g:airline#extensions#tabline#fnamemod = ':t' " Show just the filename
-
 " Syntastic (install flake8 system wide)
 let g:syntastic_python_checkers = ['flake8']
 
-" Gundo
-nnoremap <F5> :GundoToggle<CR>
-
 " Emmet
 let g:user_emmet_leader_key='<Leader>'
-let g:user_emmet_install_global = 0
+let g:ujer_emmet_install_global = 0
 
-" Gundo
-let g:gundo_close_on_revert=1
+" Undotree
+nnoremap <F5> :UndotreeToggle<CR>
+if !exists('g:undotree_SplitWidth')
+    let g:undotree_SplitWidth = 30
+endif
 
 " NERDTree
 nnoremap <C-n> :NERDTreeToggle<CR>
 let NERDTreeQuitOnOpen=1
 let g:NERDTreeDirArrows=0
+let NERDTreeIgnore = ['\.pyc$', '*egg*']
 
 " YouCompleteMe
 let g:ycm_global_ycm_extra_conf = '~/.dotfiles/.ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_filetype_blacklist = {'mkd': 1}
+let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_semantic_triggers = {'haskell' : ['.']}
 
 
 " =======================
 " SECTION 5: Autocommands
 " =======================
 
-augroup close_file
+augroup write_file
     autocmd!
     autocmd BufWritePre * call <SID>StripTrailingWhitespaces()
+    " If git-tags git hook installed run it on every save
+    autocmd BufWritePost *
+        \ if exists('b:git_dir') && executable(b:git_dir.'/hooks/git-tags') |
+        \   call system('"'.b:git_dir.'/hooks/git-tags" &') |
+        \ endif
 augroup END
 
 augroup emmet
@@ -264,16 +302,12 @@ augroup filetype_mkd
     autocmd FileType mkd setlocal formatprg=par\ -79
 augroup END
 
-" If git-tags git hook installed run it on every save
-autocmd BufWritePost *
-            \ if exists('b:git_dir') && executable(b:git_dir.'/hooks/git-tags') |
-            \   call system('"'.b:git_dir.'/hooks/git-tags" &') |
-            \ endif
-
-" augroup filetype_c
-"     autocmd!
-"     autocmd FileType c vnoremap <Leader>v :Tab/\(const\\|static\)\@<!\s\+/l0l0l0<CR>
-" augroup END
+augroup filetype_haskell
+    autocmd!
+    autocmd FileType haskell setlocal tabstop=8
+    autocmd FileType haskell setlocal shiftround
+    autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+augroup END
 
 filetype plugin indent on
 syntax on
