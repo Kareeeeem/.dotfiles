@@ -1,4 +1,4 @@
-") ===============================
+" ===============================
 " TABLE OF CONTENTS
 "
 " SECTION 1: Vim-plug setup
@@ -14,10 +14,10 @@ set nocompatible
 filetype off
 
 " ===============================
-" SECTION 1: Vundle plugin setup
+" SECTION 1: Plugin setup
 " ===============================
 
-" if Plug doesn't exist yet
+" if Vim-Plug doesn't exist yet
 if empty(glob('~/.vim/autoload/plug.vim'))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -31,28 +31,40 @@ Plug 'ap/vim-buftabline'
 Plug 'tpope/vim-commentary' " Easily comment stuff out
 Plug 'kien/ctrlp.vim' " search for files/buffers
 Plug 'godlygeek/tabular' " line up text
-Plug 'Raimondi/delimitMate' " easier handling of delimiters
+" Delimitmate screws up the dot command so let's try without autoclose
+" Plug 'Raimondi/delimitMate' " easier handling of delimiters
 Plug 'tpope/vim-surround' " easily wrap text in delimiters or change them
 Plug 'tpope/vim-fugitive' " git intergration
 Plug 'moll/vim-bbye' " a better way to delete buffers
 Plug 'jmcantrell/vim-virtualenv' " virtulenv support
 Plug 'christoomey/vim-tmux-navigator' " Navigate vim and tmux with Ctrl-[hjkl]
 Plug 'jpalardy/vim-slime' " Send input from vim to screen/tmux
+Plug 'endel/vim-github-colorscheme'
 
-" Plugins that have a postinstall hook
+Plug 'flazz/vim-colorschemes'
+Plug 'gosukiwi/vim-atom-dark'
+Plug 'andrwb/vim-lapis256'
+
+" Plugins with a post-install hook
+" ================================
+
 Plug 'Valloric/YouCompleteMe', {'do': './install.sh --clang-completer'}
 Plug 'Shougo/vimproc.vim', {'do': 'make'} " Dependency for ghc-mod
 
 " Plugins loaded for specific filetypes
+" =====================================
+
 Plug 'plasticboy/vim-markdown', {'for': 'mkd'} " markdown syntax highlighting
 Plug 'mattn/emmet-vim', {'for': ['html', 'css', 'htmldjango']} " html/css abbreviations
 Plug 'hynek/vim-python-pep8-indent', {'for': 'python'} " Better python indentation
 Plug 'jmcantrell/vim-virtualenv', {'for': 'python'} " virtualenv support
 Plug 'eagletmt/neco-ghc', {'for': 'haskell'} " haskell autocomplete
-Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'} "
+Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'} " Ghc-mod support
 Plug 'raichoo/haskell-vim', {'for': 'haskell'} " Haskell syntax highlighting and indentation
 
 " Plugins loaded on running a command
+" ===================================
+
 Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'} " a filetree
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'} "  Undo through saves
 
@@ -75,7 +87,7 @@ set laststatus=2 "always show the status line
 set wildignore+=*/venv/*,*.pyc,*.egg,*.egg-info/*,*.o,*/__pycache__/*
 set hlsearch
 set incsearch
-" set ignorecase
+set smartcase
 set autoindent
 set shiftwidth=4
 set softtabstop=4
@@ -89,24 +101,15 @@ set undodir=~/.vim/undodir/
 set undofile
 
 " statusline
-" cf the default statusline: %<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P
-" format markers:
-"   %< truncation point
-"   %n buffer number
-"   %f relative path to file
-"   %m modified flag [+] (modified), [-] (unmodifiable) or nothing
-"   %r readonly flag [RO]
-"   %y filetype [python]
-"   %= split point for left and right justification
-"   %-14. width specification
-"   %l current line number
-"   %L number of lines in buffer
-"   %c current column number
-"   %V current virtual column number (-n), if different from %c
-"   %P percentage through buffer
-"   %) end of width specification
-
-set statusline=%<%f\ %y\ %{fugitive#statusline()}%h%m%r%=%-14.(%l,%c%V%)\ %P
+set statusline=%n\ %t\ %y
+set statusline+=\ %h%m%r
+set statusline+=\ %<%{fugitive#statusline()}
+set statusline+=%= " right alignment from this point
+set statusline+=%-14.(%l,%c%V%)\ %P
+" syntastic statusline
+set statusline+=\ %#Error#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
 " set winwidth=84
 
@@ -122,12 +125,18 @@ set statusline=%<%f\ %y\ %{fugitive#statusline()}%h%m%r%=%-14.(%l,%c%V%)\ %P
 " SECTION 3: Key mappings
 " ===============================
 
-" a because backslash is in a awkward place
-let mapleader = ","
+" Command line mode
+" =================
 
-" ===========
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+
+" a because backslash is in a awkward place
+let mapleader = "\<Space>"
+
 " Normal mode
 " ===========
+
+map <Leader>c :colorscheme
 
 " Switch buffers the native way
 nnoremap <Leader>b :buffers<CR>:buffer<Space>
@@ -135,11 +144,11 @@ nnoremap K :bn<CR>
 nnoremap J :bp<CR>
 
 " put the original functionality of , on \
-nnoremap \ ,
+" nnoremap \ ,
 
 " swap ; and : because the latter is used much more often
-nnoremap ; :
-nnoremap : ;
+" nnoremap ; :
+" nnoremap : ;
 
 " start external command with just !
 nnoremap ! :!
@@ -151,9 +160,10 @@ nnoremap <Leader>j J
 nnoremap <Leader>k i<cr><esc>k$
 
 " Clear searchhighlighting
-nnoremap <CR> :nohl<CR>
+nnoremap <Leader>n :nohl<CR>
 
 " Move between splits
+" Is now taken care of by Tmux navigator
 " nnoremap <C-H> <C-W><C-H>
 " nnoremap <C-L> <C-W><C-L>
 " nnoremap <C-K> <C-W><C-K>
@@ -170,7 +180,7 @@ nnoremap Y y$
 nnoremap 0 ^
 
 " Resize vertical splits
-nnoremap <Leader>vr :vertical resize
+nnoremap <Leader>vr :vertical resize 85
 nnoremap <Leader>] :vertical resize +5<CR>
 nnoremap <Leader>[ :vertical resize -5<CR>
 
@@ -184,25 +194,24 @@ nnoremap <silent> <Leader>w :call <SID>StripTrailingWhitespaces()<CR>
 " Highlight last inserted text
 nnoremap gV `[v`]
 
-" ===========
 " Insert mode
 " ===========
 
 " because esc is too far away and when are you gonna type jj?
-inoremap jj <Esc>
+" Lets try with just <C-[>
+" inoremap jj <Esc>
 
 " Find delimiter without search highlighting or putting it as the last search
 " in search history
-inoremap <silent> kj <Esc>:call <SID>FindDelimiter()<CR>a
+" This screws up undo
+" inoremap <silent> kj <Esc>:call <SID>FindDelimiter()<CR>a
 
-" ===========
 " Visual mode
 " ===========
 
 " Bubble multiple lines
-" vnoremap <C-j> xp`[V`]
-" vnoremap <C-k> xkP`[V`]
-
+xnoremap <c-j> xp`[v`]
+xnoremap <c-k> xkp`[v`]
 
 " * and # search for visual selection
 xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
@@ -214,11 +223,6 @@ xnoremap > >gv
 
 " Start the find and replace command for visually selected text
 xnoremap <Leader>r <Esc>:%s/<c-r>=GetVisual()<cr>/
-
-nnoremap <silent> <C-Up>   :move-2<CR>==
-nnoremap <silent> <C-Down> :move+<CR>==
-xnoremap <silent> <C-Up>   :move-2<CR>gv=gv
-xnoremap <silent> <C-Down> :move'>+<CR>gv=gv
 
 " ===============================
 " SECTION 4: Plugin configuration
@@ -243,7 +247,6 @@ let g:ctrlp_by_filename = 1
 nnoremap <Leader>t :CtrlPTag<CR>
 nnoremap <Leader>m :CtrlPMRUFiles<CR>
 nnoremap <Leader>b :CtrlPBuffer<CR>
-
 
 " bbye
 nnoremap <Leader>q :Bdelete<CR>
@@ -316,17 +319,22 @@ syntax on
 " SECTION 6: Colorscheme settings
 " ===============================
 
+" colorscheme atom-dark-256
+
 colorscheme ron
 hi ColorColumn ctermbg=8
 hi Comment ctermfg=8
 hi LineNr ctermfg=8
 hi CursorLine cterm=none ctermbg=0
 
-hi SpellBad ctermfg=0
-hi SpellCap ctermfg=0
+hi SpellBad ctermfg=15
+hi SpellCap ctermfg=15
 
 hi link pythonOperator Statement
 hi link pythonNumber Structure
+
+hi CtrlPMode1 ctermfg=15
+hi link CtrlPMode2 StatusLine
 
 " tmux doesn't render italics properly, so let's just remap to standout
 if &term == "screen-256color"
@@ -400,3 +408,9 @@ function! <SID>FindDelimiter()
     let @/=_s
     set hlsearch
 endfunction
+
+" function! startup#YCMInstall(info)
+"     if a:info.status == 'installed' || a:info.force
+"         !./install.sh --clang-completer
+"     endif
+" endfunction
