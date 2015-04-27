@@ -27,23 +27,15 @@ endif
 call plug#begin('~/.vim/plugged')
 
 Plug 'scrooloose/syntastic' " Syntax checking
-Plug 'ap/vim-buftabline'
+Plug 'ap/vim-buftabline' " Lightweight bufferline like the vim tabline
 Plug 'tpope/vim-commentary' " Easily comment stuff out
-Plug 'kien/ctrlp.vim' " search for files/buffers
+Plug 'kien/ctrlp.vim' " Fuzzy search files/buffers/tags/etc
 Plug 'godlygeek/tabular' " line up text
-" Delimitmate screws up the dot command so let's try without autoclose
-" Plug 'Raimondi/delimitMate' " easier handling of delimiters
-Plug 'tpope/vim-surround' " easily wrap text in delimiters or change them
-Plug 'tpope/vim-fugitive' " git intergration
-Plug 'moll/vim-bbye' " a better way to delete buffers
-Plug 'jmcantrell/vim-virtualenv' " virtulenv support
+Plug 'tpope/vim-surround' " Easily wrap text in delimiters or change them
+Plug 'tpope/vim-fugitive' " Git intergration
+Plug 'moll/vim-bbye' " Deleete buffers without affecting windows
 Plug 'christoomey/vim-tmux-navigator' " Navigate vim and tmux with Ctrl-[hjkl]
 Plug 'jpalardy/vim-slime' " Send input from vim to screen/tmux
-Plug 'endel/vim-github-colorscheme'
-
-Plug 'flazz/vim-colorschemes'
-Plug 'gosukiwi/vim-atom-dark'
-Plug 'andrwb/vim-lapis256'
 
 " Plugins with a post-install hook
 " ================================
