@@ -36,6 +36,8 @@ Plug 'tpope/vim-fugitive' " Git intergration
 Plug 'moll/vim-bbye' " Deleete buffers without affecting windows
 Plug 'christoomey/vim-tmux-navigator' " Navigate vim and tmux with Ctrl-[hjkl]
 Plug 'jpalardy/vim-slime' " Send input from vim to screen/tmux
+Plug 'vim-scripts/Align'
+Plug 'NLKNguyen/papercolor-theme'
 
 " Plugins with a post-install hook
 " ================================
@@ -76,9 +78,10 @@ set cursorline
 set number
 set backspace=indent,eol,start " make backspace work as expected
 set laststatus=2 "always show the status line
-set wildignore+=*/venv/*,*.pyc,*.egg,*.egg-info/*,*.o,*/__pycache__/*
+set wildignore+=*/venv/**/*,*.pyc,*.egg,*.egg-info/**/*,*.o,*/__pycache__/**/*
 set hlsearch
 set incsearch
+set ignorecase
 set smartcase
 set autoindent
 set shiftwidth=4
@@ -91,6 +94,7 @@ set foldlevelstart=10
 set modelines=0 " http://www.techrepublic.com/blog/it-security/turn-off-modeline-support-in-vim/
 set undodir=~/.vim/undodir/
 set undofile
+set scrolloff=3
 
 " statusline
 set statusline=%n\ %t\ %y
@@ -223,6 +227,21 @@ xnoremap <Leader>r <Esc>:%s/<c-r>=GetVisual()<cr>/
 " Buftabline
 let g:buftabline_indicators = 1 " Show modified indicator
 
+" Align
+let g:loaded_AlignMapsPlugin=1
+" Align on equal signs
+noremap <Leader>a= :Align =<CR>
+" Align on commas
+noremap <Leader>a, :Align ,<CR>
+" Align on pipes
+noremap <Leader>a<bar> :Align <bar><CR>
+" Prompt for align character
+noremap <leader>ap :Align
+
+" Ghc-mod
+
+nnoremap <silent> <leader>ht :GhcModType<CR>
+nnoremap <silent> <leader>hT :GhcModTypeInsert<CR>
 
 " Tagbar
 nnoremap <F8> :TagbarToggle<CR>
@@ -245,10 +264,13 @@ nnoremap <Leader>q :Bdelete<CR>
 
 " Syntastic (install flake8 system wide)
 let g:syntastic_python_checkers = ['flake8']
+let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_wq = 0
 
 " Emmet
 let g:user_emmet_leader_key='<Leader>'
-let g:ujer_emmet_install_global = 0
+let g:user_emmet_install_global = 0
 
 " Undotree
 nnoremap <F5> :UndotreeToggle<CR>
@@ -302,6 +324,14 @@ augroup filetype_haskell
     autocmd FileType haskell setlocal tabstop=8
     autocmd FileType haskell setlocal shiftround
     autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+    autocmd FileType haskell inoremap <c-l> <space>-><space>
+    autocmd FileType haskell inoremap <c-l><c-k> <space>=><space>
+    autocmd FileType haskell nnoremap <Leader>n :noh<CR>:GhcModTypeClear<CR>
+augroup END
+
+augroup filetype_c
+    autocmd!
+    autocmd FileType c setlocal formatprg=astyle\ -S
 augroup END
 
 filetype plugin indent on
@@ -400,9 +430,3 @@ function! <SID>FindDelimiter()
     let @/=_s
     set hlsearch
 endfunction
-
-" function! startup#YCMInstall(info)
-"     if a:info.status == 'installed' || a:info.force
-"         !./install.sh --clang-completer
-"     endif
-" endfunction
