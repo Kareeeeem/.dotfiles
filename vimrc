@@ -27,17 +27,14 @@ endif
 call plug#begin('~/.vim/plugged')
 
 Plug 'scrooloose/syntastic' " Syntax checking
-Plug 'ap/vim-buftabline' " Lightweight bufferline like the vim tabline
 Plug 'tpope/vim-commentary' " Easily comment stuff out
 Plug 'kien/ctrlp.vim' " Fuzzy search files/buffers/tags/etc
 Plug 'godlygeek/tabular' " line up text
 Plug 'tpope/vim-surround' " Easily wrap text in delimiters or change them
 Plug 'tpope/vim-fugitive' " Git intergration
-Plug 'moll/vim-bbye' " Deleete buffers without affecting windows
+Plug 'moll/vim-bbye' " Delete buffers without affecting windows
 Plug 'christoomey/vim-tmux-navigator' " Navigate vim and tmux with Ctrl-[hjkl]
 Plug 'jpalardy/vim-slime' " Send input from vim to screen/tmux
-Plug 'vim-scripts/Align'
-Plug 'NLKNguyen/papercolor-theme'
 
 " Plugins with a post-install hook
 " ================================
@@ -60,7 +57,7 @@ Plug 'raichoo/haskell-vim', {'for': 'haskell'} " Haskell syntax highlighting and
 " ===================================
 
 Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'} " a filetree
-Plug 'mbbill/undotree', {'on': 'UndotreeToggle'} "  Undo through saves
+Plug 'mbbill/undotree', {'on': 'UndotreeToggle'} " An interface for going through the undo tree
 
 call plug#end()
 
@@ -107,15 +104,6 @@ set statusline+=\ %#Error#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-" set winwidth=84
-
-" We have to have a winheight bigger than we want to set winminheight. But if
-" we set winheight to be huge before winminheight, the winminheight set will
-" fail.
-
-" set winheight=5
-" set winminheight=5
-" set winheight=999
 
 " ===============================
 " SECTION 3: Key mappings
@@ -126,88 +114,39 @@ set statusline+=%*
 
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
-" a because backslash is in a awkward place
+" Because backslash is in a awkward place
 let mapleader = "\<Space>"
 
 " Normal mode
 " ===========
 
-map <Leader>c :colorscheme
+" Go to last used buffer
+nnoremap <Leader><Leader> <C-^>
 
-" Switch buffers the native way
-nnoremap <Leader>b :buffers<CR>:buffer<Space>
-nnoremap K :bn<CR>
-nnoremap J :bp<CR>
-
-" put the original functionality of , on \
-" nnoremap \ ,
-
-" swap ; and : because the latter is used much more often
-" nnoremap ; :
-" nnoremap : ;
-
-" start external command with just !
-nnoremap ! :!
-
-" because we map bp to J
-nnoremap <Leader>j J
-
-" break line and return to the previous one
-nnoremap <Leader>k i<cr><esc>k$
+" Mirror the J command
+nnoremap K i<cr><esc>k$
 
 " Clear searchhighlighting
 nnoremap <Leader>n :nohl<CR>
-
-" Move between splits
-" Is now taken care of by Tmux navigator
-" nnoremap <C-H> <C-W><C-H>
-" nnoremap <C-L> <C-W><C-L>
-" nnoremap <C-K> <C-W><C-K>
-" nnoremap <C-J> <C-W><C-J>
 
 " j and k on columns rather than lines
 nnoremap j gj
 nnoremap k gk
 
-" Y yanks till eol
+" Y yanks till eol to be consistent with C and D
 nnoremap Y y$
 
 " 0 puts cursor at first non whitespace char
 nnoremap 0 ^
 
-" Resize vertical splits
-nnoremap <Leader>vr :vertical resize 85
-nnoremap <Leader>] :vertical resize +5<CR>
-nnoremap <Leader>[ :vertical resize -5<CR>
-
 " Search replace word under cursor
 nnoremap <Leader>r :%s/\<<C-r><C-w>\>/
-
-" Strip whitespace withour changing cursor position or having it in the search
-" history
-nnoremap <silent> <Leader>w :call <SID>StripTrailingWhitespaces()<CR>
 
 " Highlight last inserted text
 nnoremap gV `[v`]
 
-" Insert mode
-" ===========
-
-" because esc is too far away and when are you gonna type jj?
-" Lets try with just <C-[>
-" inoremap jj <Esc>
-
-" Find delimiter without search highlighting or putting it as the last search
-" in search history
-" This screws up undo
-" inoremap <silent> kj <Esc>:call <SID>FindDelimiter()<CR>a
-
 " Visual mode
 " ===========
-
-" Bubble multiple lines
-xnoremap <c-j> xp`[v`]
-xnoremap <c-k> xkp`[v`]
 
 " * and # search for visual selection
 xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
@@ -224,37 +163,17 @@ xnoremap <Leader>r <Esc>:%s/<c-r>=GetVisual()<cr>/
 " SECTION 4: Plugin configuration
 " ===============================
 
-" Buftabline
-let g:buftabline_indicators = 1 " Show modified indicator
-
-" Align
-let g:loaded_AlignMapsPlugin=1
-" Align on equal signs
-noremap <Leader>a= :Align =<CR>
-" Align on commas
-noremap <Leader>a, :Align ,<CR>
-" Align on pipes
-noremap <Leader>a<bar> :Align <bar><CR>
-" Prompt for align character
-noremap <leader>ap :Align
-
 " Ghc-mod
-
 nnoremap <silent> <leader>ht :GhcModType<CR>
 nnoremap <silent> <leader>hT :GhcModTypeInsert<CR>
-
-" Tagbar
-nnoremap <F8> :TagbarToggle<CR>
 
 " Slime
 let g:slime_target = 'tmux'
 let g:slime_python_ipython = 1
 
 " CtrlP
-let g:ctrlp_match_window = 'max:13,results:13'
 let g:ctrlp_open_multiple_files = '1r'
 let g:ctrlp_open_new_file = 'r'
-let g:ctrlp_by_filename = 1
 nnoremap <Leader>t :CtrlPTag<CR>
 nnoremap <Leader>m :CtrlPMRUFiles<CR>
 nnoremap <Leader>b :CtrlPBuffer<CR>
@@ -265,7 +184,6 @@ nnoremap <Leader>q :Bdelete<CR>
 " Syntastic (install flake8 system wide)
 let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_wq = 0
 
 " Emmet
@@ -288,8 +206,8 @@ let NERDTreeIgnore = ['\.pyc$', '*egg*']
 let g:ycm_global_ycm_extra_conf = '~/.dotfiles/.ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_filetype_blacklist = {'mkd': 1}
 let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_filetype_blacklist = {'mkd': 1}
 let g:ycm_semantic_triggers = {'haskell' : ['.']}
 
 
@@ -307,30 +225,21 @@ augroup write_file
         \ endif
 augroup END
 
-augroup emmet
-    autocmd!
-    autocmd FileType mako,html,css,htmldjango EmmetInstall
-augroup END
-
-augroup filetype_mkd
+augroup filetypes
     autocmd!
     autocmd FileType mkd setlocal textwidth=79
     autocmd FileType mkd setlocal formatoptions+=t
     autocmd FileType mkd setlocal formatprg=par\ -79
-augroup END
 
-augroup filetype_haskell
-    autocmd!
+    autocmd FileType mako,html,css,htmldjango EmmetInstall
+
     autocmd FileType haskell setlocal tabstop=8
     autocmd FileType haskell setlocal shiftround
     autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
     autocmd FileType haskell inoremap <c-l> <space>-><space>
     autocmd FileType haskell inoremap <c-l><c-k> <space>=><space>
     autocmd FileType haskell nnoremap <Leader>n :noh<CR>:GhcModTypeClear<CR>
-augroup END
 
-augroup filetype_c
-    autocmd!
     autocmd FileType c setlocal formatprg=astyle\ -S
 augroup END
 
@@ -341,8 +250,6 @@ syntax on
 " SECTION 6: Colorscheme settings
 " ===============================
 
-" colorscheme atom-dark-256
-
 colorscheme ron
 hi ColorColumn ctermbg=8
 hi Comment ctermfg=8
@@ -351,6 +258,7 @@ hi CursorLine cterm=none ctermbg=0
 
 hi SpellBad ctermfg=15
 hi SpellCap ctermfg=15
+hi TODO ctermfg=15 ctermbg=1
 
 hi link pythonOperator Statement
 hi link pythonNumber Structure
@@ -421,12 +329,4 @@ function! s:VSetSearch(cmdtype)
     norm! gv"sy
     let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
     let @s = temp
-endfunction
-
-function! <SID>FindDelimiter()
-    set nohlsearch
-    let _s=@/
-    execute "normal! /[]})`'\"]\<CR>"
-    let @/=_s
-    set hlsearch
 endfunction
