@@ -52,6 +52,8 @@ Plug 'jmcantrell/vim-virtualenv', {'for': 'python'} " virtualenv support
 Plug 'eagletmt/neco-ghc', {'for': 'haskell'} " haskell autocomplete
 Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'} " Ghc-mod support
 Plug 'raichoo/haskell-vim', {'for': 'haskell'} " Haskell syntax highlighting and indentation
+Plug 'mxw/vim-jsx', {'for': 'jsx'} "  JSX syntax highlighting and identation
+Plug 'pangloss/vim-javascript'
 
 " Plugins loaded on running a command
 " ===================================
@@ -75,7 +77,6 @@ set cursorline
 set number
 set backspace=indent,eol,start " make backspace work as expected
 set laststatus=2 "always show the status line
-set wildignore+=*/venv/**/*,*.pyc,*.egg,*.egg-info/**/*,*.o,*/__pycache__/**/*
 set hlsearch
 set incsearch
 set ignorecase
@@ -103,6 +104,16 @@ set statusline+=%-14.(%l,%c%V%)\ %P
 set statusline+=\ %#Error#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
+
+" wildignore
+set wildignore+=*.o
+set wildignore+=*.egg
+set wildignore+=*.pyc
+
+set wildignore+=*/venv/*
+set wildignore+=*/*.egg-info/*
+set wildignore+=*/__pycache__/*
+set wildignore+=*/node_modules/*
 
 
 " ===============================
@@ -174,6 +185,7 @@ let g:slime_python_ipython = 1
 " CtrlP
 let g:ctrlp_open_multiple_files = '1r'
 let g:ctrlp_open_new_file = 'r'
+let g:ctrlp_by_filename = 1
 nnoremap <Leader>t :CtrlPTag<CR>
 nnoremap <Leader>m :CtrlPMRUFiles<CR>
 nnoremap <Leader>b :CtrlPBuffer<CR>
@@ -187,7 +199,6 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_check_on_wq = 0
 
 " Emmet
-let g:user_emmet_leader_key='<Leader>'
 let g:user_emmet_install_global = 0
 
 " Undotree
@@ -210,6 +221,8 @@ let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_filetype_blacklist = {'mkd': 1}
 let g:ycm_semantic_triggers = {'haskell' : ['.']}
 
+" jsx
+let g:jsx_ext_required = 0
 
 " =======================
 " SECTION 5: Autocommands
@@ -227,11 +240,20 @@ augroup END
 
 augroup filetypes
     autocmd!
+
     autocmd FileType mkd setlocal textwidth=79
     autocmd FileType mkd setlocal formatoptions+=t
     autocmd FileType mkd setlocal formatprg=par\ -79
+    autocmd FileType mkd nnoremap <Leader>1 yypVr=o<ESC>
+    autocmd FileType mkd nnoremap <Leader>2 yypVr-o<ESC>
 
     autocmd FileType mako,html,css,htmldjango EmmetInstall
+
+    autocmd FileType html setlocal shiftwidth=2
+    autocmd FileType html setlocal softtabstop=2
+
+    autocmd FileType javascript.jsx setlocal shiftwidth=2
+    autocmd FileType javascript.jsx setlocal softtabstop=2
 
     autocmd FileType haskell setlocal tabstop=8
     autocmd FileType haskell setlocal shiftround
