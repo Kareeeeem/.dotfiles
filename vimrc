@@ -27,69 +27,69 @@ endif
 call plug#begin('~/.vim/plugged')
 
 Plug 'scrooloose/syntastic' " Syntax checking
+Plug 'ap/vim-buftabline' " Buffers in de tab bar
 Plug 'tpope/vim-commentary' " Easily comment stuff out
-Plug 'kien/ctrlp.vim' " Fuzzy search files/buffers/tags/etc
-Plug 'godlygeek/tabular' " line up text
+Plug 'ctrlpvim/ctrlp.vim' " Fuzzy search files/buffers/tags/etc
 Plug 'tpope/vim-surround' " Easily wrap text in delimiters or change them
 Plug 'tpope/vim-fugitive' " Git intergration
 Plug 'moll/vim-bbye' " Delete buffers without affecting windows
 Plug 'christoomey/vim-tmux-navigator' " Navigate vim and tmux with Ctrl-[hjkl]
 Plug 'jpalardy/vim-slime' " Send input from vim to screen/tmux
+Plug 'mitsuhiko/vim-jinja' " Jinja syntax highlighting
 
-" Plugins with a post-install hook
-" ================================
-
-Plug 'Valloric/YouCompleteMe', {'do': './install.sh --clang-completer'}
-Plug 'Shougo/vimproc.vim', {'do': 'make'} " Dependency for ghc-mod
-
-" Plugins loaded for specific filetypes
-" =====================================
+Plug 'Valloric/YouCompleteMe', {'do': './install.py --clang-completer'} " Autocompletion
 
 Plug 'plasticboy/vim-markdown', {'for': 'mkd'} " markdown syntax highlighting
-Plug 'mattn/emmet-vim', {'for': ['html', 'css', 'htmldjango']} " html/css abbreviations
+Plug 'mattn/emmet-vim', {'for': ['html', 'css', 'htmldjango', 'htmljinja']} " html/css abbreviations
 Plug 'hynek/vim-python-pep8-indent', {'for': 'python'} " Better python indentation
 Plug 'jmcantrell/vim-virtualenv', {'for': 'python'} " virtualenv support
-Plug 'eagletmt/neco-ghc', {'for': 'haskell'} " haskell autocomplete
-Plug 'eagletmt/ghcmod-vim', {'for': 'haskell'} " Ghc-mod support
-Plug 'raichoo/haskell-vim', {'for': 'haskell'} " Haskell syntax highlighting and indentation
-Plug 'mxw/vim-jsx', {'for': 'jsx'} "  JSX syntax highlighting and identation
-Plug 'pangloss/vim-javascript'
-
-" Plugins loaded on running a command
-" ===================================
+Plug 'pangloss/vim-javascript', {'for': ['javascript.jsx', 'js']} " Javascript indentation
+Plug 'mxw/vim-jsx', {'for': ['javascript.jsx', 'js']} " JSX syntax highlighting / identation
+Plug 'rust-lang/rust.vim', {'for': ['rust']} " JSX syntax highlighting / identation
 
 Plug 'scrooloose/nerdtree', {'on': 'NERDTreeToggle'} " a filetree
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'} " An interface for going through the undo tree
 
 call plug#end()
 
+filetype plugin indent on
+syntax on
+
 " ===============================
 " SECTION 2: Basic settings
 " ===============================
 
-set hidden " enable hidden buffers
-set spelllang=nl
+" See `:help {setting}` for explanation.
+
+
+set hidden
+set backspace=indent,eol,start
 set encoding=utf-8
-set fileencoding=utf-8
+
+set laststatus=2
 set colorcolumn=80
 set background=dark
-set cursorline
 set number
-set backspace=indent,eol,start " make backspace work as expected
-set laststatus=2 "always show the status line
+
 set hlsearch
 set incsearch
 set ignorecase
 set smartcase
+
 set autoindent
 set shiftwidth=4
 set softtabstop=4
 set expandtab
+
 set foldenable
 set foldmethod=indent
 set foldnestmax=10
 set foldlevelstart=10
-set modelines=0 " http://www.techrepublic.com/blog/it-security/turn-off-modeline-support-in-vim/
+
+" http://www.techrepublic.com/blog/it-security/turn-off-modeline-support-in-vim/
+set modelines=0
+
+" Make sure this directory exists.
 set undodir=~/.vim/undodir/
 set undofile
 set scrolloff=3
@@ -100,6 +100,7 @@ set statusline+=\ %h%m%r
 set statusline+=\ %<%{fugitive#statusline()}
 set statusline+=%= " right alignment from this point
 set statusline+=%-14.(%l,%c%V%)\ %P
+
 " syntastic statusline
 set statusline+=\ %#Error#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -109,12 +110,11 @@ set statusline+=%*
 set wildignore+=*.o
 set wildignore+=*.egg
 set wildignore+=*.pyc
-
 set wildignore+=*/venv/*
+set wildignore+=*/dist/*
 set wildignore+=*/*.egg-info/*
 set wildignore+=*/__pycache__/*
 set wildignore+=*/node_modules/*
-
 
 " ===============================
 " SECTION 3: Key mappings
@@ -123,22 +123,38 @@ set wildignore+=*/node_modules/*
 " Command line mode
 " =================
 
+" Expand `%%` to current directory.
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
-
-" Because backslash is in a awkward place
-let mapleader = "\<Space>"
 
 " Normal mode
 " ===========
 
+" Because backslash is in a awkward place.
+let mapleader = "\<Space>"
+
+" I almost never want to go to the ABSOLUTE beginning of a line
+nnoremap 0 ^
+
+" Insert a uuid
+inoremap uuid4 '<C-r>=system('python -c "import uuid, sys; sys.stdout.write(str(uuid.uuid4()))"')<CR>'
+
+" Break lines on a comma.
+nnoremap <leader>, f,cw,<CR><ESC>
+
+nnoremap <F6> :set paste!<CR>
+
 " Go to last used buffer
 nnoremap <Leader><Leader> <C-^>
 
-" Mirror the J command
+" Break line
 nnoremap K i<cr><esc>k$
 
-" Clear searchhighlighting
-nnoremap <Leader>n :nohl<CR>
+" buffers
+nnoremap <leader>b :bp<CR>
+nnoremap <leader>n :bn<CR>
+
+" Clear search highlighting
+nnoremap <F7> :set hlsearch!<CR>
 
 " j and k on columns rather than lines
 nnoremap j gj
@@ -146,12 +162,6 @@ nnoremap k gk
 
 " Y yanks till eol to be consistent with C and D
 nnoremap Y y$
-
-" 0 puts cursor at first non whitespace char
-nnoremap 0 ^
-
-" Search replace word under cursor
-nnoremap <Leader>r :%s/\<<C-r><C-w>\>/
 
 " Highlight last inserted text
 nnoremap gV `[v`]
@@ -167,16 +177,12 @@ xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
 xnoremap < <gv
 xnoremap > >gv
 
-" Start the find and replace command for visually selected text
+" Search replace visual selection
 xnoremap <Leader>r <Esc>:%s/<c-r>=GetVisual()<cr>/
 
 " ===============================
 " SECTION 4: Plugin configuration
 " ===============================
-
-" Ghc-mod
-nnoremap <silent> <leader>ht :GhcModType<CR>
-nnoremap <silent> <leader>hT :GhcModTypeInsert<CR>
 
 " Slime
 let g:slime_target = 'tmux'
@@ -186,17 +192,16 @@ let g:slime_python_ipython = 1
 let g:ctrlp_open_multiple_files = '1r'
 let g:ctrlp_open_new_file = 'r'
 let g:ctrlp_by_filename = 1
-nnoremap <Leader>t :CtrlPTag<CR>
-nnoremap <Leader>m :CtrlPMRUFiles<CR>
-nnoremap <Leader>b :CtrlPBuffer<CR>
+let g:ctrlp_extensions = ['tag']
+nnoremap <leader>m :CtrlPMRUFiles<CR>
 
 " bbye
 nnoremap <Leader>q :Bdelete<CR>
 
-" Syntastic (install flake8 system wide)
-let g:syntastic_python_checkers = ['flake8']
+" Syntastic
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_python_checkers = ['flake8']
 
 " Emmet
 let g:user_emmet_install_global = 0
@@ -209,20 +214,23 @@ endif
 
 " NERDTree
 nnoremap <C-n> :NERDTreeToggle<CR>
-let NERDTreeQuitOnOpen=1
 let g:NERDTreeDirArrows=0
+let NERDTreeQuitOnOpen=1
 let NERDTreeIgnore = ['\.pyc$', '*egg*']
 
 " YouCompleteMe
 let g:ycm_global_ycm_extra_conf = '~/.dotfiles/.ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
-let g:ycm_filetype_blacklist = {'mkd': 1}
-let g:ycm_semantic_triggers = {'haskell' : ['.']}
+nnoremap <leader>g :YcmCompleter GoTo<CR>
 
-" jsx
+" vim-jsx
 let g:jsx_ext_required = 0
+
+" Buftabline
+let g:buftabline_numbers = 1
+let g:buftabline_indicators = 1
+let g:buftabline_seperators = 1
 
 " =======================
 " SECTION 5: Autocommands
@@ -231,6 +239,7 @@ let g:jsx_ext_required = 0
 augroup write_file
     autocmd!
     autocmd BufWritePre * call <SID>StripTrailingWhitespaces()
+
     " If git-tags git hook installed run it on every save
     autocmd BufWritePost *
         \ if exists('b:git_dir') && executable(b:git_dir.'/hooks/git-tags') |
@@ -241,32 +250,21 @@ augroup END
 augroup filetypes
     autocmd!
 
-    autocmd FileType mkd setlocal textwidth=79
-    autocmd FileType mkd setlocal formatoptions+=t
-    autocmd FileType mkd setlocal formatprg=par\ -79
-    autocmd FileType mkd nnoremap <Leader>1 yypVr=o<ESC>
-    autocmd FileType mkd nnoremap <Leader>2 yypVr-o<ESC>
+    " autocmd FileType mkd.markdown setlocal textwidth=79
+    " autocmd FileType mkd.markdown setlocal formatoptions+=t
+    " autocmd FileType mkd.markdown setlocal formatprg=par\ -79
+    " autocmd FileType mkd.markdown nnoremap <buffer> <Leader>1 yypVr=o<ESC>
+    " autocmd FileType mkd.markdown nnoremap <buffer> <Leader>2 yypVr-o<ESC>
 
-    autocmd FileType mako,html,css,htmldjango EmmetInstall
+    autocmd FileType mako,html,css,htmldjango,htmljinja EmmetInstall
 
-    autocmd FileType html setlocal shiftwidth=2
-    autocmd FileType html setlocal softtabstop=2
-
-    autocmd FileType javascript.jsx setlocal shiftwidth=2
-    autocmd FileType javascript.jsx setlocal softtabstop=2
-
-    autocmd FileType haskell setlocal tabstop=8
-    autocmd FileType haskell setlocal shiftround
-    autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
-    autocmd FileType haskell inoremap <c-l> <space>-><space>
-    autocmd FileType haskell inoremap <c-l><c-k> <space>=><space>
-    autocmd FileType haskell nnoremap <Leader>n :noh<CR>:GhcModTypeClear<CR>
+    autocmd FileType css,html,htmljinja,javascript.jsx,javascript setlocal shiftwidth=2
+    autocmd FileType css,html,htmljinja,javascript.jsx,javascript setlocal softtabstop=2
 
     autocmd FileType c setlocal formatprg=astyle\ -S
-augroup END
 
-filetype plugin indent on
-syntax on
+    autocmd FileType htmljinja setlocal commentstring={#\ %s\ #}
+augroup END
 
 " ===============================
 " SECTION 6: Colorscheme settings
@@ -276,17 +274,14 @@ colorscheme ron
 hi ColorColumn ctermbg=8
 hi Comment ctermfg=8
 hi LineNr ctermfg=8
-hi CursorLine cterm=none ctermbg=0
-
 hi SpellBad ctermfg=15
 hi SpellCap ctermfg=15
 hi TODO ctermfg=15 ctermbg=1
-
 hi link pythonOperator Statement
 hi link pythonNumber Structure
-
 hi CtrlPMode1 ctermfg=15
 hi link CtrlPMode2 StatusLine
+hi StatusLineNC ctermfg=8
 
 " tmux doesn't render italics properly, so let's just remap to standout
 if &term == "screen-256color"
@@ -298,7 +293,7 @@ endif
 " ===========================
 
 function! <SID>StripTrailingWhitespaces()
-    " Preparation: save last search, and cursor position.
+    " prep: save last search, and cursor position.
     let _s=@/
     let l = line(".")
     let c = col(".")

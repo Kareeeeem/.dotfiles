@@ -51,13 +51,11 @@ grml_theme_add_token  virtual-env -f virtual_env_prompt '%B%F{magenta}' '%b%f'
 
 # Simple git prompt
 
-# Show Git branch/tag, or name-rev if on detached head
 parse_git_branch() {
     (git symbolic-ref -q HEAD || git name-rev --name-only \
         --no-undefined --always HEAD) 2> /dev/null
 }
 
-# Get clean or dirty state
 parse_git_state() {
     if [[ -n $(git status --porcelain 2> /dev/null) ]]; then
         echo "%B%F{red}"
@@ -83,10 +81,6 @@ function git_branch_prompt () {
     REPLY=$(git_prompt_string)
 }
 
-# function task_prompt () {
-#     REPLY=$(task-prompt)
-# }
-
 # grml_theme_add_token  task_prompt -f task_prompt '' ''
 grml_theme_add_token  git-branch-prompt -f git_branch_prompt '' ''
 grml_theme_add_token  colon ':' '' ''
@@ -96,7 +90,7 @@ zstyle ':prompt:grml:*:items:path' token '%2~ '
 
 zstyle ':prompt:grml:*:items:user' pre ''
 
-zstyle ':prompt:grml:left:setup' items rc virtual-env git-branch-prompt task_prompt user \
+zstyle ':prompt:grml:left:setup' items rc virtual-env git-branch-prompt user \
     colon path percent
 zstyle ':prompt:grml:right:setup' items sad-smiley
 
@@ -386,12 +380,6 @@ stty erase "^?"
 # http://superuser.com/questions/446594/separate-up-arrow-lookback-for-local-and-global-zsh-history
 
 # Aliases
-alias ta='tmux attach -t'
-alias ts='tmux new-session -s'
-alias tl='tmux list-sessions'
-alias tksv='tmux kill-server'
-alias tkss='tmux kill-session -t'
-alias nv='nvim'
 alias rmpyc='find . -name "*.pyc" -delete'
 alias rmswp='find . -name ".*.swp" -delete'
 
