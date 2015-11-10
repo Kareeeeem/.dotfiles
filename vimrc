@@ -250,20 +250,22 @@ augroup END
 augroup filetypes
     autocmd!
 
-    " autocmd FileType mkd.markdown setlocal textwidth=79
-    " autocmd FileType mkd.markdown setlocal formatoptions+=t
-    " autocmd FileType mkd.markdown setlocal formatprg=par\ -79
-    " autocmd FileType mkd.markdown nnoremap <buffer> <Leader>1 yypVr=o<ESC>
-    " autocmd FileType mkd.markdown nnoremap <buffer> <Leader>2 yypVr-o<ESC>
+    autocmd FileType mkd.markdown setlocal textwidth=79
+    autocmd FileType mkd.markdown setlocal formatoptions+=t
+    autocmd FileType mkd.markdown setlocal formatprg=par\ -79
+    autocmd FileType mkd.markdown nnoremap <buffer> <Leader>1 yypVr=o<ESC>
+    autocmd FileType mkd.markdown nnoremap <buffer> <Leader>2 yypVr-o<ESC>
+
+    autocmd FileType sh setlocal tabstop=4 noexpandtab
 
     autocmd FileType mako,html,css,htmldjango,htmljinja EmmetInstall
 
     autocmd FileType css,html,htmljinja,javascript.jsx,javascript setlocal shiftwidth=2
     autocmd FileType css,html,htmljinja,javascript.jsx,javascript setlocal softtabstop=2
+    autocmd FileType htmljinja setlocal commentstring={#\ %s\ #}
 
     autocmd FileType c setlocal formatprg=astyle\ -S
 
-    autocmd FileType htmljinja setlocal commentstring={#\ %s\ #}
 augroup END
 
 " ===============================
@@ -271,6 +273,8 @@ augroup END
 " ===============================
 
 colorscheme ron
+
+" A little customization is in order.
 hi ColorColumn ctermbg=8
 hi Comment ctermfg=8
 hi LineNr ctermfg=8
