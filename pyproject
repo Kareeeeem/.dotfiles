@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Work on a python project in tmux Set up a new project with a virtualenv and .
+# some packages if it's a new project                                         .
+
+if [ -z "$1" ]
+then
+    echo "Please specify a project to work on."
+    exit 1
+else
+    PROJECTNAME="${1,,}"
+    WORKING_DIRECTORY="$HOME/projects/python/$PROJECTNAME"
+fi
+
+if [ ! -d $WORKING_DIRECTORY ];
+then
+	mkdir $WORKING_DIRECTORY
+	(cd $WORKING_DIRECTORY; \
+		virtualenv venv; \
+		echo "What packages do you need?"; \
+		read packages; \
+		for package in $packages
+		do
+			"$WORKING_DIRECTORY/venv/bin/pip" install $package
+		done
+
+		echo "#${PROJECTNAME^}" >> README.md; \
+		git init; \
+		cat > .gitignore <<- EOM
+		*.swp
+		*.py[cod]
+		*.log
+		*.egg-info
+		*.egg
+		venv/
+		dist/
+		sdist/
+		__pycache__/
+		EOM
+	)
+fi
+
+ACTIVATE=". venv/bin/activate"
+
+tmux new-session -d -c $WORKING_DIRECTORY -s $PROJECTNAME -n "dev"
+tmux send-keys "$ACTIVATE" C-m
+tmux send-keys "vim" C-m
+
+tmux split-window -v -p 20 -c "#{pane_current_path}"
+tmux send-keys "$ACTIVATE" C-m
+tmux select-pane -t :.0
+
+tmux new-window -t $PROJECTNAME:1 -n "shell" -c "#{pane_current_path}" -d
+tmux send-keys -t $PROJECTNAME:1.0 "$ACTIVATE" C-m
+
+tmux a -t $PROJECTNAME

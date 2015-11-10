@@ -1,8 +1,0 @@
-#!/usr/bin/python
-import taskw
-w = taskw.TaskWarrior()
-tasks = w.load_tasks()
-next_task = tasks['pending'][0]
-
-prompt = "t:%B%F{{magenta}}{}%f%b ".format(next_task['description'])
-print prompt
