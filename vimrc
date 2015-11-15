@@ -191,7 +191,6 @@ let g:slime_python_ipython = 1
 " CtrlP
 let g:ctrlp_open_multiple_files = '1r'
 let g:ctrlp_open_new_file = 'r'
-let g:ctrlp_by_filename = 1
 let g:ctrlp_extensions = ['tag']
 nnoremap <leader>m :CtrlPMRUFiles<CR>
 
@@ -219,7 +218,7 @@ let NERDTreeQuitOnOpen=1
 let NERDTreeIgnore = ['\.pyc$', '*egg*']
 
 " YouCompleteMe
-let g:ycm_global_ycm_extra_conf = '~/.dotfiles/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '~/dotfiles/.ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
 nnoremap <leader>g :YcmCompleter GoTo<CR>

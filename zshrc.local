@@ -383,7 +383,7 @@ stty erase "^?"
 alias rmpyc='find . -name "*.pyc" -delete'
 alias rmswp='find . -name ".*.swp" -delete'
 
-source ~/.dotfiles/z.sh
+source ~/dotfiles/z.sh
 fpath=(~/.zsh $fpath)
 
 ## END OF FILE #################################################################
