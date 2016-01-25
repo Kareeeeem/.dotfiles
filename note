@@ -7,7 +7,6 @@ DATE=$(date +'%F %T')
 NOTESFILE="$HOME/notes.txt"
 SEPERATOR="---"
 AWKRS="$SEPERATOR\n"
-TEMP=""
 
 if [[ -z $EDITOR ]]; then EDITOR="vim"; fi
 if [[ ! -e $NOTESFILE ]]; then touch $NOTESFILE; fi
@@ -26,9 +25,9 @@ insert_seperator () { printf "%b\n" "$SEPERATOR" >> $1 ; }
 check_modified () { if [[ $1 == $(stat -c %y "$2") ]]; then exit 1; fi ; }
 get_entries () { awk '{s=tolower($0)}'" $1 "'{print $0 }' RS="$AWKRS" $NOTESFILE ; }
 get_title () { printf "$1" | cut -f1 -d$'\n' ; }
-delete_entry () { sed -i~ -e "/$1/I,/$SEPERATOR/d" $NOTESFILE ; }
+delete_note () { sed -i~ -e "/$1/,/$SEPERATOR/d" $NOTESFILE ; }
 
-# if no arguments then open editor and save the entry.
+# if no arguments then open editor and save the note.
 if [[ $# == 0 ]]; then
 	TEMP=$(mktemp); printf "%s " "$DATE" > $TEMP
 	TEMPMODIFIED=$(stat -c %y "$TEMP")
@@ -37,7 +36,7 @@ if [[ $# == 0 ]]; then
 	insert_seperator $TEMP
 	prepend $TEMP
 
-# if content is given as arguments than parse it and save it as an entry.
+# if content is given as arguments than parse it and save it as an note.
 elif [[ $1 =~ ^[[:alnum:]] ]]; then
 	CONTENT="$(echo $* | sed -e $'s/\. /\.\\n/')"
 	printf "%s %s\n%b\n" "$DATE" "$CONTENT" $SEPERATOR | prepend -
@@ -96,27 +95,30 @@ else
 		elif [[ $MATCHES == "1" ]]; then
 
 			if [[ $DELETE ]]; then
-				ENTRY=$(get_entries "s~/$SEARCH/")
-				read -p "Delete the above entry y/n)>? " -n 1 -r
-				if [[ $REPLY =~ ^[Yy]$ ]]; then delete_entry $(get_title "$ENTRY"); fi
+				NOTE=$(get_entries "s~/$SEARCH/")
+				printf "\n%s\n\n" "$NOTE"
+				read -p "Delete the above note, y/n? " -n 1 -r
+				echo
+				if [[ $REPLY =~ ^[Yy]$ ]]; then
+					delete_note "$(get_title "$NOTE")"
+				fi
 
 			elif [[ $EDIT ]]; then
-				OLDENTRY=$(get_entries "s~/$SEARCH/")
-				NEWENTRY=$(printf "$1" | \
+				OLDNOTE=$(get_entries "s~/$SEARCH/")
+				NEWNOTE=$(printf "$1" | \
 					sed -e "s/^[0-9\-]\{10\} [0-9:]\{8\}/$DATE/g")
-				TEMP=$(mktemp); printf "$ENTRY" > "$TEMP"
+				TEMP=$(mktemp); printf "$NOTE" > "$TEMP"
 				TEMPMODIFIED=$(stat -c %y "$TEMP")
 				$EDITOR $TEMP
 				check_modified "$TEMPMODIFIED" "$TEMP"
 				insert_seperator $TEMP
-				the updated entry
 				prepend $TEMP
-				delete_entry $(get_title "$OLDENTRY")
+				delete_note "$(get_title "$OLDNOTE")"
 			fi
 		fi
 
 	elif [[ $LIST ]]; then
-		PATTERN=$(get_patterns $PATTERNOPERATOR "${PATTERNS[@]}")
+		PATTERN="$(get_patterns $PATTERNOPERATOR "${PATTERNS[@]}")"
 		awk '{s=tolower($0)}'" $PATTERN "'{
 			printf "%s ", $1
 			split($0, words, " ")
@@ -127,7 +129,7 @@ else
 		}' RS="$AWKRS" FS="\n" $NOTESFILE
 
 	elif [[ $READ ]]; then
-		get_entries $(get_patterns $PATTERNOPERATOR "${PATTERNS[@]}")
+		get_entries "$(get_patterns $PATTERNOPERATOR "${PATTERNS[@]}")"
 	fi
 fi
 
