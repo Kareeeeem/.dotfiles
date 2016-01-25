@@ -1,0 +1,134 @@
+#!/bin/bash
+
+# Note taking app writen in bash modeled after jrnl[0].
+# [0]: http://maebert.github.io/jrnl/
+
+DATE=$(date +'%F %T')
+NOTESFILE="$HOME/notes.txt"
+SEPERATOR="---"
+AWKRS="$SEPERATOR\n"
+TEMP=""
+
+if [[ -z $EDITOR ]]; then EDITOR="vim"; fi
+if [[ ! -e $NOTESFILE ]]; then touch $NOTESFILE; fi
+
+prepend () {
+	# A tempfile path used for prepending to file
+	PREPENDTEMP='/tmp/outnotes'
+	cat $1 $NOTESFILE > $PREPENDTEMP && mv $PREPENDTEMP $NOTESFILE
+}
+get_patterns () {
+	OPERATOR=$1; shift
+	PATTERNS=("$@")
+	echo ${PATTERNS[@]} | sed -e "s/[[:space:]]/ $OPERATOR /g"
+}
+insert_seperator () { printf "%b\n" "$SEPERATOR" >> $1 ; }
+check_modified () { if [[ $1 == $(stat -c %y "$2") ]]; then exit 1; fi ; }
+get_entries () { awk '{s=tolower($0)}'" $1 "'{print $0 }' RS="$AWKRS" $NOTESFILE ; }
+get_title () { printf "$1" | cut -f1 -d$'\n' ; }
+delete_entry () { sed -i~ -e "/$1/I,/$SEPERATOR/d" $NOTESFILE ; }
+
+# if no arguments then open editor and save the entry.
+if [[ $# == 0 ]]; then
+	TEMP=$(mktemp); printf "%s " "$DATE" > $TEMP
+	TEMPMODIFIED=$(stat -c %y "$TEMP")
+	$EDITOR $TEMP
+	check_modified "$TEMPMODIFIED" "$TEMP"
+	insert_seperator $TEMP
+	prepend $TEMP
+
+# if content is given as arguments than parse it and save it as an entry.
+elif [[ $1 =~ ^[[:alnum:]] ]]; then
+	CONTENT="$(echo $* | sed -e $'s/\. /\.\\n/')"
+	printf "%s %s\n%b\n" "$DATE" "$CONTENT" $SEPERATOR | prepend -
+
+else
+	PATTERNS=()
+	PATTERNOPERATOR="||"
+	while [[ $# > 0 ]]; do
+		case $1 in
+			@* )
+				READ=true
+				TAG=${1,,}
+				PATTERNS+=("s~/${TAG}/")
+				shift
+				;;
+			-r|--read )
+				READ=true
+				shift
+				;;
+			-e|--edit )
+				EDIT=true
+				shift
+				SEARCH="$@"
+				break
+				;;
+			-d|--d )
+				DELETE=true
+				shift
+				SEARCH="$@"
+				break
+				;;
+			-ls|--list )
+				LIST=true
+				shift
+				;;
+			--and )
+				PATTERNOPERATOR="\&\&"
+				shift
+				;;
+			* )
+				shift
+				;;
+		esac
+	done
+
+	if [[ $SEARCH ]]; then
+		MATCHES=$(grep -i -o "$SEARCH" $NOTESFILE | wc -l)
+
+		if [[ $MATCHES && $MATCHES > 1 ]]; then
+			awk '{s=tolower($0)}'" s~/$SEARCH/ "'{ print $1, $2 }' \
+				RS="$AWKRS" FS="\n" $NOTESFILE
+
+		elif [[ $MATCHES == '0' ]]; then
+			echo "No notes found"
+
+		elif [[ $MATCHES == "1" ]]; then
+
+			if [[ $DELETE ]]; then
+				ENTRY=$(get_entries "s~/$SEARCH/")
+				read -p "Delete the above entry y/n)>? " -n 1 -r
+				if [[ $REPLY =~ ^[Yy]$ ]]; then delete_entry $(get_title "$ENTRY"); fi
+
+			elif [[ $EDIT ]]; then
+				OLDENTRY=$(get_entries "s~/$SEARCH/")
+				NEWENTRY=$(printf "$1" | \
+					sed -e "s/^[0-9\-]\{10\} [0-9:]\{8\}/$DATE/g")
+				TEMP=$(mktemp); printf "$ENTRY" > "$TEMP"
+				TEMPMODIFIED=$(stat -c %y "$TEMP")
+				$EDITOR $TEMP
+				check_modified "$TEMPMODIFIED" "$TEMP"
+				insert_seperator $TEMP
+				the updated entry
+				prepend $TEMP
+				delete_entry $(get_title "$OLDENTRY")
+			fi
+		fi
+
+	elif [[ $LIST ]]; then
+		PATTERN=$(get_patterns $PATTERNOPERATOR "${PATTERNS[@]}")
+		awk '{s=tolower($0)}'" $PATTERN "'{
+			printf "%s ", $1
+			split($0, words, " ")
+			for (i in words)
+				if (words[i] ~ "@.*")
+					printf "%s ", words[i]
+			printf "\n"
+		}' RS="$AWKRS" FS="\n" $NOTESFILE
+
+	elif [[ $READ ]]; then
+		get_entries $(get_patterns $PATTERNOPERATOR "${PATTERNS[@]}")
+	fi
+fi
+
+if [[ -e $TEMP ]]; then rm $TEMP; fi
