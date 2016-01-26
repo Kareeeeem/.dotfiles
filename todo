@@ -1,0 +1,30 @@
+#!/bin/bash
+TODOFILE="$HOME/todo.txt"
+AMOUNT=10
+DEFAULTSTATUS=-
+TYPE=$DEFAULTSTATUS
+
+if [[ ! -e $TODOFILE ]]; then touch $TODOFILE; fi
+
+if [[ $1 == 'ls' ]]; then
+	shift;
+	while [[ $# > 0 ]]; do
+		case $1 in
+			[[:digit:]]* ) AMOUNT=$1; shift; ;;
+			[xv-] ) TYPE=$1; shift; ;;
+			* ) exit 1; ;;
+		esac
+	done
+	TYPE="/;$TYPE$/"
+	awk  'BEGIN {printf "ID\tADDED\tTASK\tSTATUS\n"}'"$TYPE"'{
+		printf "%s\t%s\t%s\t%s\n", $1, $2, $3, $4}' FS=";" $TODOFILE | \
+			head -n $AMOUNT | \
+			column -ts $'\t'
+elif [[ $1 =~ ^[xv-]$ ]]; then
+	TYPE=$1; shift; IDS=$*;
+	IDPATTERN=$(echo $IDS | sed 's/ /\\|/g')
+	sed -i~ "s,\(^\($IDPATTERN\);.*\)[-vx]$,\1$TYPE,g" $TODOFILE
+else
+	ID=$(awk '{print ++$1}' FS=";" $TODOFILE | sort -nr | head -n1 );
+	printf "%s;%s;%s;%s\n" "$ID" "$(date +'%F %T')" "$*" "$DEFAULTSTATUS" >> $TODOFILE
+fi
