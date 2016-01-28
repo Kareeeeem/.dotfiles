@@ -11,7 +11,8 @@ if [[ $1 == 'ls' ]]; then
 	while [[ $# > 0 ]]; do
 		case $1 in
 			[[:digit:]]* ) AMOUNT=$1; shift; ;;
-			[xv-] ) TYPE=$1; shift; ;;
+			x|v|- ) TYPE=$1; shift; ;;
+			a ) TYPE="."; shift; ;;
 			* ) exit 1; ;;
 		esac
 	done
@@ -26,5 +27,5 @@ elif [[ $1 =~ ^[xv-]$ ]]; then
 	sed -i~ "s,\(^\($IDPATTERN\);.*\)[-vx]$,\1$TYPE,g" $TODOFILE
 else
 	ID=$(awk '{print ++$1}' FS=";" $TODOFILE | sort -nr | head -n1 );
-	printf "%s;%s;%s;%s\n" "$ID" "$(date +'%F %T')" "$*" "$DEFAULTSTATUS" >> $TODOFILE
+	printf "%s;%s;%s;%s\n" "$ID" "$(date +'%F %H:%M')" "$*" "$DEFAULTSTATUS" >> $TODOFILE
 fi
