@@ -1,9 +1,10 @@
 #!/bin/bash
 
-# Note taking app writen in bash modeled after jrnl[0].
-# [0]: http://maebert.github.io/jrnl/
+# TODO return propert feedback in case of errors. write a good usage message
 
 DATE=$(date +'%F %T')
+# mawk does not support intervals in regex
+DATEREGEX="[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
 NOTESFILE="$HOME/notes.txt"
 SEPERATOR="---"
 AWKRS="$SEPERATOR\n"
@@ -11,126 +12,80 @@ AWKRS="$SEPERATOR\n"
 if [[ -z $EDITOR ]]; then EDITOR="vim"; fi
 if [[ ! -e $NOTESFILE ]]; then touch $NOTESFILE; fi
 
-prepend () {
-	# A tempfile path used for prepending to file
-	PREPENDTEMP='/tmp/outnotes'
-	cat $1 $NOTESFILE > $PREPENDTEMP && mv $PREPENDTEMP $NOTESFILE
-}
-get_patterns () {
-	OPERATOR=$1; shift
-	PATTERNS=("$@")
-	echo ${PATTERNS[@]} | sed -e "s/[[:space:]]/ $OPERATOR /g"
-}
 insert_seperator () { printf "%b\n" "$SEPERATOR" >> $1 ; }
-check_modified () { if [[ $1 == $(stat -c %y "$2") ]]; then exit 1; fi ; }
-get_entries () { awk '{s=tolower($0)}'" $1 "'{print $0 }' RS="$AWKRS" $NOTESFILE ; }
-get_title () { printf "$1" | cut -f1 -d$'\n' ; }
-delete_note () { sed -i~ -e "/$1/,/$SEPERATOR/d" $NOTESFILE ; }
 
-# if no arguments then open editor and save the note.
-if [[ $# == 0 ]]; then
-	TEMP=$(mktemp); printf "%s " "$DATE" > $TEMP
-	TEMPMODIFIED=$(stat -c %y "$TEMP")
-	$EDITOR $TEMP
-	check_modified "$TEMPMODIFIED" "$TEMP"
-	insert_seperator $TEMP
-	prepend $TEMP
+is_modified () { [[ $1 != $(stat -c %y "$2") ]]; }
 
-# if content is given as arguments than parse it and save it as an note.
-elif [[ $1 =~ ^[[:alnum:]] ]]; then
-	CONTENT="$(echo $* | sed -e $'s/\. /\.\\n/')"
-	printf "%s %s\n%b\n" "$DATE" "$CONTENT" $SEPERATOR | prepend -
+get_entries () { awk "$1"'{print $0 }' RS="$AWKRS" $NOTESFILE ; }
 
-else
+get_next_id () { awk '{print ++$1}' $NOTESFILE | sort -nr | head -n1; }
+
+delete_note () { sed -i~ -e "/^$1 $DATEREGEX/,/$SEPERATOR/d" $NOTESFILE ; }
+
+insert_note () {
+	TEMPNOTE='/tmp/outnotes'
+	insert_seperator $1
+	cat $1 $NOTESFILE > $TEMPNOTE && mv $TEMPNOTE $NOTESFILE
+}
+
+get_pattern () {
 	PATTERNS=()
-	PATTERNOPERATOR="||"
+	LOGICALOPERATOR="||"
 	while [[ $# > 0 ]]; do
 		case $1 in
-			@* )
-				READ=true
-				TAG=${1,,}
-				PATTERNS+=("s~/${TAG}/")
-				shift
-				;;
-			-r|--read )
-				READ=true
-				shift
-				;;
-			-e|--edit )
-				EDIT=true
-				shift
-				SEARCH="$@"
-				break
-				;;
-			-d|--d )
-				DELETE=true
-				shift
-				SEARCH="$@"
-				break
-				;;
-			-ls|--list )
-				LIST=true
-				shift
-				;;
-			--and )
-				PATTERNOPERATOR="\&\&"
-				shift
-				;;
-			* )
-				shift
-				;;
+			@* ) PATTERNS+=('tolower($0)~'"/${1,,}/"); shift; ;;
+			--and ) LOGICALOPERATOR="\&\&"; shift; ;;
 		esac
 	done
+	echo ${PATTERNS[@]} | sed -e "s/[[:space:]]/ $LOGICALOPERATOR /g"
+}
 
-	if [[ $SEARCH ]]; then
-		MATCHES=$(grep -i -o "$SEARCH" $NOTESFILE | wc -l)
+promp_to_delete_note () {
+	NOTE=$(get_entries "/^$1 $DATEREGEX/")
+	printf "\n%s\n\n" "$NOTE"
+	read -p "Delete the above note, y/n? " -n 1 -r; echo
+	if [[ $REPLY =~ ^[Yy]$ ]]; then delete_note $1; fi; }
 
-		if [[ $MATCHES && $MATCHES > 1 ]]; then
-			awk '{s=tolower($0)}'" s~/$SEARCH/ "'{ print $1, $2 }' \
-				RS="$AWKRS" FS="\n" $NOTESFILE
+edit_note () {
+	OLDNOTE=$(get_entries "/^$1 $DATEREGEX/")
+	NEWNOTE=$(printf "$OLDNOTE" | sed -e "s/\(^[0-9]*\) [0-9\-]\{10\} [0-9:]\{8\}/\1 $DATE/g")
+	TEMP=$(mktemp); printf "$NEWNOTE" > "$TEMP"
+	TEMPMODIFIED=$(stat -c %y "$TEMP")
+	$EDITOR $TEMP
+	if is_modified "$TEMPMODIFIED" "$TEMP"; then delete_note $1; insert_note $TEMP; fi
+}
 
-		elif [[ $MATCHES == '0' ]]; then
-			echo "No notes found"
+list_notes () {
+	awk "$(get_pattern $@)"'{
+		printf "%s ", $1
+		split($0, words, " ")
+		for (i in words)
+			if (words[i] ~ "@.*")
+				printf "%s ", words[i]
+		printf "\n"
+	}' RS="$AWKRS" FS="\n" $NOTESFILE
+}
 
-		elif [[ $MATCHES == "1" ]]; then
+if [[ $# == 0 ]]; then
+	TEMP=$(mktemp); printf "%s %s " $(get_next_id) "$DATE" > $TEMP
+	TEMPMODIFIED=$(stat -c %y "$TEMP")
+	$EDITOR $TEMP
+	if is_modified "$TEMPMODIFIED" "$TEMP"; then insert_note $TEMP; fi;
 
-			if [[ $DELETE ]]; then
-				NOTE=$(get_entries "s~/$SEARCH/")
-				printf "\n%s\n\n" "$NOTE"
-				read -p "Delete the above note, y/n? " -n 1 -r
-				echo
-				if [[ $REPLY =~ ^[Yy]$ ]]; then
-					delete_note "$(get_title "$NOTE")"
-				fi
-
-			elif [[ $EDIT ]]; then
-				OLDNOTE=$(get_entries "s~/$SEARCH/")
-				NEWNOTE=$(printf "$1" | \
-					sed -e "s/^[0-9\-]\{10\} [0-9:]\{8\}/$DATE/g")
-				TEMP=$(mktemp); printf "$NOTE" > "$TEMP"
-				TEMPMODIFIED=$(stat -c %y "$TEMP")
-				$EDITOR $TEMP
-				check_modified "$TEMPMODIFIED" "$TEMP"
-				insert_seperator $TEMP
-				prepend $TEMP
-				delete_note "$(get_title "$OLDNOTE")"
-			fi
-		fi
-
-	elif [[ $LIST ]]; then
-		PATTERN="$(get_patterns $PATTERNOPERATOR "${PATTERNS[@]}")"
-		awk '{s=tolower($0)}'" $PATTERN "'{
-			printf "%s ", $1
-			split($0, words, " ")
-			for (i in words)
-				if (words[i] ~ "@.*")
-					printf "%s ", words[i]
-			printf "\n"
-		}' RS="$AWKRS" FS="\n" $NOTESFILE
-
-	elif [[ $READ ]]; then
-		get_entries "$(get_patterns $PATTERNOPERATOR "${PATTERNS[@]}")"
+elif [[ $1 == del || $1 == edit ]]; then
+	MATCHES=$(grep -i -o "^$2 $DATEREGEX" $NOTESFILE | wc -l)
+	if [[ $MATCHES == "1" && $1 == del ]]; then promp_to_delete_note $2
+	elif [[ $MATCHES == "1" && $1 == edit ]]; then edit_note $2
+	else echo "No notes found"
 	fi
+
+elif [[ $1 == ls ]]; then shift; list_notes "$@";
+elif [[ $1 == read ]]; then shift; get_entries "$(get_pattern $@)"
+
+else
+	CONTENT="$(echo $* | sed -e $'s/\. /\.\\n/')"
+	TEMP=$(mktemp); printf "%s %s %s\n" $(get_next_id) "$DATE" "$CONTENT" > $TEMP
+	insert_note $TEMP
 fi
 
 if [[ -e $TEMP ]]; then rm $TEMP; fi
