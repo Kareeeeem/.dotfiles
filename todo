@@ -45,7 +45,7 @@ elif [[ $1 =~ ^[xv-]$ ]]; then
 	TYPE=$1; shift; IDS=$*;
 	IDPATTERN=$(echo $IDS | sed 's/ /\\|/g')
 	sed -i~ "s,\(^\($IDPATTERN\);.*\)[-vx]$,\1$TYPE,g" $TODOFILE
-	printf $CHANGEDSTATUSMSG $* $TYPE
+	printf "$CHANGEDSTATUSMSG\n" "$*" "$TYPE"
 
 elif [[ $1 == del ]]; then shift; IDS=$*;
 	create_backup
