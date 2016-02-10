@@ -17,12 +17,14 @@ then
 	mkdir $WORKING_DIRECTORY
 	(cd $WORKING_DIRECTORY; \
 		virtualenv venv; \
+		"$WORKING_DIRECTORY/venv/bin/pip" install ipython pytest
 		echo "What packages do you need?"; \
 		read packages; \
 		for package in $packages
 		do
 			"$WORKING_DIRECTORY/venv/bin/pip" install $package
 		done
+
 
 		echo "#${PROJECTNAME^}" >> README.md; \
 		git init; \
@@ -45,12 +47,9 @@ ACTIVATE=". venv/bin/activate"
 tmux new-session -d -c $WORKING_DIRECTORY -s $PROJECTNAME -n "dev"
 tmux send-keys "$ACTIVATE" C-m
 tmux send-keys "vim" C-m
-
 tmux split-window -v -p 20 -c "#{pane_current_path}"
 tmux send-keys "$ACTIVATE" C-m
 tmux select-pane -t :.0
-
 tmux new-window -t $PROJECTNAME:1 -n "shell" -c "#{pane_current_path}" -d
 tmux send-keys -t $PROJECTNAME:1.0 "$ACTIVATE" C-m
-
 tmux a -t $PROJECTNAME
