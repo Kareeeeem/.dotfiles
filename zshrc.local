@@ -381,9 +381,11 @@ stty erase "^?"
 
 # Aliases
 alias rmpyc='find . -name "*.pyc" -delete'
-alias rmswp='find . -name ".*.swp" -delete'
+alias rmswp='rm ~/.vim/tmp/*'
 
 source ~/dotfiles/z.sh
 fpath=(~/.zsh $fpath)
+
+unsetopt flow_control
 
 ## END OF FILE #################################################################
