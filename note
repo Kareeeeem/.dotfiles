@@ -8,7 +8,7 @@ DATE=$(date +'%F %T')
 DATEREGEX="[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
 NOTESFILE="$HOME/.notes.txt"
 BACKUPFILE="$NOTESFILE~"
-SEPERATOR="---"
+SEPERATOR="---endnote"
 AWKRS="$SEPERATOR\n"
 BACKUPFILE="$NOTESFILE~"
 
