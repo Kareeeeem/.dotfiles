@@ -74,7 +74,7 @@ git_stashes_count () {
 git_prompt_string() {
     local git_where="$(parse_git_branch)"
     [ -n "$git_where" ] && \
-        echo "git:$(parse_git_state)${git_where#(refs/heads/|tags/)}$(git_stashes_count)%b%f "
+        echo "$(parse_git_state)${git_where#(refs/heads/|tags/)}$(git_stashes_count)%b%f "
 }
 
 function git_branch_prompt () {
@@ -90,8 +90,8 @@ zstyle ':prompt:grml:*:items:path' token '%2~ '
 
 zstyle ':prompt:grml:*:items:user' pre ''
 
-zstyle ':prompt:grml:left:setup' items rc virtual-env git-branch-prompt user \
-    colon path percent
+zstyle ':prompt:grml:left:setup' items rc virtual-env git-branch-prompt \
+    path percent
 zstyle ':prompt:grml:right:setup' items sad-smiley
 
 ## ZLE tweaks ##
@@ -383,9 +383,24 @@ stty erase "^?"
 alias rmpyc='find . -name "*.pyc" -delete'
 alias rmswp='rm ~/.vim/tmp/*'
 
-source ~/dotfiles/z.sh
+source ~/z/z.sh
+
 fpath=(~/.zsh $fpath)
 
 unsetopt flow_control
+
+unalias acs
+unalias acsh
+unalias acp
+unalias adg
+unalias agi
+unalias ati
+unalias ag
+unalias au
+unalias up
+unalias dbp
+unalias ge
+
+export FZF_DEFAULT_COMMAND='ag -g ""'
 
 ## END OF FILE #################################################################

@@ -2,22 +2,21 @@ set nocompatible
 filetype off
 
 " if Vim-Plug doesn't exist yet
-if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    au VimEnter * PlugInstall
-endif
+" if empty(glob('~/.vim/autoload/plug.vim'))
+"     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+"         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+"     au VimEnter * PlugInstall
+" endif
 
 call plug#begin('~/.vim/plugged')
 
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-commentary' " Easily comment stuff out
-Plug 'tpope/vim-unimpaired' " Convenience mappings stating with [ and ]
 Plug 'tpope/vim-surround' " Easily wrap text in delimiters or change them
-Plug 'tpope/vim-eunuch' " Unix helpers
 Plug 'tpope/vim-repeat' " Dot repeat for unimpaired, commentary, and others
 Plug 'scrooloose/syntastic' " Syntax checking
 Plug 'ap/vim-buftabline' " Buffers in the tab bar
-Plug 'ctrlpvim/ctrlp.vim' " Fuzzy search files/buffers/tags/etc
 Plug 'christoomey/vim-tmux-navigator' " Vim and tmux nav with Ctrl-[hjkl]
 Plug 'jpalardy/vim-slime' " Send input from vim to screen/tmux
 Plug 'itchyny/vim-gitbranch' " Git branch function for use in statusline
@@ -60,8 +59,8 @@ set formatoptions+=r
 set formatoptions-=o
 set backspace=indent,eol,start
 set encoding=utf-8
-silent !mkdir ~/.vim/tmp > /dev/null 2>&1
-silent !mkdir ~/.vim/undodir > /dev/null 2>&1
+" silent !mkdir ~/.vim/tmp > /dev/null 2>&1
+" silent !mkdir ~/.vim/undodir > /dev/null 2>&1
 set dir=~/.vim/tmp
 set undodir=~/.vim/undodir/
 set undofile
@@ -116,15 +115,13 @@ nnoremap gV `[v`]
 xnoremap < <gv
 xnoremap > >gv
 
+nnoremap <C-p> :Files<CR>
+nnoremap <leader>t :Tags<CR>
+nnoremap <leader>m :History<CR>
+
 " Slime
 let g:slime_target = 'tmux'
 let g:slime_python_ipython = 1
-
-" CtrlP
-let g:ctrlp_open_multiple_files = '1r'
-let g:ctrlp_open_new_file = 'r'
-let g:ctrlp_extensions = ['tag']
-nnoremap <leader>m :CtrlPMRUFiles<CR>
 
 " Syntastic
 let g:syntastic_always_populate_loc_list = 1
@@ -141,7 +138,6 @@ if !exists('g:undotree_SplitWidth')
     let g:undotree_SplitWidth = 30
 endif
 
-let g:ycm_python_binary_path=substitute(system("which python"), "\n$", "", " ")
 let g:ycm_global_ycm_extra_conf = '~/dotfiles/.ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
@@ -190,7 +186,6 @@ hi SpellCap ctermfg=15
 hi TODO ctermfg=15 ctermbg=1
 hi link pythonOperator Statement
 hi link pythonNumber Structure
-hi CtrlPMode1 ctermfg=15
 hi link CtrlPMode2 StatusLine
 hi StatusLineNC ctermfg=8
 
