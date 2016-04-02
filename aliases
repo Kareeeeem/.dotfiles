@@ -1,5 +1,7 @@
 alias rmpyc='find . -name "*.pyc" -delete'
 alias rmswp='rm ~/.vim/tmp/*'
+alias vimrc='vim $HOME/.vimrc'
+alias zshrc='vim $HOME/.zshrc.local'
 
 # aliases set by grml. ag alias conflicts with ag silver searcher. unalias all
 # in it's category. never used them anyways.
