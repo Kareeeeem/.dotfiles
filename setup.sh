@@ -1,16 +1,23 @@
 #! /usr/bin/env sh
 
 # Setup a debian chroot on my chromebook with (almosg) everything I want.
+# might have run twice for all the installs to work
 
-echo "enter your email (for ssh key generation and git), followed by [ENTER]."
-read EMAIL
+set -e
 
 sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install -y \
     vim-nox build-essential cmake python-dev python3-dev postgresql \
     libffi-dev libpq-dev git man curl zsh openssh-server tmux wget \
 	exuberant-ctags silversearcher-ag
 
+echo "enter your email (for ssh key generation and git), followed by [ENTER]."
+read EMAIL
+
 ssh-keygen -t rsa -b 4096 -C "$EMAIL"
+
+echo "add key to github account"
+cat "$HOME/.ssh/id_rsa.pub"
+
 git config --global user.email "$EMAIL"
 git config --global user.name "Mohammed Kareem"
 
