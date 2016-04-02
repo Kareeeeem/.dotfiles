@@ -1,11 +1,13 @@
+--python-kinds=-iv
+
 --recurse=yes
 --tag-relative=yes
 --fields=+l
 
 --exclude=Makefile
+--exclude=node_modules
 --exclude=bin
-
---python-kinds=-iv
+--exclude=.git
 --exclude=*~
 --exclude=venv
 --exclude=__pycache__

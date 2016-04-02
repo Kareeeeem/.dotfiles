@@ -144,6 +144,11 @@ endif
 let g:ycm_global_ycm_extra_conf = '~/dotfiles/.ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_filetype_specific_completion_to_disable = {
+            \ 'javascript': 1,
+            \ 'javascript.jsx': 1,
+            \ 'jsx': 1,
+            \ }
 
 " vim-jsx
 let g:jsx_ext_required = 0
