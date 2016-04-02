@@ -1,0 +1,16 @@
+alias rmpyc='find . -name "*.pyc" -delete'
+alias rmswp='rm ~/.vim/tmp/*'
+
+# aliases set by grml. ag alias conflicts with ag silver searcher. unalias all
+# in it's category. never used them anyways.
+unalias acs
+unalias acsh
+unalias acp
+unalias adg
+unalias agi
+unalias ati
+unalias ag
+unalias au
+unalias up
+unalias dbp
+unalias ge

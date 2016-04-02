@@ -169,8 +169,6 @@ bindkey -M isearch . self-insert
 ## changed completer settings
 # zstyle ':completion:*' completer _complete _correct _approximate
 # zstyle ':completion:*' expand prefix suffix
-# zstyle ':completion:*:*:git:*' script ~/.dotfiles/git-completion.zsh
-# zstyle ':completion:*:*:curl:*' script ~/.dotfiles/curl-completion.zsh
 
 ## another different completer setting: expand shell aliases
 #zstyle ':completion:*' completer _expand_alias _complete _approximate
@@ -306,21 +304,21 @@ export MANWIDTH=${MANWIDTH:-80}
 #}
 
 ## Download a file and display it locally
-#uopen() {
-#    emulate -L zsh
-#    if ! [[ -n "$1" ]] ; then
-#        print "Usage: uopen \$URL/\$file">&2
-#        return 1
-#    else
-#        FILE=$1
-#        MIME=$(curl --head $FILE | \
-#               grep Content-Type | \
-#               cut -d ' ' -f 2 | \
-#               cut -d\; -f 1)
-#        MIME=${MIME%$'\r'}
-#        curl $FILE | see ${MIME}:-
-#    fi
-#}
+uopen() {
+    emulate -L zsh
+    if ! [[ -n "$1" ]] ; then
+        print "Usage: uopen \$URL/\$file">&2
+        return 1
+    else
+        FILE=$1
+        MIME=$(curl --head $FILE | \
+               grep Content-Type | \
+               cut -d ' ' -f 2 | \
+               cut -d\; -f 1)
+        MIME=${MIME%$'\r'}
+        curl $FILE | see ${MIME}:-
+    fi
+}
 
 ## Memory overview
 #memusage() {
@@ -330,15 +328,15 @@ export MANWIDTH=${MANWIDTH:-80}
 #}
 
 ## print hex value of a number
-#hex() {
-#    emulate -L zsh
-#    if [[ -n "$1" ]]; then
-#        printf "%x\n" $1
-#    else
-#        print 'Usage: hex <number-to-convert>'
-#        return 1
-#    fi
-#}
+hex() {
+    emulate -L zsh
+    if [[ -n "$1" ]]; then
+        printf "%x\n" $1
+    else
+        print 'Usage: hex <number-to-convert>'
+        return 1
+    fi
+}
 
 ## log out? set timeout in seconds...
 ## ...and do not log out in some specific terminals:
@@ -379,28 +377,10 @@ stty erase "^?"
 # seperate global and local history
 # http://superuser.com/questions/446594/separate-up-arrow-lookback-for-local-and-global-zsh-history
 
-# Aliases
-alias rmpyc='find . -name "*.pyc" -delete'
-alias rmswp='rm ~/.vim/tmp/*'
-
-source ~/z/z.sh
-
 fpath=(~/.zsh $fpath)
 
+source "$HOME/clones/z/z.sh"
+source "$HOME/.aliases"
 unsetopt flow_control
-
-unalias acs
-unalias acsh
-unalias acp
-unalias adg
-unalias agi
-unalias ati
-unalias ag
-unalias au
-unalias up
-unalias dbp
-unalias ge
-
-export FZF_DEFAULT_COMMAND='ag -g ""'
 
 ## END OF FILE #################################################################
