@@ -15,8 +15,8 @@ read EMAIL
 
 ssh-keygen -t rsa -b 4096 -C "$EMAIL"
 
-echo "add key to github account"
 cat "$HOME/.ssh/id_rsa.pub"
+read -p "added key to github account?" reply
 
 git config --global user.email "$EMAIL"
 git config --global user.name "Mohammed Kareem"
