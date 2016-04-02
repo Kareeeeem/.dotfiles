@@ -64,6 +64,7 @@ set encoding=utf-8
 set dir=~/.vim/tmp
 set undodir=~/.vim/undodir/
 set undofile
+set tags=.git/tags
 
 " statusline
 set laststatus=2
