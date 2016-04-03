@@ -4,6 +4,10 @@ alias vimrc='vim $HOME/.vimrc'
 alias zshrc='vim $HOME/.zshrc.local'
 alias dots='cd $HOME/.dotfiles'
 alias bin='cd $HOME/bin'
+alias ta='tmux a'
+alias tat='tmux a -t'
+alias tk='tmux kill-session'
+alias ts='tmux new-session -s'
 
 # aliases set by grml. ag alias conflicts with ag silver searcher. unalias all
 # in it's category. never used them anyways.
