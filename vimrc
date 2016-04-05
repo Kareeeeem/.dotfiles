@@ -1,13 +1,6 @@
 set nocompatible
 filetype off
 
-" if Vim-Plug doesn't exist yet
-" if empty(glob('~/.vim/autoload/plug.vim'))
-"     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-"         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-"     au VimEnter * PlugInstall
-" endif
-
 call plug#begin('~/.vim/plugged')
 
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
@@ -59,12 +52,11 @@ set formatoptions+=r
 set formatoptions-=o
 set backspace=indent,eol,start
 set encoding=utf-8
-" silent !mkdir ~/.vim/tmp > /dev/null 2>&1
-" silent !mkdir ~/.vim/undodir > /dev/null 2>&1
 set dir=~/.vim/tmp
 set undodir=~/.vim/undodir/
 set undofile
 set tags=.git/tags
+set nowrap
 
 " statusline
 set laststatus=2
@@ -91,11 +83,13 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 let mapleader = "\<Space>"
 " I almost never want to go to the ABSOLUTE beginning of a line
 nnoremap 0 ^
-" Insert a uuid
-inoremap -uuid- '<C-r>=system('python -c "import uuid, sys; sys.stdout.write(str(uuid.uuid4()))"')<CR>'
-" Insert the current date formatted like Fri 15-01-2016 20:06
-inoremap -date- <C-r>=substitute(system('echo $(date +"%a %d-%m-%Y %H:%M")'), '[\r\n]*$','','')<CR>
+
+" " Insert a uuid
+" inoremap <leader>u '<C-r>=system('python -c "import uuid, sys; sys.stdout.write(str(uuid.uuid4()))"')<CR>'
+" " Insert the current date formatted like Fri 15-01-2016 20:06
+" inoremap <leader>d <C-r>=substitute(system('echo $(date +"%a %d-%m-%Y %H:%M")'), '[\r\n]*$','','')<CR>
 " Break lines on a comma.
+"
 nnoremap <leader>, f,cw,<CR><ESC>
 " Go to last used buffer
 nnoremap <Leader><Leader> <C-^>
@@ -116,6 +110,12 @@ nnoremap gV `[v`]
 xnoremap < <gv
 xnoremap > >gv
 
+nnoremap <F1> :bp<CR>
+nnoremap <F2> :bn<CR>
+
+nnoremap <leader>q :bd<CR>
+
+" fzf
 nnoremap <C-p> :Files<CR>
 nnoremap <leader>t :Tags<CR>
 nnoremap <leader>m :History<CR>
