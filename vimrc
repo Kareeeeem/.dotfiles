@@ -10,7 +10,6 @@ Plug 'tpope/vim-surround' " Easily wrap text in delimiters or change them
 Plug 'tpope/vim-repeat' " Dot repeat for unimpaired, commentary, and others
 Plug 'scrooloose/syntastic' " Syntax checking
 Plug 'ap/vim-buftabline' " Buffers in the tab bar
-Plug 'christoomey/vim-tmux-navigator' " Vim and tmux nav with Ctrl-[hjkl]
 Plug 'jpalardy/vim-slime' " Send input from vim to screen/tmux
 Plug 'itchyny/vim-gitbranch' " Git branch function for use in statusline
 " Autocompletion
@@ -23,12 +22,17 @@ Plug 'mattn/emmet-vim', {'for': ['html', 'css', 'htmldjango', 'htmljinja']}
 Plug 'mitsuhiko/vim-jinja', {'for': ['html', 'htmldjango', 'htmljinja']}
 " Better python indentation
 Plug 'hynek/vim-python-pep8-indent', {'for': 'python'}
+
 " Js indentation
-Plug 'pangloss/vim-javascript', {'for': ['javascript.jsx', 'js']}
+" Plug 'pangloss/vim-javascript', {'for': ['javascript.jsx', 'javascript']}
+
+" This is a fork by amadeus that includes a fix for arrow functions in classes
+Plug 'amadeus/vim-javascript', {'for': ['javascript.jsx', 'javascript'], 'branch': 'arrow-functions-in-class', 'commit': '60726eb07b45e3c67984884e8f7618c0373e00ef'}
 " Jsx highlighting / identation
-Plug 'mxw/vim-jsx', {'for': ['javascript.jsx', 'js']}
+Plug 'mxw/vim-jsx', {'for': ['javascript.jsx', 'javascript']}
 " Undo tree interface.
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
+
 
 call plug#end()
 
@@ -114,6 +118,11 @@ nnoremap <F1> :bp<CR>
 nnoremap <F2> :bn<CR>
 
 nnoremap <leader>q :bd<CR>
+
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 
 " fzf
 nnoremap <C-p> :Files<CR>
