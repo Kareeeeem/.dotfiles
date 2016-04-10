@@ -24,10 +24,15 @@ Plug 'mitsuhiko/vim-jinja', {'for': ['html', 'htmldjango', 'htmljinja']}
 Plug 'hynek/vim-python-pep8-indent', {'for': 'python'}
 
 " Js indentation
-" Plug 'pangloss/vim-javascript', {'for': ['javascript.jsx', 'javascript']}
+Plug 'pangloss/vim-javascript', {'for': ['javascript.jsx', 'javascript']}
 
 " This is a fork by amadeus that includes a fix for arrow functions in classes
-Plug 'amadeus/vim-javascript', {'for': ['javascript.jsx', 'javascript'], 'branch': 'arrow-functions-in-class', 'commit': '60726eb07b45e3c67984884e8f7618c0373e00ef'}
+" Plug 'amadeus/vim-javascript', { 'for': ['javascript.jsx', 'javascript'],
+"             \ 'as': 'vim-javascript-amadeus',
+"             \ 'branch': 'arrow-functions-in-class',
+"             \ 'commit': '60726eb07b45e3c67984884e8f7618c0373e00ef'
+"             \ }
+
 " Jsx highlighting / identation
 Plug 'mxw/vim-jsx', {'for': ['javascript.jsx', 'javascript']}
 " Undo tree interface.
@@ -88,12 +93,6 @@ let mapleader = "\<Space>"
 " I almost never want to go to the ABSOLUTE beginning of a line
 nnoremap 0 ^
 
-" " Insert a uuid
-" inoremap <leader>u '<C-r>=system('python -c "import uuid, sys; sys.stdout.write(str(uuid.uuid4()))"')<CR>'
-" " Insert the current date formatted like Fri 15-01-2016 20:06
-" inoremap <leader>d <C-r>=substitute(system('echo $(date +"%a %d-%m-%Y %H:%M")'), '[\r\n]*$','','')<CR>
-" Break lines on a comma.
-"
 nnoremap <leader>, f,cw,<CR><ESC>
 " Go to last used buffer
 nnoremap <Leader><Leader> <C-^>
@@ -180,8 +179,6 @@ augroup filetypes
     au FileType text,*markdown* setlocal textwidth=72
     au FileType text,*markdown* setlocal formatoptions+=t
     au FileType text,*markdown* setlocal formatprg=par\ -72
-    au FileType *markdown* nnoremap <buffer> <Leader>1 yypVr=o<ESC>
-    au FileType *markdown* nnoremap <buffer> <Leader>2 yypVr-o<ESC>
 
     au FileType sh setlocal tabstop=4 noexpandtab
 
