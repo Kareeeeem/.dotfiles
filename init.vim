@@ -2,7 +2,6 @@ call plug#begin('~/.config/nvim/plugged')
 
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
-
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -11,18 +10,15 @@ Plug 'itchyny/vim-gitbranch'
 Plug 'Shougo/deoplete.nvim'
 Plug 'benekastah/neomake'
 Plug 'christoomey/vim-tmux-navigator'
-
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
-
 Plug 'davidhalter/jedi-vim', {'for': 'python'}
 Plug 'zchee/deoplete-jedi', {'for': 'python'}
 Plug 'hynek/vim-python-pep8-indent', {'for': 'python'}
 Plug 'mitsuhiko/vim-jinja', {'for': ['html', 'htmldjango', 'htmljinja']}
-
 Plug 'mattn/emmet-vim', {'for': ['html', 'css', 'htmldjango', 'htmljinja']}
-
 Plug 'pangloss/vim-javascript', {'for': ['javascript.jsx', 'javascript']}
 Plug 'mxw/vim-jsx', {'for': ['javascript.jsx', 'javascript']}
+Plug 'janko-m/vim-test'
 
 call plug#end()
 
@@ -97,26 +93,23 @@ nnoremap <F2> :bn<CR>
 
 nnoremap <leader>q :bd<CR>
 
-" neomake
-let g:neomake_error_sign = {
-            \ 'text': '>>',
-            \ 'texthl': 'ErrorMsg',
-            \ }
-
-let g:neomake_warning_sign = {
-            \ 'text': '>>',
-            \ 'texthl': 'WarningMsg',
-            \ }
-
 " for python plugins
 let g:python_host_prog = '/home/kareem/.py2neovim/bin/python'
 let g:python3_host_prog = '/home/kareem/.py3neovim/bin/python'
+
+" vim test
+let test#strategy = "neovim"
+
+" neomake
+let g:neomake_error_sign = { 'text': '>>', 'texthl': 'ErrorMsg' }
+let g:neomake_warning_sign = { 'text': '>>', 'texthl': 'WarningMsg' }
 
 " fzf
 nnoremap <C-p> :Files<CR>
 nnoremap <leader>t :Tags<CR>
 nnoremap <leader>m :History<CR>
 
+" deoplete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#sources = {}
 let g:deoplete#sources._ = ['buffer']
@@ -141,35 +134,39 @@ let g:buftabline_numbers = 1
 let g:buftabline_indicators = 1
 let g:buftabline_seperators = 1
 
+" This keeps the sign column visible at all times. Can't stand the
+" twitching when linting for errors. http://superuser.com/a/558885
+augroup dummysign
+    au!
+    autocmd BufEnter * sign define dummy
+    autocmd BufEnter * execute 'sign place 9999 line=1 name=dummy buffer=' . bufnr('')
+augroup END
+
 augroup write_file
     au!
     au BufWritePost * Neomake
     au BufWritePre * call StripTrailingWhitespaces()
     au BufWritePost *.py call GenerateTags()
     au BufWritePost *.c call GenerateTags()
-
 augroup END
 
 augroup filetypes
     au!
+    au FileType sh setlocal tabstop=4 noexpandtab
+
     au FileType text,*markdown* setlocal textwidth=72
     au FileType text,*markdown* setlocal formatoptions+=t
     au FileType text,*markdown* setlocal formatprg=par\ -72
-
-    au FileType sh setlocal tabstop=4 noexpandtab
 
     au FileType mako,html,css,htmldjango,htmljinja EmmetInstall
 
     au FileType css,html,htmljinja,*javascript* setlocal shiftwidth=2
     au FileType css,html,htmljinja,*javascript* setlocal softtabstop=2
+
     au FileType htmljinja setlocal commentstring={#\ %s\ #}
+
     au FileType c setlocal formatprg=astyle\ -S
-
 augroup END
-
-if &term == "screen-256color"
-    highlight htmlItalic cterm=standout
-endif
 
 colorscheme ron
 " A little customization is in order.
@@ -183,12 +180,13 @@ hi link pythonOperator Statement
 hi link pythonNumber Structure
 hi link CtrlPMode2 StatusLine
 hi StatusLineNC ctermfg=8
+hi SignColumn ctermbg=none
 
-function GenerateTags()
+function! GenerateTags()
     if executable('git-tags') | call system('"git-tags" &') | endif
 endfunction
 
-function StripTrailingWhitespaces()
+function! StripTrailingWhitespaces()
     " prep: save last search, and cursor position.
     let _s=@/
     let l = line(".")
