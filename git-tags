@@ -24,7 +24,7 @@ def run_command(command):
     stdout = p.stdout.read()
     return stdout.rstrip()
 
-git_dir = run_command(git_dir_command)
+git_dir = run_command(git_dir_command).decode('u8')
 
 if not git_dir:
     sys.exit(1)
