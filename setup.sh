@@ -44,14 +44,6 @@ sh "$HOME/.dotfiles/install.sh"
 curl https://bootstrap.pypa.io/get-pip.py | sudo python -
 pip install --user virtualenv flake8
 
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-mkdir ~/.vim/tmp > /dev/null 2>&1
-mkdir ~/.vim/undodir > /dev/null 2>&1
-
-vim +PlugInstall +qall
-
 echo "TODO"
 echo "* setup locales"
 echo "* recreate pg cluster with new locale"
