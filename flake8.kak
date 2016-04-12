@@ -1,10 +1,9 @@
-# FIXME line flags aren't working yet
-
+decl str flake8_options
 decl -hidden str flake8_tmp_dir
 decl -hidden line-flags flake8_flags
 decl -hidden str flake8_errors
 
-def flake8-parse -params 0..1 -docstring "Parse the contents of the current buffer with flake8" %{
+def flake8-lint -params 0..1 -docstring "Lint the contents of the current buffer with flake8" %{
     %sh{
         dir=$(mktemp -d -t kak-flake8.XXXXXXXX)
         mkfifo ${dir}/fifo
@@ -27,16 +26,15 @@ def flake8-parse -params 0..1 -docstring "Parse the contents of the current buff
         # this runs in a detached shell, asynchronously, so that kakoune does
         # not hang while flake8 is running.
 		(
-			flake8 - < ${dir}/buf > ${dir}/stderr
-			echo "eval -client ${kak_client} echo 'flake8 parsing done'" | kak -p ${kak_session}
+			flake8 --ignore=${kak_opt_flake8_options} - < ${dir}/buf > ${dir}/stderr
 
             flags=$(cat ${dir}/stderr | sed -rne "
-						/^stdin:[0-9]+:[0-9]:? (W|F|C|N).*/ { s/^stdin:([0-9]+):.*/\1|{yellow}/; p }
-						/^stdin:[0-9]+:[0-9]:? E.*/ { s/^stdin:([0-9]+):.*/\1|{red}/; p }
+						/^stdin:[0-9]+:[0-9]+:? (W|F|C|N).*/ { s/^stdin:([0-9]+):.*/\1|{yellow}█/; p }
+						/^stdin:[0-9]+:[0-9]+:? E.*/ { s/^stdin:([0-9]+):.*/\1|{red}█/; p }
                     " | paste -s -d ':')
 
             errors=$(cat ${dir}/stderr | sed -rne "
-						/^stdin:[0-9]+:[0-9]:?.*/ { s/^stdin:([0-9]+):([0-9]+:)? (.*) /\1,\3/; s/'/\\\\'/g; p }
+						/^stdin:[0-9]+:[0-9]+:?.*/ { s/^stdin:([0-9]+):([0-9]+:)? (.*) /\1,\3/; s/'/\\\\'/g; p }
                      " | sort -n)
 
             sed -e "s|<stdin>|${kak_bufname}|g" < ${dir}/stderr > ${dir}/fifo

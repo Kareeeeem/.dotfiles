@@ -228,4 +228,3 @@ function! CustomizeColors()
         hi SignColumn ctermbg=none
     endif
 endfunction
-
