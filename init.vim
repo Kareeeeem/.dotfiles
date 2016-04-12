@@ -7,28 +7,30 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'ap/vim-buftabline'
 Plug 'itchyny/vim-gitbranch'
-Plug 'Shougo/deoplete.nvim'
+" Plug 'Shougo/deoplete.nvim'
 Plug 'benekastah/neomake'
+Plug 'jpalardy/vim-slime'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'davidhalter/jedi-vim', {'for': 'python'}
-Plug 'zchee/deoplete-jedi', {'for': 'python'}
+" Plug 'zchee/deoplete-jedi', {'for': 'python'}
 Plug 'hynek/vim-python-pep8-indent', {'for': 'python'}
 Plug 'mitsuhiko/vim-jinja', {'for': ['html', 'htmldjango', 'htmljinja']}
 Plug 'mattn/emmet-vim', {'for': ['html', 'css', 'htmldjango', 'htmljinja']}
 Plug 'pangloss/vim-javascript', {'for': ['javascript.jsx', 'javascript']}
 Plug 'mxw/vim-jsx', {'for': ['javascript.jsx', 'javascript']}
-Plug 'janko-m/vim-test'
+Plug 'janko-m/vim-test', {'on': ['TestNearest', 'TestFile', 'TestSuite', 'TestLast', 'TestVisit']}
+Plug 'andreasvc/vim-256noir'
 
 call plug#end()
 
 set colorcolumn=80
-set completeopt+=noinsert,noselect
 set dir=~/.config/nvim/tmp
 set expandtab
 set formatoptions+=r
 set hidden
 set ignorecase
+set mouse=
 set nofoldenable
 set nowrap
 set number
@@ -46,21 +48,27 @@ set statusline+=%{gitbranch#name()}
 set statusline+=%= " right alignment from this point
 set statusline+=%-14.(%l,%c%V%)\ %P
 set statusline+=\ %#Error#%{neomake#statusline#LoclistStatus()}%*
+set statusline+=\ %#Error#%{neomake#statusline#QflistStatus()}%*
 
 " Expand `%%` to current directory.
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+
 " Because backslash is in a awkward place.
 let mapleader = "\<Space>"
+
 " I almost never want to go to the ABSOLUTE beginning of a line
 nnoremap 0 ^
 
 " Insert a uuid
-nnoremap <leader>u '<C-r>=system('python -c "import uuid, sys; sys.stdout.write(str(uuid.uuid4()))"')<CR>'
+" nnoremap <leader>u '<C-r>=system('python -c "import uuid, sys; sys.stdout.write(str(uuid.uuid4()))"')<CR>'
 " Insert the current date formatted like Fri 15-01-2016 20:06
-nnoremap <leader>d <C-r>=substitute(system('echo $(date +"%a %d-%m-%Y %H:%M")'), '[\r\n]*$','','')<CR>
+" nnoremap <leader>d <C-r>=substitute(system('echo $(date +"%a %d-%m-%Y %H:%M")'), '[\r\n]*$','','')<CR>
 
 " Break lines on a comma.
 nnoremap <leader>, f,cw,<CR><ESC>
+
+nnoremap <leader>ln :lnext<cr>
+nnoremap <leader>lp :lprev<cr>
 
 " Go to last used buffer
 nnoremap <Leader><Leader> <C-^>
@@ -70,9 +78,6 @@ nnoremap K i<cr><esc>k$
 
 " Toggle search highlighting
 nnoremap <F7> :set hlsearch!<CR>
-
-" Toggle paste
-nnoremap <F6> :set paste!<CR>
 
 " j and k on columns rather than lines
 nnoremap j gj
@@ -110,12 +115,17 @@ nnoremap <leader>t :Tags<CR>
 nnoremap <leader>m :History<CR>
 
 " deoplete
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#sources = {}
-let g:deoplete#sources._ = ['buffer']
-let g:deoplete#sources.python = ['buffer', 'tag']
-imap <silent><expr><Tab> pumvisible() ? "\<C-n>" : "<Tab>"
-imap <silent><expr><S-Tab> pumvisible() ? "\<C-p>" : "<S-Tab>"
+" let g:deoplete#enable_at_startup = 1
+" let g:deoplete#sources = {}
+" let g:deoplete#sources.python = ['buffer', 'tag']
+" inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" jedi
+" let g:jedi#smart_auto_mappings=0
+" let g:jedi#documentation_command='D'
+" let g:jedi#show_call_signatures=0
+" let g:jedi#popup_select_first=0
 
 " Emmet
 let g:user_emmet_install_global = 0
@@ -168,22 +178,33 @@ augroup filetypes
     au FileType c setlocal formatprg=astyle\ -S
 augroup END
 
-colorscheme ron
-" A little customization is in order.
-hi ColorColumn ctermbg=8
-hi Comment ctermfg=8
-hi LineNr ctermfg=8
-hi SpellBad ctermfg=15
-hi SpellCap ctermfg=15
-hi TODO ctermfg=15 ctermbg=1
-hi link pythonOperator Statement
-hi link pythonNumber Structure
-hi link CtrlPMode2 StatusLine
-hi StatusLineNC ctermfg=8
-hi SignColumn ctermbg=none
+colorscheme 256_noir
+
+" some customizations
+if g:colors_name == '256_noir'
+    hi Search ctermfg=7 ctermbg=0 cterm=reverse
+    hi IncSearch ctermfg=7 ctermbg=0
+    hi Search ctermfg=7 ctermbg=0 cterm=reverse
+    hi SignColumn ctermbg=none
+endif
+
+if g:colors_name == 'ron'
+    hi ColorColumn ctermbg=8
+    hi Comment ctermfg=8
+    hi LineNr ctermfg=8
+    hi SpellBad ctermfg=15
+    hi SpellCap ctermfg=15
+    hi TODO ctermfg=15 ctermbg=1
+    hi link pythonOperator Statement
+    hi link pythonNumber Structure
+    hi link CtrlPMode2 StatusLine
+    hi StatusLineNC ctermfg=8
+    hi SignColumn ctermbg=none
+endif
 
 function! GenerateTags()
-    if executable('git-tags') | call system('"git-tags" &') | endif
+    " if executable('git-tags') | call system('"git-tags" &') | endif
+    if executable('git-tags') | call jobstart('git-tags') | endif
 endfunction
 
 function! StripTrailingWhitespaces()

@@ -5,39 +5,21 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
-Plug 'tpope/vim-commentary' " Easily comment stuff out
-Plug 'tpope/vim-surround' " Easily wrap text in delimiters or change them
-Plug 'tpope/vim-repeat' " Dot repeat for unimpaired, commentary, and others
-Plug 'scrooloose/syntastic' " Syntax checking
-Plug 'ap/vim-buftabline' " Buffers in the tab bar
-Plug 'jpalardy/vim-slime' " Send input from vim to screen/tmux
-Plug 'itchyny/vim-gitbranch' " Git branch function for use in statusline
-" Autocompletion
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'scrooloose/syntastic'
+Plug 'ap/vim-buftabline'
+Plug 'jpalardy/vim-slime'
+Plug 'itchyny/vim-gitbranch'
+Plug 'andreasvc/vim-256noir'
 Plug 'Valloric/YouCompleteMe', {'do': './install.py --clang-completer'}
-" virtualenv support
-Plug 'jmcantrell/vim-virtualenv', {'for': 'python'}
-" html/css abbreviations
 Plug 'mattn/emmet-vim', {'for': ['html', 'css', 'htmldjango', 'htmljinja']}
-" jinja syntax highlighting
 Plug 'mitsuhiko/vim-jinja', {'for': ['html', 'htmldjango', 'htmljinja']}
-" Better python indentation
 Plug 'hynek/vim-python-pep8-indent', {'for': 'python'}
-
-" Js indentation
 Plug 'pangloss/vim-javascript', {'for': ['javascript.jsx', 'javascript']}
-
-" This is a fork by amadeus that includes a fix for arrow functions in classes
-" Plug 'amadeus/vim-javascript', { 'for': ['javascript.jsx', 'javascript'],
-"             \ 'as': 'vim-javascript-amadeus',
-"             \ 'branch': 'arrow-functions-in-class',
-"             \ 'commit': '60726eb07b45e3c67984884e8f7618c0373e00ef'
-"             \ }
-
-" Jsx highlighting / identation
 Plug 'mxw/vim-jsx', {'for': ['javascript.jsx', 'javascript']}
-" Undo tree interface.
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
-
 
 call plug#end()
 
@@ -138,7 +120,11 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_python_flake8_args='--ignore=E501'
 let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_eslint_exec = 'eslint_d'
+
+let g:syntastic_mode_map = {
+        \ "mode": "active",
+        \ "passive_filetypes": ["javascript", "javascript.jsx"] }
+nnoremap <leader>c :SyntasticCheck<cr>
 
 " Emmet
 let g:user_emmet_install_global = 0
@@ -149,7 +135,7 @@ if !exists('g:undotree_SplitWidth')
     let g:undotree_SplitWidth = 30
 endif
 
-let g:ycm_global_ycm_extra_conf = '~/dotfiles/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_filetype_specific_completion_to_disable = {
@@ -165,6 +151,14 @@ let g:jsx_ext_required = 0
 let g:buftabline_numbers = 1
 let g:buftabline_indicators = 1
 let g:buftabline_seperators = 1
+
+" This keeps the sign column visible at all times. Can't stand the
+" twitching when linting for errors. http://superuser.com/a/558885
+augroup dummysign
+    au!
+    autocmd BufEnter * sign define dummy
+    autocmd BufEnter * execute 'sign place 9999 line=1 name=dummy buffer=' . bufnr('')
+augroup END
 
 augroup write_file
     au!
@@ -190,18 +184,12 @@ augroup filetypes
     au FileType c setlocal formatprg=astyle\ -S
 augroup END
 
-colorscheme ron
-" A little customization is in order.
-hi ColorColumn ctermbg=8
-hi Comment ctermfg=8
-hi LineNr ctermfg=8
-hi SpellBad ctermfg=15
-hi SpellCap ctermfg=15
-hi TODO ctermfg=15 ctermbg=1
-hi link pythonOperator Statement
-hi link pythonNumber Structure
-hi link CtrlPMode2 StatusLine
-hi StatusLineNC ctermfg=8
+colorscheme 256_noir
+
+augroup setcolorscheme
+    au!
+    au ColorScheme * call CustomizeColors()
+augroup END
 
 " tmux doesn't render italics properly, so let's just remap to standout
 if &term == "screen-256color"
@@ -219,3 +207,25 @@ function! <SID>StripTrailingWhitespaces()
     let @/=_s
     call cursor(l, c)
 endfunction
+
+function! CustomizeColors()
+    if g:colors_name == '256_noir'
+        hi Search ctermfg=7 ctermbg=0 cterm=reverse
+        hi IncSearch ctermfg=7 ctermbg=0
+        hi Search ctermfg=7 ctermbg=0 cterm=reverse
+        hi SignColumn ctermbg=none
+    else if g:colors_name == 'ron'
+        hi ColorColumn ctermbg=8
+        hi Comment ctermfg=8
+        hi LineNr ctermfg=8
+        hi SpellBad ctermfg=15
+        hi SpellCap ctermfg=15
+        hi TODO ctermfg=15 ctermbg=1
+        hi link pythonOperator Statement
+        hi link pythonNumber Structure
+        hi link CtrlPMode2 StatusLine
+        hi StatusLineNC ctermfg=8
+        hi SignColumn ctermbg=none
+    endif
+endfunction
+

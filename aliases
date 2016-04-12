@@ -1,10 +1,11 @@
-alias rmpyc='find . -name "*.pyc" -delete'
-alias rmswp='rm ~/.vim/tmp/*'
-alias vimrc='vim $HOME/.vimrc'
-alias zshrc='vim $HOME/.zshrc.local'
-alias vinit='nvim $HOME/.config/nvim/init.vim'
-alias vim='nvim'
-alias v='nvim'
+#! /usr/bin/env sh
+alias rp='find . -name "*.pyc" -delete'
+alias rs='find . -name "*.swp" -delete'
+# alias v='nvim'
+
+# alias vimrc='vim $HOME/.vimrc'
+# alias vinit='nvim $HOME/.config/nvim/init.vim'
+
 alias dots='$HOME/.dotfiles'
 alias bin='$HOME/bin'
 alias ta='tmux a'

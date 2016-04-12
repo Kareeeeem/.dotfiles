@@ -383,4 +383,7 @@ source "$HOME/clones/z/z.sh"
 source "$HOME/.aliases"
 unsetopt flow_control
 
+export FZF_DEFAULT_COMMAND='ag -g ""'
+export FZF_DEFAULT_OPTS='--color=bw'
+
 ## END OF FILE #################################################################
