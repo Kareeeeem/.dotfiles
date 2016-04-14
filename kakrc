@@ -5,9 +5,9 @@ set global indentwidth 4
 set global scrolloff 1,5
 set global makecmd 'make --jobs=8'
 set global grepcmd 'ag --column'
-colorscheme lucius
+colorscheme zenburn
 
-# I'm only ignoring these because a hook will remove these errors on InsertEnd
+# I'm only ignoring these because a hook will remove these
 set global flake8_options 'W291,W293'
 
 def -docstring 'Invoke fzf to open a file.' \
@@ -38,19 +38,14 @@ def -docstring 'Remove trailing whitespace.' rmtrail %{
 	exec -draft '%s[ \t]+$<ret>d'
 }
 
-hook global InsertEnd .* %{ rmtrail }
+hook global BufWritePost .* %{ rmtrail }
 hook global WinCreate .* %{ addhl number_lines }
 
 hook global WinSetOption filetype=python %{
-    %sh{
-        if [ -z $VIRTUAL_ENV ]; then
-            echo 'set buffer jedi_python_path "$VIRTUALENV/bin/python"'
-        fi
-    }
+	jedi-enable-autocomplete
 	flake8-enable-diagnostics
 	map window normal <c-l> :flake8-lint<ret>
-    hook window -group flake8-diagnostics InsertEnd .* %{ flake8-lint }
-    hook window -group flake8-diagnostics NormalEnd .* %{ flake8-lint }
+    # hook window -group flake8-diagnostics InsertEnd .* %{ flake8-lint }
 }
 
 map global user f :fzf-file<ret>

@@ -5,6 +5,7 @@ dotfiles="$HOME/.dotfiles"
 mkdir "$HOME/.config/nvim" -p > /dev/null 2>&1
 mkdir "$HOME/.config/nvim/tmp" > /dev/null 2>&1
 mkdir "$HOME/.config/nvim/undodir" > /dev/null 2>&1
+mkdir "$HOME/.config/kak" > /dev/null 2>&1
 
 ln -s "$dotfiles/ctags" "$HOME/.ctags" > /dev/null 2>&1
 ln -s "$dotfiles/vimrc" "$HOME/.vimrc" > /dev/null 2>&1
@@ -18,3 +19,6 @@ ln -s "$dotfiles/aliases" "$HOME/.aliases" > /dev/null 2>&1
 ln -s "$dotfiles/npmrc" "$HOME/.npmrc" > /dev/null 2>&1
 ln -s "$dotfiles/ycm_extra_conf.py" "$HOME/.ycm_extra_conf.py" > /dev/null 2>&1
 ln -s "$dotfiles/init.vim" "$HOME/.config/nvim/init.vim" > /dev/null 2>&1
+ln -s "$dotfiles/gitconfig" "$HOME/.gitconfig" > /dev/null 2>&1
+ln -s "$dotfiles/kakrc" "$HOME/.config/kak/kakrc" > /dev/null 2>&1
+ln -s "$dotfiles/flake8.kak" "$HOME/.config/kak/flake8.kak" > /dev/null 2>&1
