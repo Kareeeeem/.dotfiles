@@ -6,6 +6,7 @@ mkdir "$HOME/.config/nvim" -p > /dev/null 2>&1
 mkdir "$HOME/.config/nvim/tmp" > /dev/null 2>&1
 mkdir "$HOME/.config/nvim/undodir" > /dev/null 2>&1
 mkdir "$HOME/.config/kak" > /dev/null 2>&1
+mkdir "$HOME/.rtorrent.session" > /dev/null >2>&1
 
 ln -s "$dotfiles/ctags" "$HOME/.ctags" > /dev/null 2>&1
 ln -s "$dotfiles/vimrc" "$HOME/.vimrc" > /dev/null 2>&1

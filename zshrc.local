@@ -379,7 +379,7 @@ stty erase "^?"
 
 fpath=(~/.zsh $fpath)
 
-source "$HOME/clones/z/z.sh"
+source "$HOME/sources/z/z.sh"
 source "$HOME/.aliases"
 unsetopt flow_control
 

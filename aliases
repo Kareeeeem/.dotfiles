@@ -1,17 +1,18 @@
 #! /usr/bin/env sh
-alias rp='find . -name "*.pyc" -delete'
-alias rs='find . -name "*.swp" -delete'
-# alias v='nvim'
-
-# alias vimrc='vim $HOME/.vimrc'
-# alias vinit='nvim $HOME/.config/nvim/init.vim'
+alias rp='find $HOME -name "*.pyc" -delete'
+alias rs='find $HOME -name "*.swp" -delete'
+alias v='vim'
+alias vimrc='vim $HOME/.vimrc'
 
 alias dots='$HOME/.dotfiles'
 alias bin='$HOME/bin'
+
 alias ta='tmux a'
 alias tat='tmux a -t'
 alias tk='tmux kill-session'
 alias ts='tmux new-session -s'
+
+alias pydocs='(cd ~/docs/python-2.7.11-docs-html && python -m SimpleHTTPServer > /dev/null 2>&1 &) && echo "Python 2.7.11 docs being served at :8000"'
 
 # aliases set by grml. ag alias conflicts with ag silver searcher. unalias all
 # in it's category. never used them anyways.
