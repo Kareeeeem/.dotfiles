@@ -9,8 +9,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'scrooloose/syntastic'
 Plug 'ap/vim-buftabline'
-" Plug 'jpalardy/vim-slime'
-Plug 'brauner/vimtux'
+Plug 'jpalardy/vim-slime'
 Plug 'Kareeeeem/vim-walou'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mattn/emmet-vim', {'for': ['html', 'css', 'htmldjango', 'htmljinja']}
@@ -86,9 +85,9 @@ nnoremap <Leader><Leader> <C-^>
 " Break line
 nnoremap K i<cr><esc>k$
 " Toggle search highlighting
-nnoremap <F7> :set hlsearch!<CR>
+nnoremap <leader>h :set hlsearch!<CR>
 " Toggle paste
-nnoremap <F6> :set paste!<CR>
+nnoremap <leader>p :set paste!<CR>
 " j and k on columns rather than lines
 nnoremap j gj
 nnoremap k gk
@@ -112,7 +111,7 @@ nnoremap <leader>q :bd<CR>
 
 nnoremap <leader>b :ls<cr>:b<space>
 
-nnoremap <leader>= vip=
+nnoremap <leader>= =ip
 
 " move through completion menu with tab
 inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
@@ -120,8 +119,8 @@ inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " select completion candidate with enter
 inoremap <silent><expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-nnoremap <leader>bp :bp<cr>
-nnoremap <leader>bn :bn<cr>
+nnoremap <left> :bp<cr>
+nnoremap <right> :bn<cr>
 
 nnoremap <leader>lp :lprev<cr>
 nnoremap <leader>ln :lnext<cr>
@@ -134,12 +133,12 @@ nnoremap <leader>m :History<CR>
 " let g:fzf_layout = { 'right': '60%' }
 
 " Slime
-" let g:slime_target = 'tmux'
-" let g:slime_python_ipython = 1
+let g:slime_target = 'tmux'
+let g:slime_python_ipython = 1
 
 " Syntastic
 let g:syntastic_c_compiler='clang'
-let g:syntastic_c_compiler_options='-std=c11 -Weverything'
+let g:syntastic_c_compiler_options='-std=c99 -Weverything'
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_check_on_wq = 0
@@ -170,11 +169,11 @@ let g:buftabline_numbers=1
 
 " This keeps the sign column visible at all times. Can't stand the
 " twitching when linting for errors. http://superuser.com/a/558885
-augroup dummysign
-    au!
-    autocmd BufEnter * sign define dummy
-    autocmd BufEnter * execute 'sign place 9999 line=1 name=dummy buffer=' . bufnr('')
-augroup END
+" augroup dummysign
+"     au!
+"     au BufEnter * sign define dummy
+"     au BufEnter * execute 'sign place 9999 line=1 name=dummy buffer=' . bufnr('')
+" augroup END
 
 augroup write_file
     au!
@@ -189,11 +188,19 @@ augroup go
     au FileType go setlocal formatprg=gofmt noexpandtab tabstop=4
 augroup END
 
+augroup md
+    au!
+    au FileType *markdown* setlocal formatoptions+=t
+    au FileType *markdown* setlocal formatprg=par\ -72
+    au FileType *markdown* setlocal textwidth=72
+    au FileType *markdown* setlocal textwidth=72
+    au FileType *markdown* nnoremap <leader>snl :set spell spelllang=nl<cr>
+    au FileType *markdown* nnoremap <leader>ss :set nospell<cr>
+augroup END
+
 augroup txt
     au!
-    au FileType text,*markdown* setlocal formatoptions+=t
-    au FileType text,*markdown* setlocal formatprg=par\ -72
-    au FileType text,*markdown* setlocal textwidth=72
+    au FileType text setlocal wrap linebreak nolist
 augroup END
 
 augroup shell
@@ -216,6 +223,7 @@ augroup frontend
     au FileType css,html,htmljinja,*javascript* setlocal softtabstop=2
     au FileType htmljinja setlocal commentstring={#\ %s\ #}
     au FileType mako,html,css,htmldjango,htmljinja EmmetInstall
+    au FileType *javascript* nnoremap <silent> <leader>r :call system('tmux send-keys -t :.1 c-c c-m "npm start" c-m')<cr>
 augroup END
 
 " http://stackoverflow.com/a/7086709
