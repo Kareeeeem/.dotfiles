@@ -124,6 +124,7 @@ bindkey -M menuselect 'j' vi-down-line-or-history # bottom
 #WORDCHARS=.
 #WORDCHARS='*?_[]~=&;!#$%^(){}'
 #WORDCHARS='${WORDCHARS:s@/@}'
+WORDCHARS='*?_[]~=&;!#$%^(){}<>'
 
 # just type '...' to get '../..'
 rationalise-dot() {
@@ -167,8 +168,8 @@ bindkey -M isearch . self-insert
 ## compsys related snippets ##
 
 ## changed completer settings
-# zstyle ':completion:*' completer _complete _correct _approximate
-# zstyle ':completion:*' expand prefix suffix
+zstyle ':completion:*' completer _complete _correct _approximate
+zstyle ':completion:*' expand prefix suffix
 
 ## another different completer setting: expand shell aliases
 #zstyle ':completion:*' completer _expand_alias _complete _approximate
@@ -377,13 +378,18 @@ stty erase "^?"
 # seperate global and local history
 # http://superuser.com/questions/446594/separate-up-arrow-lookback-for-local-and-global-zsh-history
 
+
+# OPAM configuration
+. /home/kareem/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+eval `opam config env`
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 fpath=(~/.zsh $fpath)
+export FZF_DEFAULT_COMMAND='ag -g ""'
+export FZF_DEFAULT_OPTS='--color=bw'
 
 source "$HOME/sources/z/z.sh"
 source "$HOME/.aliases"
-unsetopt flow_control
-
-export FZF_DEFAULT_COMMAND='ag -g ""'
-export FZF_DEFAULT_OPTS='--color=bw'
+# unsetopt flow_control
 
 ## END OF FILE #################################################################

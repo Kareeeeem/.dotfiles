@@ -126,6 +126,9 @@ nnoremap <leader>lp :lprev<cr>
 nnoremap <leader>ln :lnext<cr>
 nnoremap <leader>ll :ll<cr>
 
+nnoremap <leader>d<space> c3l=<esc>
+nnoremap <leader>i<space> cw<space>=<space><esc>
+
 " fzf
 nnoremap <C-p> :Files<CR>
 nnoremap <leader>t :Tags<CR>
