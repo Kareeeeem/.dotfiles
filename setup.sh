@@ -36,7 +36,7 @@ read -p "Add key to github account and then press enter." reply
 git config --global user.email "$EMAIL"
 git config --global user.name "Mohammed Kareem"
 
-git clone git@github.com:rupa/z.git "$HOME/clones/z"
+git clone git@github.com:rupa/z.git "$HOME/sources/z"
 
 git clone git@github.com:Kareeeeem/.dotfiles.git "$HOME/.dotfiles"
 sh "$HOME/.dotfiles/install.sh"

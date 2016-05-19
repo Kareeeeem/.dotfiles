@@ -7,26 +7,23 @@ TYPE=$DEFAULTSTATUS
 
 ADDEDMSG="Added entry to todos"
 DELETEDMSG="Deleted entry/entries from todos"
-EDITEDMSG="Deleted entry from todos"
-NOMATCHESMSG="No todos found with that id."
-UNDOMSG="Restored previous state."
 CHANGEDSTATUSMSG="Set %s to %s"
 
 # create a backup file, allows a single undo.
-create_backup () { cp $TODOFILE $BACKUPFILE ; }
+create_backup () { cp "$TODOFILE" "$BACKUPFILE" ; }
 
 # restore the backup and save the current one as backup.
 restore_backup () {
 	TEMPNOTE='/tmp/outnotes'
-	cp $TODOFILE $TEMPNOTE && mv $BACKUPFILE $TODOFILE && \
-		mv $TEMPNOTE $BACKUPFILE
+	cp "$TODOFILE" "$TEMPNOTE" && mv "$BACKUPFILE" "$TODOFILE" && \
+		mv "$TEMPNOTE" "$BACKUPFILE"
 }
 
-if [[ ! -e $TODOFILE ]]; then touch $TODOFILE; fi
+if [[ ! -e "$TODOFILE" ]]; then touch "$TODOFILE"; fi
 
 if [[ $1 == 'ls' ]]; then
 	shift;
-	while [[ $# > 0 ]]; do
+	while [[ $# -gt 0 ]]; do
 		case $1 in
 			[[:digit:]]* ) AMOUNT=$1; shift; ;;
 			x|v|- ) TYPE=$1; shift; ;;
@@ -36,37 +33,37 @@ if [[ $1 == 'ls' ]]; then
 	done
 	TYPE="/;$TYPE$/"
 	awk  'BEGIN {printf "ID\tADDED\tTASK\tSTATUS\n"}'"$TYPE"'{
-		printf "%s\t%s\t%s\t%s\n", $1, $2, $3, $4}' FS=";" $TODOFILE | \
-			head -n $AMOUNT | \
+		printf "%s\t%s\t%s\t%s\n", $1, $2, $3, $4}' FS=";" "$TODOFILE" | \
+			head -n "$AMOUNT" | \
 			column -ts $'\t'
 
 elif [[ $1 =~ ^[xv-]$ ]]; then
 	create_backup
 	TYPE=$1; shift; IDS=$*;
-	IDPATTERN=$(echo $IDS | sed 's/ /\\|/g')
-	sed -i~ "s,\(^\($IDPATTERN\);.*\)[-vx]$,\1$TYPE,g" $TODOFILE
-	printf "$CHANGEDSTATUSMSG\n" "$*" "$TYPE"
+	IDPATTERN=${$IDS// /|}
+	sed -i~ "s,\(^\($IDPATTERN\);.*\)[-vx]$,\1$TYPE,g" "$TODOFILE"
+	printf "%s\n" "$CHANGEDSTATUSMSG\n" "$*" "$TYPE"
 
 elif [[ $1 == del ]]; then shift; IDS=$*;
 	create_backup
-	IDPATTERN=$(echo $IDS | sed 's/ /|/g')
+	IDPATTERN=${$IDS// /|}
 	awk  'BEGIN {printf "ID\tADDED\tTASK\tSTATUS\n"}'"/^($IDPATTERN)/"'{
-		printf "%s\t%s\t%s\t%s\n", $1, $2, $3, $4}' FS=";" $TODOFILE | \
-			head -n $AMOUNT | \
+		printf "%s\t%s\t%s\t%s\n", $1, $2, $3, $4}' FS=";" "$TODOFILE" | \
+			head -n "$AMOUNT" | \
 			column -ts $'\t'
 	read -p "Delete the above todo(s), y/n? " -n 1 -r; echo
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
-		IDPATTERN=$(echo $IDS | sed 's/ /\\|/g')
-		sed -i~ "/^\($IDPATTERN\)/d" $TODOFILE
-		echo $DELETEDMSG
+		IDPATTERN=${$IDS// /|}
+		sed -i~ "/^\($IDPATTERN\)/d" "$TODOFILE"
+		echo "$DELETEDMSG"
 	fi
 
 elif [[ $1 == undo ]]; then restore_backup
 
 else
 	create_backup
-	ID=$(awk '{print ++$1}' FS=";" $TODOFILE | sort -nr | head -n1 );
+	ID=$(awk '{print ++$1}' FS=";" "$TODOFILE" | sort -nr | head -n1 );
 	printf "%s;%s;%s;%s\n" \
-		"$ID" "$(date +'%F %H:%M')" "$*" "$DEFAULTSTATUS" >> $TODOFILE
-	echo $ADDEDMSG
+		"$ID" "$(date +'%F %H:%M')" "$*" "$DEFAULTSTATUS" >> "$TODOFILE"
+	echo "$ADDEDMSG"
 fi
