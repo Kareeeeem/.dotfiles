@@ -16,9 +16,9 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
+PATH="$HOME/.local/bin:$PATH"
 PATH="$HOME/bin:$PATH"
 PATH="$HOME/.npm/bin:$PATH"
-PATH="$HOME/local/bin:$PATH"
 
 # GOPATH
 export GOROOT=$HOME/.local/bin/go

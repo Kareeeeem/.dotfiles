@@ -23,5 +23,6 @@ ln -s "$dotfiles/npmrc" "$HOME/.npmrc" > /dev/null 2>&1
 # ln -s "$dotfiles/init.vim" "$HOME/.config/nvim/init.vim" > /dev/null 2>&1
 ln -s "$dotfiles/gitconfig" "$HOME/.gitconfig" > /dev/null 2>&1
 ln -s "$dotfiles/inputrc" "$HOME/.inputrc" > /dev/null 2>&1
+ln -s "$dotfiles/bashrc" "$HOME/.bashrc" > /dev/null 2>&1
 # ln -s "$dotfiles/kakrc" "$HOME/.config/kak/kakrc" > /dev/null 2>&1
 # ln -s "$dotfiles/flake8.kak" "$HOME/.config/kak/flake8.kak" > /dev/null 2>&1
