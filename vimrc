@@ -111,7 +111,7 @@ nnoremap <leader>q :bd<CR>
 
 nnoremap <leader>b :ls<cr>:b<space>
 
-nnoremap <leader>= =ip
+nnoremap <leader>gq gqip
 
 " move through completion menu with tab
 inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"

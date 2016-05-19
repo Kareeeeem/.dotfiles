@@ -1,4 +1,4 @@
-## arrow up
-"\e[A":history-search-backward
-## arrow down
-"\e[B":history-search-forward
+set show-all-if-ambiguous on
+control-p: history-search-backward
+control-n: history-search-forward
+"\t":menu-complete

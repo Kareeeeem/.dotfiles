@@ -1,5 +1,3 @@
-#! /usr/bin/env bash
-
 alias rp='find . -name "*.pyc" -delete'
 alias rs='find . -name "*.swp" -delete'
 alias v='vim'
@@ -23,10 +21,11 @@ alias p='pushd'
 alias pp='popd'
 alias d='dirs -v'
 
+alias b='cd -'
+
 alias l='ls -lahF'
 alias ll='ls -1aF'
+alias la='ls -a'
 
 alias json='python -m json.tool'
 alias serve='python -m SimpleHTTPServer'
-
-alias b='cd -'
