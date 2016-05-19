@@ -1,4 +1,11 @@
+set completion-ignore-case on
+
 set show-all-if-ambiguous on
+
 control-p: history-search-backward
+"\e[A": history-search-backward
+
 control-n: history-search-forward
-"\t":menu-complete
+"\e[B": history-search-forward
+
+Tab: menu-complete
