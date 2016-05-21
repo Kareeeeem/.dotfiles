@@ -42,27 +42,30 @@ export YELLOW='\[\e[1;33m\]';
 export WHITE='\[\e[1;37m\]';
 export RESETC='\[\e[0m\]'
 
-HISTCONTROL=ignoreboth # no duplicates or lines starting with space
-HISTSIZE="NOTHING" # no limit
-HISTFILESIZE="NOTHING" # no limit
+HISTCONTROL=ignoreboth:erasedups # no duplicates or lines starting with space
+HISTSIZE=100000 # no limit
+HISTFILESIZE=100000 # no limit
+shopt -s histappend # append to history file, don't overwrite it
 
-shopt -s histappend # append to the history file, don't overwrite it
 shopt -s checkwinsize # update the values of LINES and COLUMNS.
 shopt -s globstar # match all files and zero or more (sub)directories
 shopt -s autocd # ch without typing ch
 
 # PROMPT STUFF
+
+# we're setting the prompt command so his needs to be done manually.
 _virtualenv_prompt() {
 	if [ -n "$VIRTUAL_ENV" ]; then
 		echo "$LIGHTPURPLE$(basename "$VIRTUAL_ENV")$RESETC "
 	fi
 }
 
+# show only the directory and it's parent.
 _dir_prompt() {
 	echo "$(basename "$(dirname "$PWD")")/$(basename "$PWD")"
 }
 
-# http://stackoverflow.com/a/16715681
+# show last status if not 0. http://stackoverflow.com/a/16715681
 _status_prompt() {
 	local EXIT="$?"
 	if [ $EXIT != 0 ]; then
@@ -70,6 +73,7 @@ _status_prompt() {
 	fi
 }
 
+# show branch and it's state in green/red, and number of stashes.
 _git_prompt() {
 	local branch
 	local state
@@ -92,31 +96,39 @@ _git_prompt() {
 
 }
 
-prompt_command() {
-	# Do this in a prompt command to allow color codes in functions.
-	PS1="$(_status_prompt)$(_virtualenv_prompt)$(_dir_prompt)$(_git_prompt) % "
+
+# Set PS1 in a prompt command to allow color codes in functions.
+_prompt_command() {
+	history -a; history -c; history -r
+	PS1="$(_status_prompt)$(_virtualenv_prompt)\w$(_git_prompt) % "
 }
 
-export PROMPT_COMMAND="prompt_command"
+export PROMPT_DIRTRIM=2
+export PROMPT_COMMAND="_prompt_command"
 
 # Disable START/STOP signals
 stty -ixon
 
 # FZF
-[ -f ~/.fzf.bash ] && . ~/.fzf.bash
+# let's get used to bash's own functionality first
+# export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+# export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+# [ -f ~/.fzf.bash ] && . ~/.fzf.bash
+
+# use ag, and no need for colors.
 export FZF_DEFAULT_COMMAND='ag -g ""'
 export FZF_DEFAULT_OPTS='--color=bw'
 
-# GIT Completion
+# GIT Completion https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
 . "/home/kareem/.dotfiles/git-completion.bash"
 
-# Z
+# Z https://github.com/rupa/z
 . "/home/kareem/sources/z/z.sh"
 
-# TMUX completion
+# TMUX completion # forgot where I got this file
 . "/home/kareem/.dotfiles/tmux.completion.bash"
 
-# mkdir and cd to it. http://unix.stackexchange.com/a/9124
+# mkdir and cd. http://unix.stackexchange.com/a/9124
 mkcd () {
 	case "$1" in
 		*/..|*/../) cd -- "$1" ;; # that doesn't make any sense unless the directory already exists

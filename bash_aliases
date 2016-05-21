@@ -1,8 +1,13 @@
 alias rp='find . -name "*.pyc" -delete'
 alias rs='find . -name "*.swp" -delete'
+
 alias v='vim'
-alias vimrc='vim $HOME/.vimrc'
-alias bashrc='vim $HOME/.bashrc'
+alias e='vim'
+
+alias evimrc='vim $HOME/.vimrc'
+alias ebashrc='vim $HOME/.bashrc'
+
+alias bashrc='. $HOME/.bashrc'
 
 alias dots='cd $HOME/.dotfiles'
 alias bin='cd $HOME/bin'
@@ -12,6 +17,7 @@ alias ta='tmux a'
 alias tat='tmux a -t'
 alias tk='tmux kill-session'
 alias ts='tmux new-session -s'
+alias tl='tmux ls'
 
 alias ..='cd ..'
 alias ...='cd ../..'

@@ -47,7 +47,19 @@ set undodir=~/.vim/undodir/
 set undofile
 
 " colorscheme
-colorscheme walou
+" colorscheme walou
+colorscheme ron
+
+hi ColorColumn ctermbg=8
+hi Comment ctermfg=8
+hi LineNr ctermfg=8
+hi SpellBad ctermfg=15
+hi SpellCap ctermfg=15
+hi TODO ctermfg=15 ctermbg=1
+hi link pythonOperator Statement
+hi link pythonNumber Structure
+hi StatusLineNC ctermfg=8
+hi SignColumn ctermbg=none
 
 " statusline
 set laststatus=2
