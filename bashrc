@@ -8,28 +8,20 @@ case $- in
       *) return;;
 esac
 
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=10000
-HISTFILESIZE=20000
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
-
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-shopt -s globstar
-
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias dir='dir --color=auto'
+    alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
 
 # Colors
 export BLACK='\[\e[0;30m\]';
@@ -50,91 +42,59 @@ export YELLOW='\[\e[1;33m\]';
 export WHITE='\[\e[1;37m\]';
 export RESETC='\[\e[0m\]'
 
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    alias dir='dir --color=auto'
-    alias vdir='vdir --color=auto'
+HISTCONTROL=ignoreboth # no duplicates or lines starting with space
+HISTSIZE="NOTHING" # no limit
+HISTFILESIZE="NOTHING" # no limit
 
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
+shopt -s histappend # append to the history file, don't overwrite it
+shopt -s checkwinsize # update the values of LINES and COLUMNS.
+shopt -s globstar # match all files and zero or more (sub)directories
+shopt -s autocd # ch without typing ch
 
-# colored GCC warnings and errors
-export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
-
-# PROMPT
-
-__virtualenv_prompt() {
+# PROMPT STUFF
+_virtualenv_prompt() {
 	if [ -n "$VIRTUAL_ENV" ]; then
 		echo "$LIGHTPURPLE$(basename "$VIRTUAL_ENV")$RESETC "
 	fi
 }
 
-__dir_prompt() {
+_dir_prompt() {
 	echo "$(basename "$(dirname "$PWD")")/$(basename "$PWD")"
 }
 
 # http://stackoverflow.com/a/16715681
-__status_prompt() {
+_status_prompt() {
 	local EXIT="$?"
 	if [ $EXIT != 0 ]; then
 		echo "${RED}$EXIT${RESETC} "
 	fi
 }
 
-__git_prompt() {
-	local branch=''
-	local state=''
-	local stashes=''
-
+_git_prompt() {
+	local branch
+	local state
+	local stashes
 	ref=$(git symbolic-ref -q HEAD 2> /dev/null || \
 		git name-rev --name-only --no-undefined --always HEAD 2> /dev/null)
-
 	if [ -n "$ref" ]; then
-
 		branch=${ref#refs/heads/}
-
 		if [[ -n $(git status --porcelain 2> /dev/null) ]]; then
 			state=$LIGHTRED
 		else
 			state=$LIGHTGREEN
 		fi
-
 		st_num=$(git stash list 2> /dev/null | wc -l | tr -d ' ')
-
 		if [[ $st_num != "0" ]]; then
 			stashes="$RED($st_num)$RESETC"
 		fi
-
 		echo " $state$branch$RESETC$stashes"
 	fi
 
 }
 
 prompt_command() {
-	PS1="$(__status_prompt)"
-	PS1+="$(__virtualenv_prompt)"
-	PS1+="$(__dir_prompt)"
-	PS1+="$(__git_prompt)"
-	PS1+=" % "
+	# Do this in a prompt command to allow color codes in functions.
+	PS1="$(_status_prompt)$(_virtualenv_prompt)$(_dir_prompt)$(_git_prompt) % "
 }
 
 export PROMPT_COMMAND="prompt_command"
@@ -143,37 +103,18 @@ export PROMPT_COMMAND="prompt_command"
 stty -ixon
 
 # FZF
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f ~/.fzf.bash ] && . ~/.fzf.bash
 export FZF_DEFAULT_COMMAND='ag -g ""'
 export FZF_DEFAULT_OPTS='--color=bw'
 
 # GIT Completion
-source "/home/kareem/.dotfiles/git-completion.bash"
+. "/home/kareem/.dotfiles/git-completion.bash"
 
 # Z
-source "/home/kareem/sources/z/z.sh"
+. "/home/kareem/sources/z/z.sh"
 
-# Navigation http://unix.stackexchange.com/a/4291
-# pushd() {
-# 	if [ $# -eq 0 ]; then
-# 		DIR="${HOME}"
-# 	else
-# 		DIR="$1"
-# 	fi
-
-# 	builtin pushd "${DIR}" > /dev/null
-# 	builtin dirs
-# }
-
-# pushd_builtin() {
-# 	builtin pushd > /dev/null
-# 	builtin dirs
-# }
-
-# popd() {
-# 	builtin popd > /dev/null
-# 	builtin dirs
-# }
+# TMUX completion
+. "/home/kareem/.dotfiles/tmux.completion.bash"
 
 # mkdir and cd to it. http://unix.stackexchange.com/a/9124
 mkcd () {
@@ -187,4 +128,18 @@ mkcd () {
 	esac
 }
 
-shopt -s autocd
+# colored manpages with max width 80
+export MANWIDTH=80
+man() {
+	env \
+		LESS_TERMCAP_mb="$(printf "\e[1;31m")" \
+		LESS_TERMCAP_md="$(printf "\e[1;31m")" \
+		LESS_TERMCAP_me="$(printf "\e[0m")" \
+		LESS_TERMCAP_se="$(printf "\e[0m")" \
+		LESS_TERMCAP_so="$(printf "\e[1;44;33m")" \
+		LESS_TERMCAP_ue="$(printf "\e[0m")" \
+		LESS_TERMCAP_us="$(printf "\e[1;32m")" \
+			man "$@"
+}
+
+. ~/.bash_aliases

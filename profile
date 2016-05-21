@@ -26,4 +26,4 @@ export GOPATH=$HOME/projects/go
 PATH="$GOROOT/bin:$PATH"
 
 export VISUAL="vim"
-export EDITOR="vi -e"
+export EDITOR="vim"

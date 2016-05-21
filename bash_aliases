@@ -17,11 +17,11 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
+alias b='cd -'
+
 alias p='pushd'
 alias pp='popd'
-alias d='dirs -v'
-
-alias b='cd -'
+alias dirs='dirs -v'
 
 alias l='ls -lahF'
 alias ll='ls -1aF'
