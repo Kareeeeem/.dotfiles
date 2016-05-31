@@ -99,11 +99,11 @@ _git_prompt() {
 
 # Set PS1 in a prompt command to allow color codes in functions.
 _prompt_command() {
+	PS1="$(_status_prompt)$(_virtualenv_prompt)\W$(_git_prompt) % "
 	history -a; history -c; history -r
-	PS1="$(_status_prompt)$(_virtualenv_prompt)\w$(_git_prompt) % "
 }
 
-export PROMPT_DIRTRIM=2
+# export PROMPT_DIRTRIM=2
 export PROMPT_COMMAND="_prompt_command"
 
 # Disable START/STOP signals
