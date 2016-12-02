@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# This is a really fragile script to retrieve somafm channels. It depends
+# completely on the html and it's comments on the somafm listen page.
+# It saves to a file and allows the user to select one with fzf.
+
+# Assumes you have FZF and MPV installed.
+
+SOMA_URL='http://somafm.com'
+SOMA_LISTEN_URL="$SOMA_URL/listen/"
+SOMA_FILE="$HOME/.somafm"
+
+if [[ $1 == '-r' ]]; then
+        curl -s "$SOMA_LISTEN_URL" | \
+                # grep the playlist link and the comment naming the channel and genre
+                grep -oP 'MP3.*href="/\K.*\.pls|<!-- \K.*\(.*\)' | \
+                # swap the lines so that the playlist link comes before the channel and
+                # genre. Got this from: http://stackoverflow.com/a/6818367
+                sed "N;s#\(.*\)\n\(.*\)#\1\t$SOMA_URL/\2#" | \
+                # pretty print it into columns and redirect the output to file
+                column -ts $'\t' > "$SOMA_FILE"
+fi
+
+channel=$(fzf < "$SOMA_FILE" | awk '{ print $1 }')
+mpv "$channel"
