@@ -4,7 +4,9 @@
 # completely on the html and it's comments on the somafm listen page.
 # It saves to a file and allows the user to select one with fzf.
 
-# Assumes you have FZF and MPV installed.
+# Assumes you have FZF and mpg123 installed.
+
+shopt -s extglob
 
 SOMA_URL='http://somafm.com'
 SOMA_LISTEN_URL="$SOMA_URL/listen/"
@@ -21,5 +23,14 @@ if [[ $1 == '-r' ]]; then
                 column -ts $'\t' > "$SOMA_FILE"
 fi
 
-channel=$(fzf < "$SOMA_FILE" | awk '{ print $1 }')
-mpv "$channel"
+selection=$(fzf < "$SOMA_FILE")
+
+if [[ -n "$selection" ]]; then
+	channel_name="${selection%%*( )http*}"
+	channel_url="${selection##* }"
+
+	printf "Playing channel: %s.\nPress h for help.\n" "$channel_name"
+	mpg123 -q -@ "$channel_url"
+fi
+
+shopt -u extglob
