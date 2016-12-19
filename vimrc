@@ -10,19 +10,18 @@ Plug 'tpope/vim-repeat'
 Plug 'scrooloose/syntastic'
 Plug 'ap/vim-buftabline'
 Plug 'jpalardy/vim-slime'
-" Plug 'Kareeeeem/vim-walou', {'branch': 'develop'}
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mattn/emmet-vim', {'for': ['html', 'css', 'htmldjango', 'htmljinja']}
-" Plug 'mitsuhiko/vim-jinja', {'for': ['html', 'htmldjango', 'htmljinja']}
-Plug 'hynek/vim-python-pep8-indent', {'for': 'python'}
-Plug 'pangloss/vim-javascript', {'branch': 'develop', 'for': ['javascript.jsx', 'javascript']}
-" Plug 'mxw/vim-jsx', {'for': ['javascript.jsx', 'javascript']}
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'moll/vim-bbye'
 Plug 'robertmeta/nofrils'
 Plug 'editorconfig/editorconfig-vim'
 
-Plug '2072/PHP-Indenting-for-VIm'
+" indenting help
+Plug '2072/PHP-Indenting-for-VIm', {'for': 'php'}
+Plug 'hynek/vim-python-pep8-indent', {'for': 'python'}
+Plug 'pangloss/vim-javascript', {'for': ['javascript.jsx', 'javascript']}
+Plug 'mxw/vim-jsx', {'for': ['javascript.jsx', 'javascript']}
 
 call plug#end()
 
@@ -52,6 +51,7 @@ set undodir=~/.vim/undodir/
 set undofile
 
 " colorscheme
+let g:nofrils_strbackgrounds=1
 colorscheme nofrils-dark
 
 " statusline
