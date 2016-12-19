@@ -9,5 +9,6 @@ control-p: history-search-backward
 control-n: history-search-forward
 "\e[B": history-search-forward
 
-Tab: menu-complete
+"\C-w": unix-filename-rubout
 
+Tab: menu-complete
