@@ -99,7 +99,12 @@ _git_prompt() {
 
 # Set PS1 in a prompt command to allow color codes in functions.
 _prompt_command() {
-	PS1="$(_status_prompt)$(_virtualenv_prompt)\W$(_git_prompt) % "
+	if [ -n $debian_chroot ]; then
+		chroot_prompt="($debian_chroot) "
+	else
+		chroot_prompt=""
+	fi
+	PS1="$(_status_prompt)$chroot_prompt$(_virtualenv_prompt)\W$(_git_prompt) % "
 	history -a; history -c; history -r
 }
 
