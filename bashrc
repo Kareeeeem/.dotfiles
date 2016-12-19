@@ -99,7 +99,7 @@ _git_prompt() {
 
 # Set PS1 in a prompt command to allow color codes in functions.
 _prompt_command() {
-	if [ -n $debian_chroot ]; then
+	if [ -n "$debian_chroot" ]; then
 		chroot_prompt="($debian_chroot) "
 	else
 		chroot_prompt=""
@@ -125,13 +125,15 @@ export FZF_DEFAULT_COMMAND='ag -g ""'
 export FZF_DEFAULT_OPTS='--color=bw'
 
 # GIT Completion https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
-. "/home/kareem/.dotfiles/git-completion.bash"
+. "$HOME/.dotfiles/git-completion.bash"
 
 # Z https://github.com/rupa/z
-. "/home/kareem/sources/z/z.sh"
+if [ -d "$HOME/sources/z" ]; then
+	. "$HOME/sources/z/z.sh"
+fi
 
 # TMUX completion # forgot where I got this file
-. "/home/kareem/.dotfiles/tmux.completion.bash"
+. "$HOME/.dotfiles/tmux.completion.bash"
 
 # mkdir and cd. http://unix.stackexchange.com/a/9124
 mkcd () {
