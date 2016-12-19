@@ -13,7 +13,7 @@ alias dots='cd $HOME/.dotfiles'
 alias bin='cd $HOME/bin'
 
 if [ -n "$debian_chroot" ]; then
-	alias tmux='tmux -L $debian_chroot'
+    alias tmux='tmux -L "$debian_chroot"'
 fi
 
 alias t='tmux'

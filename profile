@@ -19,6 +19,7 @@ fi
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.npm/bin:$PATH"
+export PATH=$PATH:$HOME/.gem/ruby/2.1.0/bi
 
 export VISUAL="vim"
 export EDITOR="$VISUAL"
