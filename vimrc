@@ -22,6 +22,8 @@ Plug 'moll/vim-bbye'
 Plug 'robertmeta/nofrils'
 Plug 'editorconfig/editorconfig-vim'
 
+Plug '2072/PHP-Indenting-for-VIm'
+
 call plug#end()
 
 filetype plugin indent on
