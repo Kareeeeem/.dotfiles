@@ -62,16 +62,6 @@ set statusline+=%= " right alignment from this point
 set statusline+=%-14.(%l,%c%V%)\ %P
 set statusline+=\ %#Error#%{SyntasticStatuslineFlag()}%*
 
-" wildignore
-" set wildignore+=*.o
-" set wildignore+=*.egg
-" set wildignore+=*.pyc
-" set wildignore+=*/venv/*
-" set wildignore+=*/dist/*
-" set wildignore+=*/*.egg-info/*
-" set wildignore+=*/__pycache__/*
-" set wildignore+=*/node_modules/*
-
 if executable("ag")
     set grepprg=ag\ --nogroup\ --nocolor\ --ignore-case\ --column
     set grepformat=%f:%l:%c:%m,%f:%l:%m
