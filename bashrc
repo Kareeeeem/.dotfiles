@@ -119,14 +119,14 @@ export PROMPT_COMMAND="_prompt_command"
 stty -ixon
 
 # FZF
+# use ag, and no need for colors.
+export FZF_DEFAULT_COMMAND='ag -g ""'
+export FZF_DEFAULT_OPTS='--color=bw'
+
 # let's get used to bash's own functionality first
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 [ -f ~/.fzf.bash ] && . ~/.fzf.bash
-
-# use ag, and no need for colors.
-export FZF_DEFAULT_COMMAND='ag -g ""'
-export FZF_DEFAULT_OPTS='--color=bw'
 
 # mkdir and cd. http://unix.stackexchange.com/a/9124
 mkcd () {
@@ -164,6 +164,5 @@ fi
 [ -d "$HOME/sources/z" ] && . "$HOME/sources/z/z.sh"
 
 # GIT Completion https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
-. "$HOME/.dotfiles/git-completion.bash"
-# TMUX completion # forgot where I got this file
-. "$HOME/.dotfiles/tmux.completion.bash"
+# TMUX complation https://github.com/imomaliev/tmux-bash-completion
+[ -d "$HOME/.dotfiles" ] && . "$HOME/.dotfiles/git-completion.bash"; . "$HOME/.dotfiles/tmux.completion.bash"

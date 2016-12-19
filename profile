@@ -17,9 +17,9 @@ if [ -n "$BASH_VERSION" ]; then
 fi
 
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/bin:$PATH"
-export PATH="$HOME/.npm/bin:$PATH"
-export PATH=$PATH:$HOME/.gem/ruby/2.1.0/bi
+[ -d "$HOME/bin" ]  && PATH="$HOME/bin:$PATH"
+[ -d "$HOME/.npm" ] && PATH="$HOME/.npm/bin:$PATH"
+[ -d "$HOME/.gem" ] && PATH="$PATH:$HOME/.gem/ruby/2.1.0/bin"
 
 export VISUAL="vim"
 export EDITOR="$VISUAL"
