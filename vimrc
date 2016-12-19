@@ -138,6 +138,10 @@ nnoremap <leader>m :History<CR>
 " Slime
 let g:slime_target = 'tmux'
 let g:slime_python_ipython = 1
+let g:slime_no_mappings = 1
+xnoremap <leader>s <Plug>SlimeRegionSend
+nnoremap <leader>s <Plug>SlimeParagraphSend
+nnoremap <leader>v <Plug>SlimeConfig
 
 " Syntastic
 let g:syntastic_c_compiler='clang'
