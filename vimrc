@@ -51,7 +51,7 @@ set undodir=~/.vim/undodir/
 set undofile
 
 " colorscheme
-let g:nofrils_strbackgrounds=1
+" let g:nofrils_strbackgrounds=1
 colorscheme nofrils-dark
 
 " statusline
