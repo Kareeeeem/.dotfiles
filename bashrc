@@ -94,7 +94,6 @@ _git_prompt() {
 		fi
 		echo " $state$branch$RESETC$stashes"
 	fi
-
 }
 
 _chroot_prompt() {
@@ -120,12 +119,13 @@ stty -ixon
 
 # FZF
 # use ag, and no need for colors.
-export FZF_DEFAULT_COMMAND='ag -g ""'
+if hash ag; then
+	export FZF_DEFAULT_COMMAND='ag -g ""'
+	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+	export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+fi
 export FZF_DEFAULT_OPTS='--color=bw'
 
-# let's get used to bash's own functionality first
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 [ -f ~/.fzf.bash ] && . ~/.fzf.bash
 
 # mkdir and cd. http://unix.stackexchange.com/a/9124
