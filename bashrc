@@ -23,6 +23,17 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
+HISTCONTROL=ignoreboth:erasedups # no duplicates or lines starting with space
+HISTSIZE=100000 # no limit
+HISTFILESIZE=100000 # no limit
+shopt -s histappend # append to history file, don't overwrite it
+
+shopt -s checkwinsize # update the values of LINES and COLUMNS.
+shopt -s globstar # match all files and zero or more (sub)directories
+shopt -s autocd # ch without typing ch
+
+# PROMPT STUFF
+
 # Colors
 export BLACK='\[\e[0;30m\]';
 export BLUE='\[\e[0;34m\]';
@@ -42,16 +53,6 @@ export YELLOW='\[\e[1;33m\]';
 export WHITE='\[\e[1;37m\]';
 export RESETC='\[\e[0m\]'
 
-HISTCONTROL=ignoreboth:erasedups # no duplicates or lines starting with space
-HISTSIZE=100000 # no limit
-HISTFILESIZE=100000 # no limit
-shopt -s histappend # append to history file, don't overwrite it
-
-shopt -s checkwinsize # update the values of LINES and COLUMNS.
-shopt -s globstar # match all files and zero or more (sub)directories
-shopt -s autocd # ch without typing ch
-
-# PROMPT STUFF
 
 # we're setting the prompt command so his needs to be done manually.
 _virtualenv_prompt() {
@@ -96,19 +97,22 @@ _git_prompt() {
 
 }
 
+_chroot_prompt() {
+	if [ -n "$debian_chroot" ]; then
+		echo "($debian_chroot) "
+	fi
+}
 
 # Set PS1 in a prompt command to allow color codes in functions.
 _prompt_command() {
-	if [ -n "$debian_chroot" ]; then
-		chroot_prompt="($debian_chroot) "
-	else
-		chroot_prompt=""
-	fi
-	PS1="$(_status_prompt)$chroot_prompt$(_virtualenv_prompt)\W$(_git_prompt) % "
-	history -a; history -c; history -r
+	PS1="$(_status_prompt)$(_chroot_prompt)$(_virtualenv_prompt)\W$(_git_prompt) % "
+
+	# merge history after each command
+	history -a # Append new lines to history file
+	history -c # Clear the history list
+	history -r # Append the history file to the history list
 }
 
-# export PROMPT_DIRTRIM=2
 export PROMPT_COMMAND="_prompt_command"
 
 # Disable START/STOP signals
@@ -116,24 +120,13 @@ stty -ixon
 
 # FZF
 # let's get used to bash's own functionality first
-# export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-# export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 [ -f ~/.fzf.bash ] && . ~/.fzf.bash
 
 # use ag, and no need for colors.
 export FZF_DEFAULT_COMMAND='ag -g ""'
 export FZF_DEFAULT_OPTS='--color=bw'
-
-# GIT Completion https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
-. "$HOME/.dotfiles/git-completion.bash"
-
-# Z https://github.com/rupa/z
-if [ -d "$HOME/sources/z" ]; then
-	. "$HOME/sources/z/z.sh"
-fi
-
-# TMUX completion # forgot where I got this file
-. "$HOME/.dotfiles/tmux.completion.bash"
 
 # mkdir and cd. http://unix.stackexchange.com/a/9124
 mkcd () {
@@ -161,18 +154,16 @@ man() {
 			man "$@"
 }
 
-. ~/.bash_aliases
-
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 	. /etc/bash_completion
 fi
 
-dud() {
-	local DIR
-	if [[ -z "$1" ]]; then
-		DIR=$PWD
-	else
-		DIR=$1
-	fi
-	du -h "$DIR" --max-depth=1 | grep '[0-9]\{2,\}M' | sort
-}
+. ~/.bash_aliases
+
+# Z https://github.com/rupa/z
+[ -d "$HOME/sources/z" ] && . "$HOME/sources/z/z.sh"
+
+# GIT Completion https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
+. "$HOME/.dotfiles/git-completion.bash"
+# TMUX completion # forgot where I got this file
+. "$HOME/.dotfiles/tmux.completion.bash"
