@@ -12,7 +12,10 @@ alias bashrc='. $HOME/.bashrc'
 alias dots='cd $HOME/.dotfiles'
 alias bin='cd $HOME/bin'
 
-alias tmux='tmux -L STRETCH'
+if [ -n "$debian_chroot" ]; then
+	alias tmux='tmux -L $debian_chroot'
+fi
+
 alias t='tmux'
 alias ta='tmux a'
 alias tat='tmux a -t'
