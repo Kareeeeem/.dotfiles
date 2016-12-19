@@ -16,14 +16,14 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
-PATH="$HOME/.local/bin:$PATH"
-PATH="$HOME/bin:$PATH"
-PATH="$HOME/.npm/bin:$PATH"
-
-# GOPATH
-export GOROOT=$HOME/.local/bin/go
-export GOPATH=$HOME/projects/go
-PATH="$GOROOT/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.npm/bin:$PATH"
 
 export VISUAL="vim"
-export EDITOR="vim"
+export EDITOR="$VISUAL"
+
+# enable bash completion in interactive shells
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi

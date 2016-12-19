@@ -12,6 +12,7 @@ alias bashrc='. $HOME/.bashrc'
 alias dots='cd $HOME/.dotfiles'
 alias bin='cd $HOME/bin'
 
+alias tmux='tmux -L STRETCH'
 alias t='tmux'
 alias ta='tmux a'
 alias tat='tmux a -t'
@@ -29,7 +30,7 @@ alias p='pushd'
 alias pp='popd'
 alias dirs='dirs -v'
 
-alias l='ls -lahF'
+alias l='ls -lahFt'
 alias ll='ls -1aF'
 alias la='ls -a'
 

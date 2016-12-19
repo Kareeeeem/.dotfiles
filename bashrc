@@ -113,7 +113,7 @@ stty -ixon
 # let's get used to bash's own functionality first
 # export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
-# [ -f ~/.fzf.bash ] && . ~/.fzf.bash
+[ -f ~/.fzf.bash ] && . ~/.fzf.bash
 
 # use ag, and no need for colors.
 export FZF_DEFAULT_COMMAND='ag -g ""'
@@ -155,3 +155,17 @@ man() {
 }
 
 . ~/.bash_aliases
+
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+	. /etc/bash_completion
+fi
+
+dud() {
+	local DIR
+	if [[ -z "$1" ]]; then
+		DIR=$PWD
+	else
+		DIR=$1
+	fi
+	du -h "$DIR" --max-depth=1 | grep '[0-9]\{2,\}M' | sort
+}
