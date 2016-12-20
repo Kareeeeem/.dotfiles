@@ -1,43 +1,42 @@
 #! /usr/bin/env python
-"""A script that will generate tags for a git project in the .git folder. Could
-be used in git hooks like so:
-http://tbaggery.com/2011/08/08/effortless-ctags-with-git.html
+'''A script that will generate tags for a project in the .git folder.
 
-Or some other way. Whatever.
-"""
+I use it in vim on each write like so:
+
+    au BufWritePost *.py,*.c call system("if command -v ctags >/dev/null 2>&1
+        \ && command -v git-tags >/dev/null 2>&1;
+        \ then git-tags >/dev/null 2>&1;
+        \ fi")
+'''
 
 import os
-import sys
 import shlex
+import sys
 from subprocess import Popen, PIPE
 
 
-temp_tags_filename = "{}/tags.temp"
-tags_filename = "{}/tags"
-ctags_command = "ctags -R -o {} {}"
-git_dir_command = 'git rev-parse --git-dir'
-
-
 def run_command(command):
+    '''Run a command and return the stdout content.'''
     tokenized_command = shlex.split(command)
     p = Popen(tokenized_command, stdout=PIPE, stderr=PIPE)
-    stdout = p.stdout.read()
-    return stdout.rstrip()
+    return p.stdout.read().rstrip()
 
-git_dir = run_command(git_dir_command).decode('u8')
 
-if not git_dir:
+project_dir = run_command('git rev-parse --show-toplevel').decode('u8')
+git_dir = os.path.join(project_dir, '.git')
+
+if not project_dir:
     sys.exit(1)
 
-temp_tags_filename = temp_tags_filename.format(git_dir)
-tags_filename = tags_filename.format(git_dir)
-ctags_command = ctags_command.format(temp_tags_filename, git_dir + '/..')
+tags_path = os.path.join(git_dir, 'tags')
+tmp_tags_path = os.path.join(git_dir, 'tags.tmp')
 
 try:
     # remove the old temp file if for whatever reason it's still there
-    os.remove(temp_tags_filename)
+    os.remove(tmp_tags_path)
 except OSError:
     pass
 
-run_command(ctags_command.format(temp_tags_filename, git_dir + '/..'))
-os.rename(temp_tags_filename, tags_filename)
+ctags_command = 'ctags -R -o %s %s' % (tmp_tags_path, project_dir)
+run_command(ctags_command)
+os.rename(tmp_tags_path, tags_path)
