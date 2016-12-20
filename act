@@ -1,22 +1,19 @@
 #!/bin/bash
+# shellcheck disable=1090
 
-# Simple script that will activate a virtualenv located in a folder above your
-# current pwd. The default name of the virtualenv is "venv". Has to be sourced
-# rather than just ran.
+# Activate the virtualenv located in the current, or one of the parent
+# directories by sourcing this script. Accepts a parameter for the virtualenv
+# name, default to venv.
 
-if [ -z "$1" ]; then
-    VENV="venv"
-else
-    VENV=$1
-fi
+VENV="${1:-venv}"
 
 slashes=${PWD//[^\/]/}
-directory="$PWD"
+DIR="$PWD"
 for (( n=${#slashes}; n>1; --n ))
 do
-    if [ -d "$directory/$VENV" ]; then
-        source "$directory/$VENV/bin/activate"
+    if [ -d "$DIR/$VENV" ]; then
+        source "$DIR/$VENV/bin/activate"
     else
-        directory="$directory/.."
+        DIR="$DIR/.."
     fi
 done
