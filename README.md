@@ -1,28 +1,26 @@
 #Scripts
-I need to learn how to do some shell scripting. Don't expect anything special.
 
-##act
-I hate forgetting to activate my virtualenv and having going back to my project root to do activate it. So here's a script that will find a virtualenv named *venv* or some other name you can specify and activate it from deep down in your project folder.
+## act
+Activate a virtualenv somewhere in your current or parent directories.
 
-`source act` or `source act [env name]` or `. act` or `. act [env name]`
+## git-tags
+Generate tags for the current project managed by git.
 
-##monitor
-Set up the secondary screen as primary left of internal for my i3 chroot.
+## modernc
+Work on a chapter in the C Modern Approach book.
 
-##git-branch
-Return the current git branch and status
+## mp3quran
+Download a recitation from mp3quran.
 
-##git-tags
-Generate ctags in .git folder
+## note
+Notetaking app
 
-##modernc
-work on Modern C book exercises and projects.
+## pushdots
+Push dotfiles
 
-##note
-Note taking app written in bash
+## pyproject
+## soma
+Listen to a somafm station
 
-##todo
-todo app written in bash
-
-##pyproject
-work on a python project (sets up tmux and venv)
+## todo
+Todo list app
