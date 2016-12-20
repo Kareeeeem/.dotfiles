@@ -154,6 +154,15 @@ man() {
 			man "$@"
 }
 
+# I might run a number of debian chroots. In that case I want to group my
+# tmux sessions.
+if [ -n "$debian_chroot" ]; then
+	tmux() {
+		command tmux -L "$debian_chroot" "$@"
+	}
+fi
+export -f tmux
+
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 	. /etc/bash_completion
 fi
