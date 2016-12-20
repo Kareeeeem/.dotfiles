@@ -4,7 +4,7 @@
 # a tmux session. Create the folder and copy a basic makefile if it's a new
 # chapter.
 
-MODERNC_PATH="$HOME/selfstudy/c_modern_approach"
+MODERNC_PATH="$HOME/projects/c/modernc"
 
 if [ -z "$1" ]
 then
