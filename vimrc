@@ -20,6 +20,7 @@ Plug 'editorconfig/editorconfig-vim'
 " indenting help
 Plug '2072/PHP-Indenting-for-VIm', {'for': 'php'}
 Plug 'hynek/vim-python-pep8-indent', {'for': 'python'}
+Plug 'Kareeeeem/python-docstring-comments', {'for': 'python'}
 Plug 'pangloss/vim-javascript', {'for': ['javascript.jsx', 'javascript']}
 Plug 'mxw/vim-jsx', {'for': ['javascript.jsx', 'javascript']}
 
@@ -166,19 +167,25 @@ let g:buftabline_indicators=1
 let g:buftabline_numbers=1
 
 " This keeps the sign column visible at all times. Can't stand the
-" twitching when linting for errors. http://superuser.com/a/558885
-" augroup dummysign
-"     au!
-"     au BufEnter * sign define dummy
-"     au BufEnter * execute 'sign place 9999 line=1 name=dummy buffer=' . bufnr('')
-" augroup END
+" twitching when linting for errors.
+augroup signcolumn
+    au!
+    au FileType python,c set signcolumn=yes
+augroup END
+
+" Only register these autocommands if the necessary executables are present
+if executable('ctags') && executable('ctags')
+    augroup tags
+        au BufWritePost *.py,*.c call system('git-tags')
+        au BufWritePost *.js call system("git-tags && clean_js_tags")
+    augroup END
+endif
 
 augroup write_file
     au!
-    let blacklist = ['markdown']
-    " strip all trailing whitespace in all files export of type in blacklist
+    let blacklist = ['markdown', 'text']
+    " strip all trailing whitespace in all files except of type in blacklist
     au BufWritePre * if index(blacklist, &ft) < 0 | call Preserve('%s/\s\+$//ge')
-    au BufWritePost *.py,*.c if executable('git-tags') | call system('"git-tags" &') | endif
 augroup END
 
 augroup go
@@ -213,17 +220,14 @@ augroup c
     au FileType c setlocal commentstring=//\ %s
     " Don't indent case inside switch statements
     au FileType c setlocal cinoptions+=:0
-
-    " au FileType c setlocal cindent shiftwidth=8 noexpandtab
 augroup END
 
 augroup frontend
     au!
-    au FileType css,html,htmljinja,*javascript* setlocal shiftwidth=2 softtabstop=2
-    au FileType css,html,htmljinja,*javascript* setlocal softtabstop=2
+    au FileType css,html,htmljinja setlocal shiftwidth=2 softtabstop=2
     au FileType htmljinja setlocal commentstring={#\ %s\ #}
     au FileType mako,html,css,htmldjango,htmljinja EmmetInstall
-    au FileType *javascript* nnoremap <silent> <leader>r :call system('tmux send-keys -t :.1 c-c c-m "npm start" c-m')<cr>
+    " au FileType *javascript* nnoremap <silent> <leader>r :call system('tmux send-keys -t :.1 c-c c-m "npm start" c-m')<cr>
 augroup END
 
 " http://stackoverflow.com/a/7086709
