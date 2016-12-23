@@ -3,10 +3,11 @@
 
 I use it in vim on each write like so:
 
-    au BufWritePost *.py,*.c call system("if command -v ctags >/dev/null 2>&1
-        \ && command -v git-tags >/dev/null 2>&1;
-        \ then git-tags >/dev/null 2>&1;
-        \ fi")
+    if executable('ctags') && executable('ctags')
+        augroup tags
+            au BufWritePost *.py,*.c call system('git-tags')
+        augroup END
+    endif
 '''
 
 import os

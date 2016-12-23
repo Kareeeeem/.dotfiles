@@ -1,0 +1,14 @@
+#! /usr/bin/env bash
+
+# Adapted from a blog post[0] by Ray Gasso. Ctags is sort of crap for
+# Javascript and the blog post gives a configuration that works better. See the
+# ctags file in dotfiles for more info.
+#
+# [0]: https://dance.computer.dance/posts/2015/04/using-ctags-on-modern-javascript.html
+
+FILE="$(git rev-parse --git-dir)/tags"
+
+# -E is an undocumented option for compatibility from BSD sed. Changing it to
+# -e breaks the script.
+sed -i -E '/^(if|switch|function|module\.exports|it|describe)	.+language:js$/d' "$FILE"
+sed -i -E '/var[		]+[a-zA-Z0-9_$]+[	]+=[	]+require\(.+language:js$/d' "$FILE"
