@@ -1,5 +1,5 @@
 alias rp='find . -name "*.pyc" -delete'
-alias rs='rm ~/.vim/tmp/.*sw*'
+alias rs='rm ~/.vim/tmp/*sw*'
 
 alias v='vim'
 alias e='vim'
