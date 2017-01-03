@@ -7,7 +7,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'scrooloose/syntastic'
 Plug 'ap/vim-buftabline'
 Plug 'jpalardy/vim-slime'
 Plug 'christoomey/vim-tmux-navigator'
@@ -16,13 +15,14 @@ Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'moll/vim-bbye'
 Plug 'robertmeta/nofrils'
 Plug 'editorconfig/editorconfig-vim'
+Plug 'neomake/neomake'
 
 " indenting help
 Plug '2072/PHP-Indenting-for-VIm', {'for': 'php'}
 Plug 'hynek/vim-python-pep8-indent', {'for': 'python'}
 Plug 'Kareeeeem/python-docstring-comments', {'for': 'python'}
 Plug 'pangloss/vim-javascript', {'for': ['javascript.jsx', 'javascript']}
-Plug 'mxw/vim-jsx', {'for': ['javascript.jsx', 'javascript']}
+" Plug 'mxw/vim-jsx', {'for': ['javascript.jsx', 'javascript']}
 
 call plug#end()
 
@@ -51,21 +51,17 @@ set tags=./tags,.git/tags
 set undodir=~/.vim/undodir/
 set undofile
 
-" colorscheme
-" let g:nofrils_strbackgrounds=1
-colorscheme nofrils-dark
-
 " statusline
 set laststatus=2
 set statusline=%n\ %.20F\ %y
 set statusline+=\ %h%m%r
 set statusline+=%= " right alignment from this point
 set statusline+=%-14.(%l,%c%V%)\ %P
-set statusline+=\ %#Error#%{SyntasticStatuslineFlag()}%*
+set statusline+=\ %-4#Error#%{neomake#statusline#LoclistStatus('ll\ ')}%*
 
 if executable("ag")
-    set grepprg=ag\ --nogroup\ --nocolor\ --ignore-case\ --column
-    set grepformat=%f:%l:%c:%m,%f:%l:%m
+    set grepprg=ag\ --vimgrep\ $*
+    set grepformat=%f:%l:%c:%m
 endif
 
 " Expand `%%` to current directory.
@@ -109,22 +105,14 @@ nnoremap <leader>q :Bdelete<cr>
 
 nnoremap <leader>gq gqip
 
-nnoremap <leader>b :ls<cr>:b<space>
 nnoremap <left> :bp<cr>
 nnoremap <right> :bn<cr>
-
-" nnoremap <leader>lp :lprev<cr>
-" nnoremap <leader>ln :lnext<cr>
-" nnoremap <leader>ll :ll<cr>
-
-" nnoremap <leader>d<space> c3l=<esc>
-" nnoremap <leader>i<space> cw<space>=<space><esc>
 
 " fzf
 nnoremap <C-p> :Files<CR>
 nnoremap <leader>t :Tags<CR>
 nnoremap <leader>m :History<CR>
-" let g:fzf_layout = { 'right': '60%' }
+nnoremap <leader>b :Buffers<cr>
 
 " Slime
 let g:slime_target = 'tmux'
@@ -134,26 +122,31 @@ xnoremap <leader>s <Plug>SlimeRegionSend
 nnoremap <leader>s <Plug>SlimeParagraphSend
 nnoremap <leader>v <Plug>SlimeConfig
 
-" Syntastic
-let g:syntastic_c_compiler='clang'
-let g:syntastic_c_compiler_options='-std=c99 -Weverything'
-let g:syntastic_c_check_header = 1
+" Neomake
+let g:neomake_error_sign = {'text': 'E>', 'texthl': 'ErrorMsg'}
+let g:neomake_warning_sign = {'text': 'W>', 'texthl': 'WarningMsg'}
+let g:neomake_message_sign = {'text': 'M>', 'texthl': 'StatusLine'}
+let g:neomake_info_sign = {'text': 'I>', 'texthl': 'StatusLine'}
+let g:neomake_remove_invalid_entries = 1
 
-" let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_python_flake8_args='--ignore=E501'
-let g:syntastic_python_checkers = ['flake8']
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_mode_map = {
-        \ "mode": "active",
-        \ "passive_filetypes": ["javascript", "javascript.jsx"] }
-nnoremap <leader>c :SyntasticCheck<cr>
+let g:neomake_javascript_enabled_makers = ['eslint_d']
+
+let g:neomake_c_enabled_makers = ['clang']
+let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything']
+
+let g:neomake_python_enabled_makers = ['flake8']
+let g:neomake_python_flake8_args = ['--max-line-length=100']
+
+augroup neo_make
+    au!
+    au BufWritePost * Neomake
+augroup END
 
 " Emmet
 let g:user_emmet_install_global = 0
 
 " vim-jsx
-let g:jsx_ext_required = 0
+" let g:jsx_ext_required = 0
 
 " Undotree
 nnoremap <F5> :UndotreeToggle<CR>
@@ -170,7 +163,7 @@ let g:buftabline_numbers=1
 " twitching when linting for errors.
 augroup signcolumn
     au!
-    au FileType python,c set signcolumn=yes
+    au FileType python,c,javascript set signcolumn=yes
 augroup END
 
 " Only register these autocommands if the necessary executables are present
@@ -224,11 +217,23 @@ augroup END
 
 augroup frontend
     au!
-    au FileType css,html,htmljinja setlocal shiftwidth=2 softtabstop=2
+    " au FileType css,html,htmljinja,htmldjango setlocal shiftwidth=2 softtabstop=2
     au FileType htmljinja setlocal commentstring={#\ %s\ #}
     au FileType mako,html,css,htmldjango,htmljinja EmmetInstall
-    " au FileType *javascript* nnoremap <silent> <leader>r :call system('tmux send-keys -t :.1 c-c c-m "npm start" c-m')<cr>
 augroup END
+
+augroup qf
+    au!
+    au FileType qf set nobuflisted
+augroup END
+
+" colorscheme
+augroup colors
+    au!
+    hi link NeomakeError SpellBad
+    hi link NeomakeWarning SpellCap
+augroup END
+colorscheme nofrils-dark
 
 " http://stackoverflow.com/a/7086709
 " call a command and restore view. Also resets the registers.

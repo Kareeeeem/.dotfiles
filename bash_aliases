@@ -22,8 +22,13 @@ alias p='pushd'
 alias pp='popd'
 alias dirs='dirs -v'
 
+# ls options
+#	l long listing
+#	a hidden files
+#	h human readable sizes
+#	F classifiers
+#	t sort by modification time
 alias l='ls -lahFt'
-alias ll='ls -1aF'
 alias la='ls -a'
 
 alias json='python -m json.tool'
