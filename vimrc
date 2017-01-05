@@ -246,8 +246,13 @@ colorscheme nofrils-dark
 
 augroup load_editorconfig
     au!
-    au VimEnter * if filereadable(".editorconfig") | Plug 'editorconfig/editorconfig-vim' | endif
+    au SourcePre * if filereadable('.editorconfig') | call Loadd() | endif
 augroup END
+
+function! Loadd()
+    call plug#load('editorconfig-vim')
+    au! load_editorconfig
+endfunction
 
 " http://stackoverflow.com/a/7086709
 " call a command and restore view and registers.
