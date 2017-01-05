@@ -253,6 +253,11 @@ augroup lazyload_editorconfig
                 \ | au! lazyload_editorconfig
 augroup END
 
+function! Loadd()
+    call plug#load('editorconfig-vim')
+    au! load_editorconfig
+endfunction
+
 " http://stackoverflow.com/a/7086709
 " call a command and restore view and registers.
 function! Preserve(command)
