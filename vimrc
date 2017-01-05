@@ -28,13 +28,17 @@ Plug 'Kareeeeem/python-docstring-comments', {'for': 'python'}
 Plug 'pangloss/vim-javascript', {'for': ['javascript.jsx', 'javascript']}
 " Plug 'mxw/vim-jsx', {'for': ['javascript.jsx', 'javascript']}
 
-" See lazyload_editorconfig autocmd for lazy loading strat.
-Plug 'editorconfig/editorconfig-vim' , {'on': []}
+Plug 'editorconfig/editorconfig-vim'
+" Only load if there's an editorconfig file in the current folder.
+if !filereadable('.editorconfig')
+    let g:loaded_EditorConfig = 1
+endif
 
 " Force myself to work with less buffers open
 " Plug 'ap/vim-buftabline'
 
 call plug#end()
+
 
 filetype plugin indent on
 syntax on
@@ -243,15 +247,6 @@ augroup colors
     hi link NeomakeWarning SpellCap
 augroup END
 colorscheme nofrils-dark
-
-" editorconfig
-augroup lazyload_editorconfig
-    au!
-    au SourcePre * if filereadable('.editorconfig')
-                \ | call plug#load('editorconfig-vim')
-                \ | endif
-                \ | au! lazyload_editorconfig
-augroup END
 
 " http://stackoverflow.com/a/7086709
 " call a command and restore view and registers.
