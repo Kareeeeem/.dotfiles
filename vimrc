@@ -30,7 +30,7 @@ Plug 'pangloss/vim-javascript', {'for': ['javascript.jsx', 'javascript']}
 
 " Only load this if the current working directory contains an .editorconfig.
 " The plugin has insane startuptime and I only use it on some projects.
-if filereadable(".editorconfig") | Plug 'editorconfig/editorconfig-vim' | endif
+Plug 'editorconfig/editorconfig-vim', {'on': []}
 
 " Force myself to work with less buffers open
 " Plug 'ap/vim-buftabline'
@@ -54,7 +54,18 @@ set incsearch
 set nowrap
 set number
 set scrolloff=3
-set signcolumn=yes
+
+if has('signcolumn')
+    set signcolumn=yes
+else
+    " http://superuser.com/a/558885
+    augroup signs
+        au!
+        au BufEnter * sign define dummy
+        au BufEnter * execute 'sign place 9999 line=1 name=dummy buffer=' . bufnr('')
+    augroup END
+endif
+
 set expandtab
 set shiftwidth=4
 set softtabstop=4
@@ -232,6 +243,11 @@ augroup colors
     hi link NeomakeWarning SpellCap
 augroup END
 colorscheme nofrils-dark
+
+augroup load_editorconfig
+    au!
+    au VimEnter * if filereadable(".editorconfig") | Plug 'editorconfig/editorconfig-vim' | endif
+augroup END
 
 " http://stackoverflow.com/a/7086709
 " call a command and restore view and registers.
