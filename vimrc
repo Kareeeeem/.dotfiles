@@ -28,9 +28,8 @@ Plug 'Kareeeeem/python-docstring-comments', {'for': 'python'}
 Plug 'pangloss/vim-javascript', {'for': ['javascript.jsx', 'javascript']}
 " Plug 'mxw/vim-jsx', {'for': ['javascript.jsx', 'javascript']}
 
-" Only load this if the current working directory contains an .editorconfig.
-" The plugin has insane startuptime and I only use it on some projects.
-Plug 'editorconfig/editorconfig-vim', {'on': []}
+" See lazyload_editorconfig autocmd for lazy loading strat.
+Plug 'editorconfig/editorconfig-vim' , {'on': []}
 
 " Force myself to work with less buffers open
 " Plug 'ap/vim-buftabline'
@@ -67,6 +66,7 @@ else
 endif
 
 set expandtab
+set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set dir=~/.vim/tmp
@@ -216,11 +216,11 @@ augroup END
 augroup languages
     au!
     " au BufWritePre *.go call Preserve('%!gofmt 2> /dev/null')
-    au FileType go setlocal formatprg=gofmt noexpandtab tabstop=4
+    au FileType go setlocal formatprg=gofmt noexpandtab
 
     au FileType *markdown*,text setlocal formatoptions+=t formatprg=par\ -72 textwidth=72
 
-    au FileType sh setlocal tabstop=4 noexpandtab
+    au FileType sh setlocal noexpandtab
 
     " I don't do c++ so always assume c
     au BufRead,BufNewFile *.h,*.c setlocal filetype=c
@@ -244,9 +244,13 @@ augroup colors
 augroup END
 colorscheme nofrils-dark
 
-augroup load_editorconfig
+" editorconfig
+augroup lazyload_editorconfig
     au!
-    au VimEnter * if filereadable(".editorconfig") | Plug 'editorconfig/editorconfig-vim' | endif
+    au SourcePre * if filereadable('.editorconfig')
+                \ | call plug#load('editorconfig-vim')
+                \ | endif
+                \ | au! lazyload_editorconfig
 augroup END
 
 " http://stackoverflow.com/a/7086709
