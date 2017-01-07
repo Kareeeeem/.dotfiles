@@ -155,10 +155,10 @@ man() {
 }
 
 
+export debian_chroot
 # I might run a number of debian chroots. In that case I want to group my
 # tmux sessions.
 if [ -n "$debian_chroot" ]; then
-	export debian_chroot
 	tmux() {
 		command tmux -L "$debian_chroot" "$@"
 	}
