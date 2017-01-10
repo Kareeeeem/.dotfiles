@@ -1,23 +1,16 @@
 alias rp='find . -name "*.pyc" -delete'
 alias rs='rm ~/.vim/tmp/*sw*'
 
-alias v='vim'
-alias e='vim'
+alias vi='vim'
 
-alias evimrc='vim $HOME/.vimrc'
-alias ebashrc='vim $HOME/.bashrc'
-
-alias bashrc='. $HOME/.bashrc'
-
-alias dots='cd $HOME/.dotfiles'
-alias bin='cd $HOME/bin'
+alias evim='vim $HOME/.vimrc'
+alias ebash='vim $HOME/.bashrc $HOME/.profile $HOME/.bash_aliases'
 
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
 alias b='cd -'
-
 alias p='pushd'
 alias pp='popd'
 alias dirs='dirs -v'
@@ -28,7 +21,7 @@ alias dirs='dirs -v'
 #	h human readable sizes
 #	F classifiers
 #	t sort by modification time
-alias l='ls -lahFt'
+alias l='ls -lahFt --group-directories-first'
 alias la='ls -a'
 
 alias json='python -m json.tool'
