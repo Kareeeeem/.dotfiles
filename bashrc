@@ -23,9 +23,23 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
+# colored manpages with max width 80
+export MANWIDTH=80
+# man() {
+# 	env \
+# 		LESS_TERMCAP_mb="$(printf "\e[1;34m")" \
+# 		LESS_TERMCAP_md="$(printf "\e[1;34m")" \
+# 		LESS_TERMCAP_me="$(printf "\e[0m")" \
+# 		LESS_TERMCAP_se="$(printf "\e[0m")" \
+# 		LESS_TERMCAP_so="$(printf "\e[7m")" \
+# 		LESS_TERMCAP_ue="$(printf "\e[0m")" \
+# 		LESS_TERMCAP_us="$(printf "\e[1;36m")" \
+# 			man "$@"
+# }
+
 # no duplicates or lines starting with space
 HISTCONTROL=ignoreboth:erasedups
-HISTSIZE=100000
+HISTSIZE=5000
 HISTFILESIZE=100000
 
 shopt -s histappend		# append to history file, don't overwrite it
@@ -33,7 +47,6 @@ shopt -s checkwinsize	# update the values of LINES and COLUMNS.
 shopt -s globstar		# ** matches all files and 0 or more (sub)directories
 shopt -s autocd			# cd without typing cd
 shopt -s cmdhist		# save multiline commands as one
-shopt -s cdable_vars	# cd to directories in variables
 stty -ixon				# Disable START/STOP signals
 
 # enable bash completion in interactive shells
@@ -43,57 +56,72 @@ fi
 
 # PROMPT STUFF
 
-# Colors
-PROMPT_BOLD='\e[1m'
-PROMPT_UNDERLINE='\e[4;1m'
-PROMPT_RESET='\e[0m'
+PROMPT_BOLD='\[\e[1m\]'
+PROMPT_UNDERLINE='\[\e[4m\]'
+PROMPT_RESET='\[\e[0m\]'
 
 # we're setting the prompt command so his needs to be done manually.
 _virtualenv_prompt() {
 	if [ -n "$VIRTUAL_ENV" ]; then
-		echo "$PROMPT_BOLD$(basename "$VIRTUAL_ENV")$PROMPT_RESET "
+		echo -n "$PROMPT_BOLD$(basename "$VIRTUAL_ENV")$PROMPT_RESET "
 	fi
 }
 
 # show last status if not 0. http://stackoverflow.com/a/16715681
 _status_prompt() {
-	local EXIT="$?"
+	local EXIT
+	EXIT=$?
 	if [ $EXIT != 0 ]; then
-		echo "$PROMPT_BOLD$EXIT$PROMPT_RESET "
+		echo -n "$PROMPT_BOLD$EXIT$PROMPT_RESET "
 	fi
 }
 
-# show branch and it's state in green/red, and number of stashes.
+# show branch (underlined if dirty), and number of stashes.
 _git_prompt() {
-	local branch
-	local state
-	local stashes
+	local prompt
+
 	ref=$(git symbolic-ref -q HEAD 2> /dev/null || \
 		git name-rev --name-only --no-undefined --always HEAD 2> /dev/null)
+
 	if [ -n "$ref" ]; then
-		branch=${ref#refs/heads/}
-		if [[ -n $(git status --porcelain 2> /dev/null) ]]; then
-			state=$PROMPT_UNDERLINE
-		else
-			state=$PROMPT_BOLD
+		if [ -n "$(git status --porcelain 2> /dev/null)" ]; then
+			prompt=$PROMPT_UNDERLINE
 		fi
-		st_num=$(git stash list 2> /dev/null | wc -l | tr -d ' ')
-		if [[ $st_num != "0" ]]; then
-			stashes="$PROMPT_BOLD($st_num)$PROMPT_RESET"
+		prompt+=$PROMPT_BOLD${ref#refs/heads/}$PROMPT_RESET
+
+		if [ "$(git stash list 2> /dev/null | wc -l | tr -d ' ')" != "0" ]; then
+			prompt+="$PROMPT_BOLD($st_num)$PROMPT_RESET"
 		fi
-		echo " $state$branch$PROMPT_RESET$stashes"
+
+		echo -n " $prompt"
 	fi
 }
 
 _chroot_prompt() {
 	if [ -n "$debian_chroot" ]; then
-		echo "($debian_chroot) "
+		echo -n "($debian_chroot) "
 	fi
 }
 
-# Set PS1 in a prompt command to allow color codes in functions.
+export PROMPT_LONG=1
+# prompt toggle
+pt() {
+	PROMPT_LONG=$([ $PROMPT_LONG == 0 ] && echo 1 || echo 0)
+}
+
 _prompt_command() {
-	PS1="$(_status_prompt)$(_chroot_prompt)$(_virtualenv_prompt)\W$(_git_prompt) % "
+	if [ $PROMPT_LONG -eq 0 ]; then
+		PS1="$ "
+	else
+		PS1=$(_status_prompt)
+		PS1+=$(_chroot_prompt)
+		PS1+=$(_virtualenv_prompt)
+		PS1+="\W"
+		PS1+=$(_git_prompt)
+		PS1+=" $ "
+	fi
+
+	export PS1
 
 	# merge history after each command
 	history -a # Append new lines to history file
@@ -103,32 +131,6 @@ _prompt_command() {
 
 export PROMPT_COMMAND="_prompt_command"
 
-# mkdir and cd. http://unix.stackexchange.com/a/9124
-mkcd () {
-	case "$1" in
-		*/..|*/../) cd -- "$1" ;; # that doesn't make any sense unless the directory already exists
-		/*/../*) (cd "${1%/../*}/.." && mkdir -p "./${1##*/../}") && cd -- "$1" ;;
-		/*) mkdir -p "$2" && cd "$1" ;;
-		*/../*) (cd "./${1%/../*}/.." && mkdir -p "./${1##*/../}") && cd "./$1" ;;
-		../*) (cd .. && mkdir -p "${1#.}") && cd "$1" ;;
-		*) mkdir -p "./$1" && cd "./$1" ;;
-	esac
-}
-
-# colored manpages with max width 80
-export MANWIDTH=80
-man() {
-	env \
-		LESS_TERMCAP_mb="$(printf "\e[1;31m")" \
-		LESS_TERMCAP_md="$(printf "\e[1;31m")" \
-		LESS_TERMCAP_me="$(printf "\e[0m")" \
-		LESS_TERMCAP_se="$(printf "\e[0m")" \
-		LESS_TERMCAP_so="$(printf "\e[7m")" \
-		LESS_TERMCAP_ue="$(printf "\e[0m")" \
-		LESS_TERMCAP_us="$(printf "\e[1;32m")" \
-			man "$@"
-}
-
 # Z https://github.com/rupa/z
 [ -d "$HOME/sources/z" ] && . "$HOME/sources/z/z.sh"
 # GIT Completion https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
@@ -137,15 +139,18 @@ man() {
 [ -f "$HOME/.dotfiles/tmux.completion.bash" ] && . "$HOME/.dotfiles/tmux.completion.bash"
 
 # FZF
+[ -f ~/.fzf.bash ] && . ~/.fzf.bash
+export FZF_DEFAULT_OPTS='--no-bold --color=bw'
 if hash ag; then
 	export FZF_DEFAULT_COMMAND='ag -g ""'
 	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
-export FZF_DEFAULT_OPTS='--no-bold --color=bw'
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-# Open files in .viminfo
+# Open files in .viminfo with fzf
 v() {
+	# If arguments are given give them to vim. Otherwise use fzf.
+	[ $# -gt 0 ] && vim "$*" && return
+
 	local files
 	files=$(grep '^>' ~/.viminfo | cut -c3- |
 	while read -r line; do
@@ -153,11 +158,58 @@ v() {
 	done | fzf-tmux -d -m -q "$*" -1) && vim ${files//\~/$HOME}
 }
 
-# intergration with z
+# Fzf intergration with z
 unalias z 2> /dev/null
 z() {
-  [ $# -gt 0 ] && _z "$*" && return
-  cd "$(_z -l 2>&1 | fzf-tmux +s --tac --query "$*" | sed 's/^[0-9,.]* *//')"
+	# If arguments are given give them to z. Otherwise use fzf.
+	[ $# -gt 0 ] && _z "$*" && return
+	cd "$(_z -l 2>&1 | fzf-tmux +s --tac --query "$*" | sed 's/^[0-9,.]* *//')"
+}
+
+# Switch to tmux session with FZF.
+tt() {
+	local client
+	# If arguments are given give them to z. Otherwise use fzf.
+	if [ $# -gt 0 ]; then
+		client="$*"
+	else
+		client="$(tmux ls | grep -o "^[^:]*" | fzf-tmux --tac +s)"
+	fi
+
+	if [ -z $TMUX ]; then
+		tmux a -t $client
+	else
+		tmux switch-client -t $client
+	fi
+}
+
+ts() {
+	local target
+	if [ -z $1 ]; then
+		TMUX= tmux a -t $1 2> /dev/null && return
+		target="-s $1"
+	fi
+
+	if [ -z $TMUX ]; then
+		tmux a -t $1 2> /dev/null && return
+		tmux new-session -s $1
+	else
+		tmux new-session -d -s $1 2> /dev/null
+		tmux switch-client -t $1
+	fi
+
+	TMUX= tmux new-session -d "$target" # && tmux switch-client $target
+}
+
+
+# Serve a directory.
+serve() {
+	PORT="${1:-8000}"
+	cd "$1" && python -m SimpleHTTPServer "$PORT"
+}
+
+mkcd () {
+	mkdir -p "./$1" && cd "./$1"
 }
 
 . ~/.bash_aliases
