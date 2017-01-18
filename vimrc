@@ -85,6 +85,11 @@ nnoremap <leader>} f{i<cr><ESC>
 " Break line
 nnoremap K i<cr><esc>kg$
 
+" Original J on leader j
+nnoremap <leader>j J
+" Join lines without whitespace
+nnoremap <silent> J :call JoinSpaceless()<cr>
+
 " write if changed
 nnoremap <Leader><Leader> :up<cr>
 
@@ -113,10 +118,12 @@ xnoremap > >gv
 
 " Navigate buffers
 nnoremap <S-Tab> :bp<cr>
+
 nnoremap <Tab> :bn<cr>
+
 nnoremap <leader>b :ls<cr>:b<space>
 
-" Don't use Ex mode
+" Don't use Ex mode, use it to delete a buffer.
 map Q :bd<cr>
 
 " }}}
@@ -136,9 +143,6 @@ Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'moll/vim-bbye', {'on': 'Bdelete'}
-Plug 'Valloric/YouCompleteMe',
-            \ {'do': './install.py --clang-completer',
-            \ 'on': []}
 Plug 'christoomey/vim-tmux-navigator',
             \ {'on': [
             \ 'TmuxNavigateLeft',
@@ -171,16 +175,6 @@ call plug#end()
 "buftabline
 let g:buftabline_numbers = 1
 let g:buftabline_indicators = 1
-
-" ycm
-" Explicity load this. Don't need it on quick edits.
-nnoremap <leader>y :call plug#load('YouCompleteMe')<cr>
-nnoremap <leader>g :YcmCompleter GoTo<cr>
-
-let g:ycm_python_binary_path="python"
-let g:ycm_show_diagnostics_ui = 0
-let g:ycm_min_num_identifier_candidate_chars=3
-let g:ycm_collect_identifiers_from_tags_files = 1
 
 " Tmux navigator
 nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
@@ -301,6 +295,7 @@ augroup languages
     au FileType c setlocal cinoptions+=:0 " Don't indent case
 
     au FileType htmljinja,htmldjango setlocal commentstring={#\ %s\ #}
+    au FileType php setlocal commentstring=//\ %s
 
     au BufReadPre *vimrc setlocal foldenable foldmethod=marker
 
@@ -345,7 +340,7 @@ colorscheme nofrils-dark
 " Functions and Commands {{{
 
 " http://stackoverflow.com/a/7086709
-" call a command and restore view and registers.
+" call a command and restore view.
 function! Preserve(command)
     let w = winsaveview()
     execute a:command
@@ -362,6 +357,16 @@ endif
 function! SetSigncolumn()
     sign define dummy
     execute 'sign place 9999 line=1 name=dummy buffer=' . bufnr('')
+endfunction
+
+" http://vi.stackexchange.com/a/440
+" Like gJ, but always remove spaces
+function! JoinSpaceless()
+    execute 'normal gJ'
+    " Character under cursor is whitespace remove it.
+    if matchstr(getline('.'), '\%' . col('.') . 'c.') =~ '\s'
+        execute 'normal dw'
+    endif
 endfunction
 
 " }}}
