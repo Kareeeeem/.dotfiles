@@ -12,3 +12,4 @@ ln -s "$dotfiles/npmrc" "$HOME/.npmrc" > /dev/null 2>&1
 ln -s "$dotfiles/gitconfig" "$HOME/.gitconfig" > /dev/null 2>&1
 ln -s "$dotfiles/inputrc" "$HOME/.inputrc" > /dev/null 2>&1
 ln -s "$dotfiles/bashrc" "$HOME/.bashrc" > /dev/null 2>&1
+ln -s "$dotfiles/racketrc" "$HOME/.racketrc" > /dev/null 2>&1

@@ -158,6 +158,7 @@ Plug '2072/PHP-Indenting-for-VIm'
 Plug 'hynek/vim-python-pep8-indent'
 Plug 'Kareeeeem/python-docstring-comments'
 Plug 'pangloss/vim-javascript'
+Plug 'wlangstroth/vim-racket'
 
 Plug 'editorconfig/editorconfig-vim'
 " Don't load if there's no editorconfig file in the current folder.
@@ -222,6 +223,13 @@ let g:neomake_python_enabled_makers = ['flake8']
 let g:neomake_python_flake8_args = ['--max-line-length=100']
 
 let g:neomake_sh_shellcheck_args = ['-fgcc', '-x', '-s', 'bash', '-e', 'SC1090,SC1091']
+
+let g:neomake_racket_raco_maker = {
+            \ 'exe': 'raco',
+            \ 'args': ['expand'],
+            \ 'errorformat': '%-G %.%#,%E%f:%l:%c: %m'
+            \ }
+let g:neomake_racket_enabled_makers = ['raco']
 
 set statusline+=\ %#Error#%{neomake#statusline#LoclistStatus('loc\ ')}%*
 

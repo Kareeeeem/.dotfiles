@@ -12,3 +12,5 @@ control-n: history-search-forward
 "\C-w": unix-filename-rubout
 
 Tab: menu-complete
+
+set blink-matching-paren on
