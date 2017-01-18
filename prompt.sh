@@ -74,4 +74,4 @@ _prompt_command() {
 	history -r # Append the history file to the history list
 }
 
-export PROMPT_COMMAND="_prompt_command"
+export PROMPT_COMMAND="_prompt_command; "

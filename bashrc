@@ -55,6 +55,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 [ -f "prompt.sh" ] && . prompt.sh
+# [ -f "autoenv.sh" ] && . autoenv.sh
 
 # Z https://github.com/rupa/z
 [ -d "$HOME/sources/z" ] && . "$HOME/sources/z/z.sh"
@@ -108,23 +109,24 @@ tt() {
 	fi
 }
 
-ts() {
-	local target
-	if [ -z $1 ]; then
-		TMUX='' tmux a -t $1 2> /dev/null && return
-		target="-s $1"
-	fi
+# FIXME debug this later
+# ts() {
+# 	local target
+# 	if [ -n $1 ]; then
+# 		TMUX='' tmux a -t $1 2> /dev/null && return
+# 		target="-s $1"
+# 	fi
 
-	if [ -z $TMUX ]; then
-		tmux a -t $1 2> /dev/null && return
-		tmux new-session -s $1
-	else
-		tmux new-session -d -s $1 2> /dev/null
-		tmux switch-client -t $1
-	fi
+# 	if [ -z $TMUX ]; then
+# 		tmux a -t $1 2> /dev/null && return
+# 		tmux new-session -s $1
+# 	else
+# 		tmux new-session -d -s $1 2> /dev/null
+# 		tmux switch-client -t $1
+# 	fi
 
-	TMUX='' tmux new-session -d "$target" # && tmux switch-client $target
-}
+# 	TMUX='' tmux new-session -d "$target" # && tmux switch-client $target
+# }
 
 
 # Serve a directory.
