@@ -54,15 +54,15 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-[ -f "prompt.sh" ] && . prompt.sh
+[ -f "$HOME/.dotfiles/prompt.sh" ] && . "$HOME/.dotfiles/prompt.sh"
 # [ -f "autoenv.sh" ] && . autoenv.sh
 
 # Z https://github.com/rupa/z
 [ -d "$HOME/sources/z" ] && . "$HOME/sources/z/z.sh"
 # GIT Completion https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
-[ -f "git-completion.bash" ] && . "git-completion.bash"
+[ -f "$HOME/.dotfiles/git-completion.bash" ] && . "$HOME/.dotfiles/git-completion.bash"
 # TMUX complation https://github.com/imomaliev/tmux-bash-completion
-[ -f "tmux.completion.bash" ] && . "tmux.completion.bash"
+[ -f "$HOME/.dotfiles/tmux.completion.bash" ] && . "$HOME/.dotfiles/tmux.completion.bash"
 
 # FZF
 [ -f ~/.fzf.bash ] && . ~/.fzf.bash
@@ -127,7 +127,6 @@ tt() {
 
 # 	TMUX='' tmux new-session -d "$target" # && tmux switch-client $target
 # }
-
 
 # Serve a directory.
 serve() {

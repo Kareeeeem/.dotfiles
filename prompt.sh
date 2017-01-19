@@ -4,6 +4,8 @@ PROMPT_BOLD='\[\e[1m\]'
 PROMPT_UNDERLINE='\[\e[4m\]'
 PROMPT_RESET='\[\e[0m\]'
 
+# Disable the original
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 # we're setting the prompt command so his needs to be done manually.
 _virtualenv_prompt() {
 	if [ -n "$VIRTUAL_ENV" ]; then
