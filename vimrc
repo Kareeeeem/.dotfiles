@@ -99,9 +99,6 @@ nnoremap M K
 " Toggle search highlighting
 nnoremap <BS> :nohl<cr>
 
-" Toggle relative numbers
-nnoremap <F7> :set relativenumber!<cr>
-
 " j and k on columns rather than lines
 nnoremap j gj
 nnoremap k gk
@@ -315,7 +312,8 @@ augroup END
 
 augroup nofrils
     au!
-    au ColorScheme * call ModifyNofrils()
+    au ColorScheme nofrils* call ModifyNofrils()
+    au ColorScheme nofrils* nnoremap <F7> :call ToggleNofrils()<cr>
 augroup END
 
 function! ModifyNofrils()
@@ -368,5 +366,14 @@ function! JoinSpaceless()
         execute 'normal dw'
     endif
 endfunction
+
+function! ToggleNofrils()
+    if (g:colors_name == 'nofrils-dark')
+        colorscheme nofrils-light
+    elseif (g:colors_name == 'nofrils-light')
+        colorscheme nofrils-dark
+    endif
+endfunction
+
 
 " }}}
