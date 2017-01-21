@@ -29,7 +29,19 @@ _confirm_envfile () {
 	echo "--- ENVFILE END ---"
 	read -r -n 1 -p "Authorize envfile? y/n " answer
 	echo
-	[ "${answer,,}" = "y" ] && return 0 || return 1
+
+	if [ "${answer,,}" = "y" ]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+_deactivate_environment () {
+	AUTOENV=
+	unalias deac
+	# If the envfile defined _deactivate call it.
+	declare -f _deactivate > /dev/null 2>&1 && _deactivate
 }
 
 _autoenv () {
@@ -41,8 +53,9 @@ _autoenv () {
 
 	if _envfile_is_authorized || _confirm_envfile; then
 		_authorize_envfile
-		. "$AUTOENV_ENVFILE"
 		AUTOENV="$PWD/$AUTOENV_ENVFILE"
+		. "$AUTOENV_ENVFILE"
+		alias deac="_deactivate_environment"
 	fi
 }
 
@@ -62,12 +75,5 @@ editenv () {
 	fi
 }
 
-_deactivate_env () {
-	AUTOENV=
-	declare -f _deactivate > /dev/null 2>&1 && _deactivate
-}
-alias deac="_deactivate_env"
-
-# Prepend it to prompt command.
 grep --quiet _autoenv <<< "$PROMPT_COMMAND" || \
 	PROMPT_COMMAND="_autoenv; $PROMPT_COMMAND"

@@ -2,7 +2,7 @@
     "hterm": {
         "default": {
             "audible-bell-sound": "",
-            "background-color": "rgba(16, 16, 16, 1)",
+            "background-color": "rgba(38, 38, 38, 1)",
             "color-palette-overrides": null,
             "cursor-color": "rgba(255, 0, 0, 0.46)",
             "enable-bold": true,
