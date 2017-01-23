@@ -1,1 +1,45 @@
-{"magic":"nassh-prefs","version":1,"nassh":{"profile-ids":[{"id":"663c","json":{"description":"stretch","username":"kareem","hostname":"localhost","port":22,"terminal-profile":"default"}},{"id":"bb6f","json":{"description":"work","username":"kareem","hostname":"localhost","port":222,"terminal-profile":"default"}}]},"hterm":{"default":{"audible-bell-sound":"","enable-bold":false,"font-family":"monospace, \"DejaVu Sans Mono\", \"Everson Mono\", FreeMono, \"Menlo\", \"Terminal\", monospace","font-size":"13","pass-alt-number":true,"pass-meta-number":true,"scrollbar-visible":false}}}
+{
+    "hterm": {
+        "default": {
+            "audible-bell-sound": "",
+            "background-color": "rgba(38, 38, 38, 1)",
+            "color-palette-overrides": null,
+            "cursor-color": "rgba(255, 0, 0, 0.46)",
+            "enable-bold": true,
+            "font-family": "\"DejaVu Sans Mono\",monospace",
+            "font-size": "13",
+            "foreground-color": "rgba(240, 240, 240, 1)",
+            "pass-alt-number": true,
+            "pass-ctrl-number": null,
+            "pass-meta-number": true,
+            "scroll-on-keystroke": false,
+            "scrollbar-visible": false
+        }
+    },
+    "magic": "nassh-prefs",
+    "nassh": {
+        "profile-ids": [
+            {
+                "id": "663c",
+                "json": {
+                    "description": "stretch",
+                    "hostname": "localhost",
+                    "port": 22,
+                    "terminal-profile": "default",
+                    "username": "kareem"
+                }
+            },
+            {
+                "id": "bb6f",
+                "json": {
+                    "description": "work",
+                    "hostname": "localhost",
+                    "port": 222,
+                    "terminal-profile": "default",
+                    "username": "kareem"
+                }
+            }
+        ]
+    },
+    "version": 1
+}
