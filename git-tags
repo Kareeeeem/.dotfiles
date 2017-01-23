@@ -3,11 +3,9 @@
 
 I use it in vim on each write like so:
 
-    if executable('ctags') && executable('ctags')
-        augroup tags
-            au BufWritePost *.py,*.c call system('git-tags')
-        augroup END
-    endif
+augroup tags
+    au BufWritePost *.py,*.c call system('git-tags')
+augroup END
 '''
 
 import os
