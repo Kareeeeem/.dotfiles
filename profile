@@ -16,8 +16,8 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
-export PATH="$HOME/.local/bin:$PATH"
 [ -d "$HOME/bin" ]  && PATH="$HOME/bin:$PATH"
+[ -d "$HOME/.local/bin" ]  && PATH="$HOME/.local/bin:$PATH"
 [ -d "$HOME/.npm" ] && PATH="$HOME/.npm/bin:$PATH"
 [ -d "$HOME/.gem" ] && PATH="$PATH:$HOME/.gem/ruby/2.1.0/bin"
 
