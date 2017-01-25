@@ -26,27 +26,24 @@ _tmux_session_fzf() {
 }
 
 # wrapper around attch and switch-client
-# param: client-name. Can be prefix. (required)
-_tmux_attach() {
-	if [ -z $TMUX ]; then
-		tmux attach -t "$1"*
+# param: client-name. (required)
+_tmux_attach () {
+	if [[ -z $TMUX ]]; then
+		tmux attach -t "$1"
 	else
-		tmux switch-client -t "$1"*
+		tmux switch-client -t "$1"
 	fi
 }
 
-# tmux attach to session/create new session/pick session with fzf.
-# param: target (not required)
-t() {
+# attach or create new session and attach
+# param: session name (not required)
+ta () {
 	local target
-	if [ -n "$1" ]; then
-		_tmux_attach "$1" 2> /dev/null && return
-		target="$1"
-		tmux new-session -d -s "$target"
-	else
-		target="$(_tmux_session_fzf)"
+	target="${1:-$(_tmux_session_fzf)}"
+
+	if ! _tmux_attach "$target" 2> /dev/null; then
+		TMUX= tmux new-session -d -s "$target" && _tmux_attach "$target"
 	fi
-	_tmux_attach "$target"
 }
 
 # Serve a directory.
