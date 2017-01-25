@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+now=$(date +"%Y-%m-%d")
+
+if [[ $1 = "-r" ]]; then
+	curl -X GET \
+		-H "Cache-Control: no-cache" \
+		-H "Postman-Token: bd2c3688-8c88-c4b8-5fd7-486d0f26b8c6" \
+		-o "$HOME/zaandam.txt" \
+		"http://www.muwaqqit.com/api.csv?add=Kalf%2B470%2C%2B1509%2BBE%2BZaandam%2C%2BNetherlands&d=""$now""&diptype=apparent&dn=Today&ea=-18.0&eh=1.64&ehtype=observer&eo=1.64&fa=-18.0&fea=0.5&ia=4.5&isn=-10.0&isna=0.5&k=0.155&ln=4.8411387&lt=52.4716922&p=1010.0&rsa=0.5&t=15.0&tz=Europe%2FAmsterdam&tztype=auto&vc=5.65&z=7" \
+		1> /dev/null
+	shift
+fi
+
+case "$1" in
+	f*)
+		awk 'BEGIN { FS="," }; /^'"$now"'/ || NR == 1 { printf "%-17s%-17s%-17s%-17s%-17s%-17s%-17s\n", $1, $17, $21, $23, $25, $28, $30 }' zaandam.txt
+		;;
+	d*)
+		awk 'BEGIN { FS="," }; /^'"$now"'/ || NR == 1 { printf "%-17s%-17s\n", $1, $36 }' zaandam.txt
+		;;
+	a*)
+		awk 'BEGIN { FS="," }; /^'"$now"'/ || NR == 1 { printf "%-17s%-17s%-17s\n", $1, $39, $45 }' zaandam.txt
+		;;
+	m*)
+		awk 'BEGIN { FS="," }; /^'"$now"'/ || NR == 1 { printf "%-17s%-17s%-17s$-17s\n", $1, $49, $52, %54 }' zaandam.txt
+		;;
+	i*)
+		awk 'BEGIN { FS="," }; /^'"$now"'/ || NR == 1 { printf "%-17s%-17s%-17s$-17s\n", $1, $56, $60, %62 }' zaandam.txt
+		;;
+	*)
+		awk 'BEGIN { FS="," }; /^'"$now"'/ || NR == 1 { printf "%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s\n", $1, $17, $21, $23, $25, $28, $30, $36, $39, $45, $49, $52, $54, $56, $60, $62 }' zaandam.txt
+		;;
+esac
