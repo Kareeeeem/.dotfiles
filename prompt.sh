@@ -21,8 +21,7 @@ _autoenv_prompt() {
 
 # show last status if not 0. http://stackoverflow.com/a/16715681
 _status_prompt() {
-	local EXIT
-	EXIT=$?
+	local EXIT=$?
 	if [ $EXIT != 0 ]; then
 		echo -n "$PROMPT_BOLD$EXIT$PROMPT_RESET "
 	fi
@@ -56,23 +55,19 @@ _chroot_prompt() {
 	fi
 }
 
-export PROMPT_LONG=1
-# prompt toggle
-pt() {
-	PROMPT_LONG=$([ $PROMPT_LONG == 0 ] && echo 1 || echo 0)
-}
-
 _prompt_command() {
-	if [ $PROMPT_LONG -eq 0 ]; then
-		PS1="$ "
-	else
-		PS1=$(_status_prompt)
-		PS1+=$(_chroot_prompt)
-		PS1+=$(_autoenv_prompt)
-		PS1+="\W"
-		PS1+=$(_git_prompt)
-		PS1+=" $ "
-	fi
+	# Save the status prompt before anything else so $? does not get
+	# overwritten.
+	PS1="$(_status_prompt)"
+
+	# run autoenv
+	_autoenv
+
+	PS1+=$(_chroot_prompt)
+	PS1+=$(_autoenv_prompt)
+	PS1+="\W"
+	PS1+=$(_git_prompt)
+	PS1+=" $ "
 
 	export PS1
 
@@ -82,4 +77,5 @@ _prompt_command() {
 	history -r # Append the history file to the history list
 }
 
+export _AUTOENV_NO_PROMPT_COMMAND=1
 export PROMPT_COMMAND="_prompt_command; "
