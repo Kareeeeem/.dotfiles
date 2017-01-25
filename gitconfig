@@ -1,8 +1,8 @@
 [user]
-	email = kareeeeem@gmail.com
-	name = Mohammed Kareem
+    email = kareeeeem@gmail.com
+    name = Mohammed Kareem
 [alias]
-	co = checkout
-	br = branch
-        ci = commit
-        st = status
+    co = checkout
+    br = branch
+    ci = commit
+    st = status

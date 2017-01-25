@@ -55,7 +55,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 [ -f "$HOME/.dotfiles/prompt.sh" ] && . "$HOME/.dotfiles/prompt.sh"
-[ -f "$HOME/.dotfiles/autoenv.sh" ] && . "$HOME/.dotfiles/autoenv.sh"
+[ -f "$HOME/.dotfiles/autoenv" ] && . "$HOME/.dotfiles/autoenv.sh"
 
 # Z https://github.com/rupa/z
 [ -d "$HOME/sources/z" ] && . "$HOME/sources/z/z.sh"
@@ -72,70 +72,5 @@ if hash ag; then
 	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
-# Open files in .viminfo with fzf
-v() {
-	# If arguments are given give them to vim. Otherwise use fzf.
-	[ $# -gt 0 ] && vim "$*" && return
-
-	local files
-	files=$(grep '^>' ~/.viminfo | cut -c3- |
-	while read -r line; do
-		[ -f "${line/\~/$HOME}" ] && echo "$line"
-	done | fzf-tmux -d -m -q "$*" -1) && vim ${files//\~/$HOME}
-}
-
-# Fzf intergration with z
-unalias z 2> /dev/null
-z() {
-	# If arguments are given give them to z. Otherwise use fzf.
-	[ $# -gt 0 ] && _z "$*" && return
-	cd "$(_z -l 2>&1 | fzf-tmux +s --tac --query "$*" | sed 's/^[0-9,.]* *//')" || exit
-}
-
-# Switch to tmux session with FZF.
-tt() {
-	local client
-	# If arguments are given give them to z. Otherwise use fzf.
-	if [ $# -gt 0 ]; then
-		client="$*"
-	else
-		client="$(tmux ls | grep -o "^[^:]*" | fzf-tmux --tac +s)"
-	fi
-
-	if [ -z $TMUX ]; then
-		tmux a -t $client
-	else
-		tmux switch-client -t $client
-	fi
-}
-
-# FIXME debug this later
-# ts() {
-# 	local target
-# 	if [ -n $1 ]; then
-# 		TMUX='' tmux a -t $1 2> /dev/null && return
-# 		target="-s $1"
-# 	fi
-
-# 	if [ -z $TMUX ]; then
-# 		tmux a -t $1 2> /dev/null && return
-# 		tmux new-session -s $1
-# 	else
-# 		tmux new-session -d -s $1 2> /dev/null
-# 		tmux switch-client -t $1
-# 	fi
-
-# 	TMUX='' tmux new-session -d "$target" # && tmux switch-client $target
-# }
-
-# Serve a directory.
-serve() {
-	PORT="${1:-8000}"
-	cd "$1" && python -m SimpleHTTPServer "$PORT"
-}
-
-mkcd () {
-	mkdir -p "./$1" && cd "./$1" || exit
-}
-
+[ -f "$HOME/.dotfiles/bash_functions" ] && . "$HOME/.dotfiles/bash_functions"
 . ~/.bash_aliases

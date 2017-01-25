@@ -242,14 +242,14 @@ let g:undotree_SetFocusWhenToggle = 1
 " Autocommands {{{
 
 augroup vimStartup
-au!
-" When editing a file, always jump to the last known cursor position.
-" Don't do it when the position is invalid or when inside an event handler
-" (happens when dropping a file on gvim).
-autocmd BufReadPost *
-            \ if line("'\"") >= 1 && line("'\"") <= line("$") |
-            \   exe "normal! g`\"" |
-            \ endif
+    au!
+    " When editing a file, always jump to the last known cursor position.
+    " Don't do it when the position is invalid or when inside an event handler
+    " (happens when dropping a file on gvim).
+    autocmd BufReadPost *
+                \ if line("'\"") >= 1 && line("'\"") <= line("$") |
+                \   exe "normal! g`\"" |
+                \ endif
 augroup END
 
 " Only register these autocommands if the necessary executables are present

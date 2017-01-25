@@ -3,10 +3,8 @@
 alias rmpyc='find . -name "*.pyc" -delete'
 alias rmswp='rm -f $HOME/.vim/tmp/*sw*'
 
-alias evim='vim $HOME/.vimrc'
-alias ebash='vim $HOME/.bashrc $HOME/.profile $HOME/.bash_aliases'
-
-alias sourceb='. $HOME/.bashrc'
+alias evim='vim $DOTFILES/vimrc'
+alias ebash='vim $DOTFILES/{bashrc,profile,bash_aliases,bash_prompt,bash_functions}'
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -17,16 +15,13 @@ alias p='pushd'
 alias pp='popd'
 alias dirs='dirs -v'
 
-alias la='ls -a'
-alias l='ls -lAhF --group-directories-first'
+alias l='ls -lhF --group-directories-first'
 #	        ├l long listing
-#	        ├─A hidden files (ignore . and ..)
-#	        ├──h human readable sizes
-#	        └───F classifiers
+#	        ├─h human readable sizes
+#	        └──F classifiers
+alias la='l -A' # A Hidden files, ignore . and ..
 
 alias json='python -m json.tool'
 
-alias t='tmux'
-alias ta='tmux a'
 alias tk='tmux kill-session'
 alias tl='tmux ls'
