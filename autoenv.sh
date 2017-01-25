@@ -9,6 +9,8 @@ AUTOENV_CHECKSUM=.envsum
 AUTOENV_LAST_PWD=
 export AUTOENV=
 
+# Helpers
+# -----------------------------------------------------------------------------
 
 _file_exists () {
 	stat -t "$1" > /dev/null 2>&1
@@ -37,12 +39,9 @@ _confirm_envfile () {
 	fi
 }
 
-_deactivate_environment () {
-	AUTOENV=
-	unalias deac
-	# If the envfile defined _deactivate call it.
-	declare -f _deactivate > /dev/null 2>&1 && _deactivate
-}
+
+# "main" function
+# -----------------------------------------------------------------------------
 
 _autoenv () {
 	[ "$AUTOENV_LAST_PWD" = "$PWD" ] && return
@@ -55,13 +54,31 @@ _autoenv () {
 		_authorize_envfile
 		AUTOENV="$PWD/$AUTOENV_ENVFILE"
 		. "$AUTOENV_ENVFILE"
-		alias deac="_deactivate_environment"
 	fi
 }
+
+# de- and reactivation
+# -----------------------------------------------------------------------------
+
+_deactivate_environment () {
+	AUTOENV=
+	# If the envfile defined _deactivate call it.
+	declare -f _deactivate > /dev/null 2>&1 && _deactivate
+}
+
+_reactivate_environment () {
+	_deactivate_environment
+	# This forces _autoenv to run again
+	AUTOENV_LAST_PWD=
+}
+
+# Public functions
+# -----------------------------------------------------------------------------
 
 showenv () {
 	if [ -n "$AUTOENV" ] && _file_exists "$AUTOENV"; then
 		cat "$AUTOENV"
+		echo "$AUTOENV"
 	else
 		echo "No environment sourced or envfile has been moved or deleted."
 	fi
@@ -75,5 +92,15 @@ editenv () {
 	fi
 }
 
-grep --quiet _autoenv <<< "$PROMPT_COMMAND" || \
-	PROMPT_COMMAND="_autoenv; $PROMPT_COMMAND"
+# Set up the prompt command and aliases
+# -----------------------------------------------------------------------------
+
+if [ -z "$_AUTOENV_NO_PROMPT_COMMAND" ]; then
+	grep --quiet _autoenv <<< "$PROMPT_COMMAND" || \
+		PROMPT_COMMAND="_autoenv; $PROMPT_COMMAND"
+fi
+
+if [ -z "$_AUTOENV_NO_ALIASES" ]; then
+	alias deac="_deactivate_environment"
+	alias reac="_reactivate_environment"
+fi
