@@ -136,6 +136,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'neomake/neomake'
 Plug 'robertmeta/nofrils'
+Plug 'jpalardy/vim-slime'
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
@@ -147,11 +148,6 @@ Plug 'christoomey/vim-tmux-navigator',
             \ 'TmuxNavigateDown',
             \ 'TmuxNavigateUp',
             \ 'TmuxNavigatePrevious']}
-Plug 'jpalardy/vim-slime',
-            \ {'on': [
-            \ '<Plug>SlimeConfig',
-            \ '<Plug>SlimeParagraphSend',
-            \ '<Plug>SlimeRegionSend']}
 
 " language help
 Plug 'mattn/emmet-vim'
@@ -193,7 +189,6 @@ let g:slime_target = 'tmux'
 let g:slime_python_ipython = 1
 let g:slime_no_mappings = 1
 
-" let g:slime_dont_ask_default = 1
 xmap <leader>s <Plug>SlimeRegionSend
 nmap <leader>s <Plug>SlimeParagraphSend
 nmap <leader>v <Plug>SlimeConfig
