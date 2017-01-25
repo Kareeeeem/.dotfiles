@@ -55,7 +55,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 [ -f "$HOME/.dotfiles/prompt.sh" ] && . "$HOME/.dotfiles/prompt.sh"
-[ -f "$HOME/.dotfiles/autoenv" ] && . "$HOME/.dotfiles/autoenv.sh"
+[ -f "$HOME/.dotfiles/autoenv.sh" ] && . "$HOME/.dotfiles/autoenv.sh"
 
 # Z https://github.com/rupa/z
 [ -d "$HOME/sources/z" ] && . "$HOME/sources/z/z.sh"
