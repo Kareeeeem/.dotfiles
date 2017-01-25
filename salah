@@ -22,10 +22,10 @@ case "$1" in
 		awk 'BEGIN { FS="," }; /^'"$now"'/ || NR == 1 { printf "%-17s%-17s%-17s\n", $1, $39, $45 }' $HOME/zaandam.txt
 		;;
 	m*)
-		awk 'BEGIN { FS="," }; /^'"$now"'/ || NR == 1 { printf "%-17s%-17s%-17s$-17s\n", $1, $49, $52, %54 }' $HOME/zaandam.txt
+		awk 'BEGIN { FS="," }; /^'"$now"'/ || NR == 1 { printf "%-17s%-17s%-17s%-17s\n", $1, $49, $52,$54 }' $HOME/zaandam.txt
 		;;
 	i*)
-		awk 'BEGIN { FS="," }; /^'"$now"'/ || NR == 1 { printf "%-17s%-17s%-17s$-17s\n", $1, $56, $60, %62 }' $HOME/zaandam.txt
+		awk 'BEGIN { FS="," }; /^'"$now"'/ || NR == 1 { printf "%-17s%-17s%-17s%-17s\n", $1, $56, $60, $62 }' $HOME/zaandam.txt
 		;;
 	*)
 		awk 'BEGIN { FS="," }; /^'"$now"'/ || NR == 1 { printf "%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s%-17s\n", $1, $17, $21, $23, $25, $28, $30, $36, $39, $45, $49, $52, $54, $56, $60, $62 }' $HOME/zaandam.txt
