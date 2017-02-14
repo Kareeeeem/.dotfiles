@@ -256,8 +256,8 @@ augroup END
 if executable('ctags') && executable('git-tags')
     augroup tags
         au!
-        au BufWritePost *.py,*.c call system('git-tags')
-        au BufWritePost *.js call system("git-tags && clean_js_tags")
+        au BufWritePost *.py,*.c call system('git-tags &')
+        " au BufWritePost *.js call system("(git-tags && clean_js_tags) &")
     augroup END
 endif
 
