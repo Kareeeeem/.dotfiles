@@ -50,15 +50,13 @@ ta () {
 # param: dir (not required)
 # option -p: port (not required)
 serve() {
-	local dir port
+	local port
 	if [ "$1" = "-p" ]; then
 		port="$2"
 		shift 2
 	fi
 
-	dir="${1:-$PWD}"
-
-	(cd "$dir" && python -m SimpleHTTPServer "${port:=8000}")
+	(cd "${1:-$PWD}" && python -m SimpleHTTPServer "${port:-8000}")
 }
 
 mkcd () {

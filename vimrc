@@ -91,7 +91,7 @@ nnoremap <leader>j J
 nnoremap <silent> J :call JoinSpaceless()<cr>
 
 " write if changed
-nnoremap <Leader><Leader> :up<cr>
+nnoremap <Leader><Leader> :w<cr>
 
 " show manpage
 nnoremap M K
@@ -110,8 +110,8 @@ nnoremap Y y$
 nnoremap gV `[v`]
 
 " keep the visual selection after changing indentation
-xnoremap < <gv
-xnoremap > >gv
+" xnoremap < <gv
+" xnoremap > >gv
 
 " Navigate buffers
 nnoremap <S-Tab> :bp<cr>
