@@ -47,6 +47,7 @@ shopt -s checkwinsize	# update the values of LINES and COLUMNS.
 shopt -s globstar		# ** matches all files and 0 or more (sub)directories
 shopt -s autocd			# cd without typing cd
 shopt -s cmdhist		# save multiline commands as one
+shopt -s extglob
 stty -ixon				# Disable START/STOP signals
 
 # enable bash completion in interactive shells
