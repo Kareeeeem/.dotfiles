@@ -14,7 +14,7 @@ set autoindent
 set backspace=2
 set colorcolumn=80
 set encoding=utf-8
-set formatoptions=jcrq
+set formatoptions=tjrocqn
 set hidden
 set nowrap
 set scrolloff=3
@@ -257,7 +257,7 @@ if executable('ctags') && executable('git-tags')
     augroup tags
         au!
         au BufWritePost *.py,*.c call system('git-tags &')
-        au BufWritePost *.js call system("(git-tags && clean_js_tags) &")
+        " au BufWritePost *.js call system("(git-tags && clean_js_tags) &")
     augroup END
 endif
 
@@ -285,9 +285,10 @@ augroup languages
     au BufRead,BufNewFile *.h,*.c setlocal filetype=c
     au FileType c setlocal commentstring=//\ %s
     au FileType c setlocal cinoptions+=:0 " Don't indent case
-
+    au FileType awk setlocal commentstring=#\ %s
     au FileType htmljinja,htmldjango setlocal commentstring={#\ %s\ #}
     au FileType php setlocal commentstring=//\ %s
+    au FileType racket,scheme setlocal commentstring=;\ %s
 
     au BufReadPre *vimrc setlocal foldenable foldmethod=marker
 

@@ -39,8 +39,8 @@ export MANWIDTH=80
 
 # no duplicates or lines starting with space
 HISTCONTROL=ignoreboth:erasedups
-HISTSIZE=5000
-HISTFILESIZE=100000
+HISTSIZE=1000000
+HISTFILESIZE=1000000
 
 shopt -s histappend		# append to history file, don't overwrite it
 shopt -s checkwinsize	# update the values of LINES and COLUMNS.
@@ -74,4 +74,5 @@ if hash ag; then
 fi
 
 [ -f "$HOME/.dotfiles/bash_functions" ] && . "$HOME/.dotfiles/bash_functions"
+
 . ~/.bash_aliases
