@@ -56,7 +56,7 @@ serve() {
 		shift 2
 	fi
 
-	(cd "${1:-$PWD}" && python -m SimpleHTTPServer "${port:-8000}")
+	(cd "${1:-$PWD}" && python2 -m SimpleHTTPServer "${port:-8000}")
 }
 
 mkcd () {

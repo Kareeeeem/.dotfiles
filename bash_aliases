@@ -26,3 +26,15 @@ alias json='python -m json.tool'
 alias t='tmux'
 alias tk='tmux kill-session'
 alias tl='tmux ls'
+
+# http://askubuntu.com/a/17279
+alias pcp="rsync -ah --progress"
+#				 ├a equals -rlptgoD.
+#				 │		  ├recursive
+#				 │		  ├─copy symlinks,
+#				 │		  ├──preserve permissions
+#				 │		  ├───preserve modification times
+#				 │		  ├────preserve group
+#				 │		  ├─────preserve owner (superuser only)
+#				 │		  └──────preserve device files and special files.
+#				 └─h human readable numbers

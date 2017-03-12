@@ -15,7 +15,7 @@ _virtualenv_prompt() {
 
 _autoenv_prompt() {
 	if [ -n "$AUTOENV" ]; then
-		echo -n "$PROMPT_BOLD""env""$PROMPT_RESET "
+		echo -n "$PROMPT_BOLD""${AUTOENV_PROMPT:-env}""$PROMPT_RESET "
 	fi
 }
 

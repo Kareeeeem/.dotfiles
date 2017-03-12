@@ -50,15 +50,19 @@ _autoenv () {
 	[ -n "$AUTOENV" ] && return
 	! _file_exists "$AUTOENV_ENVFILE" && return
 
+	_activate
+}
+
+# (de)activation
+# -----------------------------------------------------------------------------
+
+_activate () {
 	if _envfile_is_authorized || _confirm_envfile; then
 		_authorize_envfile
 		AUTOENV="$PWD/$AUTOENV_ENVFILE"
 		. "$AUTOENV_ENVFILE"
 	fi
 }
-
-# de- and reactivation
-# -----------------------------------------------------------------------------
 
 _deactivate_environment () {
 	AUTOENV=
@@ -74,6 +78,27 @@ _reactivate_environment () {
 
 # Public functions
 # -----------------------------------------------------------------------------
+
+# active from child directory
+act () {
+	_deactivate_environment
+	local slashes current_dir original_dir
+
+	original_dir="$PWD"
+	current_dir="$original_dir"
+	slashes=${current_dir//[^\/]/}
+
+	for (( n=${#slashes}; n>1; --n )); do
+		if _file_exists "$current_dir/$AUTOENV_ENVFILE"; then
+			cd "$current_dir"
+			_activate
+			cd "$original_dir"
+			return
+		else
+			current_dir="$current_dir/.."
+		fi
+	done
+}
 
 showenv () {
 	if [ -n "$AUTOENV" ] && _file_exists "$AUTOENV"; then

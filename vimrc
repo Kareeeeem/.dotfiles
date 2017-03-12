@@ -151,7 +151,6 @@ Plug 'christoomey/vim-tmux-navigator',
 
 " language help
 Plug 'mattn/emmet-vim'
-Plug '2072/PHP-Indenting-for-VIm'
 Plug 'hynek/vim-python-pep8-indent'
 Plug 'Kareeeeem/python-docstring-comments'
 Plug 'pangloss/vim-javascript'
@@ -326,6 +325,7 @@ function! ModifyNofrils()
     hi Conditional cterm=bold
     hi Statement cterm=bold
     hi Exception cterm=bold
+    hi Comment ctermfg=244
 endfunction
 
 " set the colorscheme last to allow any ColorScheme autocmds to get set.

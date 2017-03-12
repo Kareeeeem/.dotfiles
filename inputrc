@@ -1,6 +1,6 @@
 set completion-ignore-case on
 set show-all-if-ambiguous on
-set menu-complete-display-prefix on
+# set menu-complete-display-prefix on
 set colored-stats on
 Tab: menu-complete
 
