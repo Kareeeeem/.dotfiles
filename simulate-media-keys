@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# dependencies:
+#	playerctl: https://github.com/acrisci/playerctl
+# 	pactl
+
+case $1 in
+	lower)
+		pactl set-sink-volume 0 -10%
+		;;
+	raise)
+		pactl set-sink-volume 0 +10%
+		;;
+	mute)
+		pactl set-sink-volume 0 0%
+		;;
+	next)
+		playerctl next
+		;;
+	prev)
+		playerctl prev
+		;;
+	play|pause)
+		playerctl play-pause
+		;;
+	*) ;;
+esac
