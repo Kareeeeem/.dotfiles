@@ -12,7 +12,7 @@ case $1 in
 		pactl set-sink-volume 0 +10%
 		;;
 	mute)
-		pactl set-sink-volume 0 0%
+		pactl set-sink-mute 0 toggle
 		;;
 	next)
 		playerctl next
