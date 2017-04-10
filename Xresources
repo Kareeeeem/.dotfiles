@@ -1,0 +1,10 @@
+rofi.modi: window,run
+rofi.fullscreen: true
+rofi.padding: 300
+rofi.lines: 1
+
+rofi.color-enabled: true
+rofi.color-window: argb:0fdf6e3, #002b36, argb:0000000
+rofi.color-normal: argb:78fdf6e3, #002b36, argb:78eee8d5, #586e75, #eee8d5
+rofi.color-active: #fdf6e3, #268bd2, #eee8d5, #268bd2, #fdf6e3
+rofi.color-urgent: argb:0fdf6e3, #dc322f, #eee8d5, #dc322f, #fdf6e3

@@ -14,6 +14,7 @@ set autoindent
 set backspace=2
 set colorcolumn=80
 set encoding=utf-8
+set fileencoding=utf-8
 set formatoptions=tjrocqn
 set hidden
 set nowrap
@@ -25,7 +26,7 @@ set hlsearch ignorecase smartcase incsearch
 set expandtab tabstop=4 softtabstop=4 shiftwidth=4
 
 set dir=$HOME/.vim/tmp
-set tags=.git/tags
+set tags=.git/tags,tags
 set undofile undodir=$HOME/.vim/undodir/
 
 if exists("&signcolumn")
@@ -131,6 +132,7 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'keith/tmux.vim'
 Plug 'ap/vim-buftabline'
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -173,6 +175,7 @@ nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
 nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
+let g:tmux_navigator_disable_when_zoomed=1
 
 " vim bbye
 nnoremap <leader>q :Bdelete<cr>
@@ -181,7 +184,7 @@ nnoremap <leader>q :Bdelete<cr>
 nnoremap <C-p> :Files<cr>
 nnoremap <leader>t :Tags<cr>
 nnoremap <leader>m :History<cr>
-" nnoremap <leader>b :Buffers<cr>
+nnoremap <leader>b :Buffers<cr>
 
 " Slime
 let g:slime_target = 'tmux'

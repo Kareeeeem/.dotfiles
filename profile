@@ -19,4 +19,3 @@
 
 export VISUAL="vim"
 export EDITOR="$VISUAL"
-# export TMUX_TMPDIR=$HOME

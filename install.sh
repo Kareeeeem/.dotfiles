@@ -16,3 +16,4 @@ ln -s "$dotfiles/racketrc" "$HOME/.racketrc" > /dev/null 2>&1
 ln -s "$dotfiles/i3" "$HOME/.config/i3" > /dev/null 2>&1
 ln -s "$dotfiles/i3status" "$HOME/.config/i3status" > /dev/null 2>&1
 ln -s "$dotfiles/compton.conf" "$HOME/.config/compton.conf" > /dev/null 2>&1
+ln -s "$dotfiles/Xresources" "$HOME/.Xresources" > /dev/null 2>&1

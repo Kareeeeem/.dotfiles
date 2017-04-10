@@ -38,3 +38,5 @@ alias pcp="rsync -ah --progress"
 #				 │		  ├─────preserve owner (superuser only)
 #				 │		  └──────preserve device files and special files.
 #				 └─h human readable numbers
+
+alias restart-network-manager="sudo systemctl restart network-manager.service"
