@@ -38,4 +38,15 @@ except OSError:
 
 ctags_command = 'ctags -R -o %s %s' % (tmp_tags_path, project_dir)
 run_command(ctags_command)
+
+if len(sys.argv) > 1 and sys.argv[1] == 'venv':
+    modules_path = ' '.join('{}'.format(d) for d in sys.path if os.path.isdir(d))
+    ctags_command = 'ctags -R -o %s %s' % (tags_path + '.py', modules_path)
+    run_command(ctags_command)
+
+if os.path.isfile(tags_path + '.py'):
+    with open(tmp_tags_path, 'a') as tags:
+        with open(tags_path + '.py', 'r') as pytags:
+            tags.write(pytags.read())
+
 os.rename(tmp_tags_path, tags_path)
