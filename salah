@@ -6,7 +6,7 @@ if [[ $1 = "-r" ]]; then
 		-H "Cache-Control: no-cache" \
 		-H "Postman-Token: bd2c3688-8c88-c4b8-5fd7-486d0f26b8c6" \
 		-o "$HOME/zaandam.txt" \
-		"http://www.muwaqqit.com/api.csv?add=Kalf%2B470%2C%2B1509%2BBE%2BZaandam%2C%2BNetherlands&d=""$now""&diptype=apparent&dn=Today&ea=-18.0&eh=1.64&ehtype=observer&eo=1.64&fa=-18.0&fea=0.5&ia=4.5&isn=-10.0&isna=0.5&k=0.155&ln=4.8411387&lt=52.4716922&p=1010.0&rsa=0.5&t=15.0&tz=Europe%2FAmsterdam&tztype=auto&vc=5.65&z=7" \
+		"https://www.muwaqqit.com/api.csv?add=Kalf%2B470%2C%2B1509%2BBE%2BZaandam%2C%2BNetherlands&d=""$now""&diptype=apparent&dn=Today&ea=-18.0&eh=1.64&ehtype=observer&eo=1.64&fa=-18.0&fea=0.5&ia=4.5&isn=-10.0&isna=0.5&k=0.155&ln=4.8411387&lt=52.4716922&p=1010.0&rsa=0.5&t=15.0&tz=Europe%2FAmsterdam&tztype=auto&vc=5.65&z=7" \
 		1> /dev/null
 	shift
 fi
