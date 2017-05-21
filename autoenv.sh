@@ -7,6 +7,7 @@
 AUTOENV_ENVFILE=.env
 AUTOENV_CHECKSUM=.envsum
 AUTOENV_LAST_PWD=
+export AUTOENV_PROMPT=
 export AUTOENV=
 
 # Helpers
@@ -56,7 +57,7 @@ _autoenv () {
 # (de)activation
 # -----------------------------------------------------------------------------
 
-_activate () {
+_activate_environment () {
 	if _envfile_is_authorized || _confirm_envfile; then
 		_authorize_envfile
 		AUTOENV="$PWD/$AUTOENV_ENVFILE"
@@ -66,8 +67,12 @@ _activate () {
 
 _deactivate_environment () {
 	AUTOENV=
+	AUTOENV_PROMPT=
 	# If the envfile defined _deactivate call it.
-	declare -f _deactivate > /dev/null 2>&1 && _deactivate
+    if [ -n "$(declare -f -F _deactivate)" ]; then
+        _deactivate;
+        unset -f _deactivate
+    fi
 }
 
 _reactivate_environment () {
@@ -76,12 +81,8 @@ _reactivate_environment () {
 	AUTOENV_LAST_PWD=
 }
 
-# Public functions
-# -----------------------------------------------------------------------------
-
 # active from child directory
-act () {
-	_deactivate_environment
+_activate () {
 	local slashes current_dir original_dir
 
 	original_dir="$PWD"
@@ -91,7 +92,9 @@ act () {
 	for (( n=${#slashes}; n>1; --n )); do
 		if _file_exists "$current_dir/$AUTOENV_ENVFILE"; then
 			cd "$current_dir"
-			_activate
+
+			_activate_environment
+
 			cd "$original_dir"
 			return
 		else
