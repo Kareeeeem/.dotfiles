@@ -15,20 +15,22 @@ alias p='pushd'
 alias pp='popd'
 alias dirs='dirs -v'
 
+alias la='l -A' # A Hidden files, ignore . and ..
 alias l='ls -lhF --group-directories-first'
 #	        ├l long listing
 #	        ├─h human readable sizes
 #	        └──F classifiers
-alias la='l -A' # A Hidden files, ignore . and ..
 
 alias json='python -m json.tool'
 
 alias t='tmux'
 alias tk='tmux kill-session'
 alias tl='tmux ls'
+alias tat='tmux a'
+alias tat='tmux a -t'
 
 # http://askubuntu.com/a/17279
-alias pcp="rsync -ah --progress"
+alias rcp="rsync -ah --progress"
 #				 ├a equals -rlptgoD.
 #				 │		  ├recursive
 #				 │		  ├─copy symlinks,

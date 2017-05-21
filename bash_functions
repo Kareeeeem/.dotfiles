@@ -20,32 +20,6 @@ z() {
 	cd "$(_z -l 2>&1 | fzf-tmux +s --tac --query "$*" | sed 's/^[0-9,.]* *//')" || exit
 }
 
-# select a tmux session with fzf
-_tmux_session_fzf() {
-	tmux ls | grep -o "^[^:]*" | fzf-tmux --tac +s
-}
-
-# wrapper around attch and switch-client
-# param: client-name. (required)
-_tmux_attach () {
-	if [[ -z $TMUX ]]; then
-		tmux attach -t "$1"
-	else
-		tmux switch-client -t "$1"
-	fi
-}
-
-# attach or create new session and attach
-# param: session name (not required)
-ta () {
-	local target
-	target="${1:-$(_tmux_session_fzf)}"
-
-	if ! _tmux_attach "$target" 2> /dev/null; then
-		TMUX= tmux new-session -d -s "$target" && _tmux_attach "$target"
-	fi
-}
-
 # Serve a directory.
 # param: dir (not required)
 # option -p: port (not required)

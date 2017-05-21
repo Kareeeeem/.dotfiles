@@ -2,37 +2,24 @@
 
 set $mod Mod4
 
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below.
+# exec --no-startup-id feh --bg-fill ~/Pictures/trees.jpg
+new_window none
+focus_follows_mouse no
 font pango:monospace 8
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
-
-# start a browser
 bindsym $mod+b exec google-chrome
-
-# kill focused window
+bindsym $mod+n exec nautilus --no-desktop
 bindsym $mod+Shift+q kill
 
 bindsym $mod+d exec --no-startup-id rofi -show run
 bindsym Mod1+Tab exec --no-startup-id rofi -show window
 
-# vsynx  fix
 exec --no-startup-id compton --config $HOME/.config/compton.conf -b
-
-# background
-exec --no-startup-id feh --bg-fill ~/Pictures/trees.jpg
-
 exec --no-startup-id nm-applet
-
-# No titlebar no border
-new_window none
-
-focus_follows_mouse no
 
 # change focus
 bindsym $mod+h focus left

@@ -67,11 +67,13 @@ fi
 
 # FZF
 [ -f ~/.fzf.bash ] && . ~/.fzf.bash
-export FZF_DEFAULT_OPTS='--no-bold --color=bw'
-if hash ag; then
+if hash rg; then
+	export FZF_DEFAULT_COMMAND='rg --files'
+elif hash ag; then
 	export FZF_DEFAULT_COMMAND='ag -g ""'
-	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
+export FZF_DEFAULT_OPTS='--no-bold --color=bw'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 [ -f "$HOME/.dotfiles/bash_functions" ] && . "$HOME/.dotfiles/bash_functions"
 

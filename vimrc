@@ -10,6 +10,7 @@ set ttimeout        " time out for key codes
 set ttimeoutlen=100 " wait up to 100ms after Esc for special key
 
 set completeopt-=preview
+" set complete-=t
 set autoindent
 set backspace=2
 set colorcolumn=80
@@ -39,8 +40,10 @@ else
 endif
 
 if executable("ag")
-    set grepprg=ag\ --nogroup\ --nocolor\ --vimgrep
-    set grepformat=%f:%l:%c:%m
+    " set grepprg=ag\ --nogroup\ --nocolor\ --vimgrep
+    " set grepformat=%f:%l:%c:%m
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
 " }}}
@@ -279,9 +282,10 @@ augroup languages
     au!
     au FileType *markdown*,text setlocal fo+=t fp=par\ -72 tw=72 wrap
 
-    au FileType sh setlocal noexpandtab
+    " au FileType sh setlocal noexpandtab
 
     au FileType python setlocal keywordprg=pydoc
+    au FileType python nnoremap <leader>i oimport ipdb; ipdb.set_trace()<esc>
 
     " I don't do c++ so always assume c
     au BufRead,BufNewFile *.h,*.c setlocal filetype=c
