@@ -65,10 +65,13 @@ fi
 # TMUX complation https://github.com/imomaliev/tmux-bash-completion
 [ -f "$HOME/.dotfiles/tmux.completion.bash" ] && . "$HOME/.dotfiles/tmux.completion.bash"
 
+[ -f "/$HOME/sources/ripgrep-0.5.2-x86_64-unknown-linux-musl/complete/rg.bash-completion" ] && . \
+    "/$HOME/sources/ripgrep-0.5.2-x86_64-unknown-linux-musl/complete/rg.bash-completion"
+
 # FZF
 [ -f ~/.fzf.bash ] && . ~/.fzf.bash
 if hash rg; then
-	export FZF_DEFAULT_COMMAND='rg --files'
+	export FZF_DEFAULT_COMMAND='rg --hidden --files'
 elif hash ag; then
 	export FZF_DEFAULT_COMMAND='ag -g ""'
 fi

@@ -42,3 +42,4 @@ alias rcp="rsync -ah --progress"
 #				 └─h human readable numbers
 
 alias restart-network-manager="sudo systemctl restart network-manager.service"
+alias rt="rtorrent"
