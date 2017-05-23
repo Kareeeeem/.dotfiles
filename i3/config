@@ -16,7 +16,8 @@ bindsym $mod+n exec nautilus --no-desktop
 bindsym $mod+Shift+q kill
 
 bindsym $mod+d exec --no-startup-id rofi -show run
-bindsym Mod1+Tab exec --no-startup-id rofi -show window
+bindsym $mod+Tab exec --no-startup-id rofi -show window
+bindsym $mod+x exec --no-startup-id switch-workspaces-between-monitors
 
 exec --no-startup-id compton --config $HOME/.config/compton.conf -b
 exec --no-startup-id nm-applet
