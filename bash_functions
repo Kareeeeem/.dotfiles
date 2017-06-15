@@ -36,3 +36,8 @@ serve() {
 mkcd () {
 	mkdir -p "./$1" && cd "./$1" || exit
 }
+
+pyclean () {
+    find . -name *.pyc -type f -delete
+    find . -name __pycache__ -type d -exec rm -rf {} +
+}

@@ -96,7 +96,7 @@ nnoremap <leader>j J
 nnoremap <silent> J :call JoinSpaceless()<cr>
 
 " write if changed
-nnoremap <Leader><Leader> :w<cr>
+" nnoremap <Leader><Leader> :w<cr>
 
 " show manpage
 nnoremap M K

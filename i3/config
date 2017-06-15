@@ -4,23 +4,25 @@ set $mod Mod4
 
 # exec --no-startup-id feh --bg-fill ~/Pictures/trees.jpg
 new_window none
-focus_follows_mouse no
+focus_follows_mouse yes
 font pango:monospace 8
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-bindsym $mod+Return exec i3-sensible-terminal
+# bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec st
 bindsym $mod+b exec google-chrome
 bindsym $mod+n exec nautilus --no-desktop
-bindsym $mod+Shift+q kill
 
 bindsym $mod+d exec --no-startup-id rofi -show run
-bindsym $mod+Tab exec --no-startup-id rofi -show window
+bindsym $mod+Tab exec --no-startup-id switcher
 bindsym $mod+x exec --no-startup-id switch-workspaces-between-monitors
 
 exec --no-startup-id compton --config $HOME/.config/compton.conf -b
 exec --no-startup-id nm-applet
+
+bindsym $mod+Shift+q kill
 
 # change focus
 bindsym $mod+h focus left

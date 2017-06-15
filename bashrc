@@ -71,7 +71,7 @@ fi
 # FZF
 [ -f ~/.fzf.bash ] && . ~/.fzf.bash
 if hash rg; then
-	export FZF_DEFAULT_COMMAND='rg --hidden --files'
+	export FZF_DEFAULT_COMMAND='rg --files'
 elif hash ag; then
 	export FZF_DEFAULT_COMMAND='ag -g ""'
 fi

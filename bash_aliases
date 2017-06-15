@@ -1,7 +1,5 @@
 #!/usr/bin/bash
-
-alias rmpyc='find . -name "*.pyc" -delete'
-alias rmswp='rm -f $HOME/.vim/tmp/*sw*'
+alias rmswp='rm -f $HOME/.vim/tmp/*.*sw*'
 
 alias evim='vim $HOME/.dotfiles/vimrc'
 alias ebash='vim $HOME/.dotfiles/{bashrc,profile,bash_aliases,bash_prompt,bash_functions}'
@@ -24,6 +22,7 @@ alias l='ls -lhF --group-directories-first'
 alias json='python -m json.tool'
 
 alias t='tmux'
+alias tn='tmux new -s '
 alias tk='tmux kill-session'
 alias tl='tmux ls'
 alias tat='tmux a'

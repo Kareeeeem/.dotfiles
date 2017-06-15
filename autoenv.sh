@@ -49,7 +49,6 @@ _autoenv () {
 	AUTOENV_LAST_PWD=$PWD
 
 	[ -n "$AUTOENV" ] && return
-	! _file_exists "$AUTOENV_ENVFILE" && return
 
 	_activate
 }
@@ -68,11 +67,11 @@ _activate_environment () {
 _deactivate_environment () {
 	AUTOENV=
 	AUTOENV_PROMPT=
+    _deactivate;
+    unset -f _deactivate
 	# If the envfile defined _deactivate call it.
-    if [ -n "$(declare -f -F _deactivate)" ]; then
-        _deactivate;
-        unset -f _deactivate
-    fi
+    # if [ -n "$(declare -f -F _deactivate)" ]; then
+    # fi
 }
 
 _reactivate_environment () {
@@ -131,4 +130,5 @@ fi
 if [ -z "$_AUTOENV_NO_ALIASES" ]; then
 	alias deac="_deactivate_environment"
 	alias reac="_reactivate_environment"
+	alias ac="_activate"
 fi
