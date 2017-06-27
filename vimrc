@@ -214,7 +214,7 @@ let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything']
 let g:neomake_python_enabled_makers = ['flake8']
 let g:neomake_python_flake8_args = ['--max-line-length=100']
 
-let g:neomake_sh_shellcheck_args = ['-fgcc', '-x', '-s', 'bash', '-e', 'SC1090,SC1091']
+let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091']
 
 let g:neomake_racket_raco_maker = {
             \ 'exe': 'raco',
