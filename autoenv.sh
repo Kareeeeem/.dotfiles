@@ -5,10 +5,14 @@
 # _deactivate calling _deactivate_env or the alias deac will call it.
 
 AUTOENV_ENVFILE=.env
-AUTOENV_CHECKSUM=.envsum
+AUTOENV_CHECKSUM=~/.envsum
 AUTOENV_LAST_PWD=
 export AUTOENV_PROMPT=
 export AUTOENV=
+
+if [ ! -d "$AUTOENV_CHECKSUM" ]; then
+    mkdir -p "$AUTOENV_CHECKSUM"
+fi
 
 # Helpers
 # -----------------------------------------------------------------------------
@@ -17,13 +21,17 @@ _file_exists () {
 	stat -t "$1" > /dev/null 2>&1
 }
 
+_checksum_file () {
+    echo -n "$PWD" | md5sum | awk '{print $1}'
+}
+
 _envfile_is_authorized () {
-	_file_exists "$AUTOENV_CHECKSUM" && \
-		md5sum -c "$AUTOENV_CHECKSUM" > /dev/null 2>&1
+    _file_exists "$AUTOENV_CHECKSUM/$(_checksum_file)" && \
+        md5sum -c "$AUTOENV_CHECKSUM/$(_checksum_file)" > /dev/null 2>&1
 }
 
 _authorize_envfile () {
-	md5sum "$AUTOENV_ENVFILE" > "$AUTOENV_CHECKSUM"
+    md5sum "$AUTOENV_ENVFILE" > "$AUTOENV_CHECKSUM/$(_checksum_file)"
 }
 
 _confirm_envfile () {
@@ -58,9 +66,10 @@ _autoenv () {
 
 _activate_environment () {
 	if _envfile_is_authorized || _confirm_envfile; then
-		_authorize_envfile
-		AUTOENV="$PWD/$AUTOENV_ENVFILE"
-		. "$AUTOENV_ENVFILE"
+		if _authorize_envfile; then
+            AUTOENV="$PWD/$AUTOENV_ENVFILE"
+            . "$AUTOENV_ENVFILE"
+        fi
 	fi
 }
 
