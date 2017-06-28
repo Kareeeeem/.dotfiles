@@ -19,6 +19,18 @@ _autoenv_prompt() {
 	fi
 }
 
+_env_prompt() {
+    autoenv="$(_autoenv_prompt)"
+    if [ -n "$autoenv" ]; then
+		echo "$autoenv"
+    else
+        virtualenv="$(_virtualenv_prompt)"
+        if [ -n "$virtualenv" ]; then
+            echo "$virtualenv"
+        fi
+	fi
+}
+
 # show last status if not 0. http://stackoverflow.com/a/16715681
 _status_prompt() {
 	local EXIT=$?
@@ -64,7 +76,7 @@ _prompt_command() {
 	_autoenv
 
 	PS1+=$(_chroot_prompt)
-	PS1+=$(_autoenv_prompt)
+	PS1+=$(_env_prompt)
 	PS1+="\W"
 	PS1+=$(_git_prompt)
 	PS1+=" $ "
