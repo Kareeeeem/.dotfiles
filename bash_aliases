@@ -29,7 +29,7 @@ alias tat='tmux a'
 alias tat='tmux a -t'
 
 # http://askubuntu.com/a/17279
-alias rcp="rsync -ah --progress"
+alias rcp="rsync -ah -P"
 #				 ├a equals -rlptgoD.
 #				 │		  ├recursive
 #				 │		  ├─copy symlinks,
