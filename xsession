@@ -1,5 +1,5 @@
 xset s 300
-xxs-lock -- lock &
+xss-lock -- $HOME/bin/lock &
 
 xset r rate 200 40
 setxkbmap -option ctrl:nocaps
