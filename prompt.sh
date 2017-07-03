@@ -87,6 +87,12 @@ _prompt_command() {
 	history -a # Append new lines to history file
 	history -c # Clear the history list
 	history -r # Append the history file to the history list
+
+	# set the window title to the $PWD in non tmux windows.
+	# Tmux has it's own configuration.
+	if [[ $TERM =~ xterm* ]]; then
+		echo -ne "\033]0;$PWD\007"
+	fi
 }
 
 export _AUTOENV_NO_PROMPT_COMMAND=1
