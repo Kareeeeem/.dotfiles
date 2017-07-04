@@ -17,7 +17,6 @@
 [ -d "$HOME/.npm" ] && PATH="$HOME/.npm/bin:$PATH"
 
 # FZF
-[ -f ~/.fzf.bash ] && . ~/.fzf.bash
 if hash rg; then
 	export FZF_DEFAULT_COMMAND='rg --files'
 elif hash ag; then
@@ -26,5 +25,5 @@ fi
 export FZF_DEFAULT_OPTS='--no-bold --color=bw'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-export VISUAL="vim"
-export EDITOR="$VISUAL"
+hash vim && export VISUAL="vim"; export EDITOR="$VISUAL"
+hash st && export TERMINAL=st

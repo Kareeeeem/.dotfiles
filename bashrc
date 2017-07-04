@@ -70,4 +70,6 @@ fi
 
 [ -f "$HOME/.dotfiles/bash_functions" ] && . "$HOME/.dotfiles/bash_functions"
 
+[ -f ~/.fzf.bash ] && . ~/.fzf.bash
+
 . ~/.bash_aliases
