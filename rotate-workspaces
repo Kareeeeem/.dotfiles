@@ -1,0 +1,9 @@
+#!/usr/bin/python3
+
+import i3ipc
+
+i3 = i3ipc.Connection
+
+for output in filter(lambda o: o['active'], i3.get_outputs()):
+    i3.command('workspace %d' + output['current_workspace'])
+    i3.command('move workspace to output right')
