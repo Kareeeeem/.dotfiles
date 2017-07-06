@@ -30,7 +30,9 @@ serve() {
 		shift 2
 	fi
 
-	(cd "${1:-$PWD}" && python2 -m SimpleHTTPServer "${port:-8000}")
+    # This makes it easier to open the link.
+    echo Will serve HTTP on http://0.0.0.0:8000 ...
+	(cd "${1:-$PWD}" && python2 -m SimpleHTTPServer "${port:-8000}" > /dev/null)
 }
 
 mkcd () {
