@@ -1,8 +1,0 @@
-#! /usr/bin/env sh
-
-set -e
-
-cd $HOME/.dotfiles
-git add .
-git commit
-git push origin master
