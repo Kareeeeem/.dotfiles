@@ -1,86 +1,42 @@
 #!/usr/bin/python3
 
-# This example shows how to implement a simple, but highly configurable window
-# switcher (like a much improved "alt-tab") with iterative dmenu calls. This
-# script works well for most use cases with no arguments.
-#
-# https://faq.i3wm.org/question/228/how-do-i-find-an-app-buried-in-some-workspace-by-its-title/
-
-from argparse import ArgumentParser
+import sys
 from subprocess import check_output
-from os.path import basename
+
 import i3ipc
 
-i3 = i3ipc.Connection()
 
-parser = ArgumentParser(
-    prog='i3-container-commander.py',
-    description=(
-        'i3-container-commander.py is a simple but highly configurable '
-        'dmenu-based script for creating dynamic context-based commands for '
-        'controlling top-level windows. With no arguments, it is an efficient '
-        'and ergonomical window switcher.'
-    ),
-    epilog='Additional arguments found after "--" will be passed to dmenu.')
-
-parser.add_argument(
-    '--command', metavar='COMMAND',
-    default='focus',
-    help=(
-        'The command to execute on the container that you end up '
-        'selecting. The command should be a single command or comma-separated '
-        'list such as what is passed to i3-msg. The command will only affect the '
-        'selected container (it will be selected by criteria). (default: "focus")'
-    ))
-
-parser.add_argument(
-    '--menu',
-    default='rofi',
-    help='The menu command to run (ex: --menu=rofi)'
-)
-
-(args, menu_args) = parser.parse_known_args()
-
-if len(menu_args) and menu_args[0] == '--':
-    menu_args = menu_args[1:]
-
-# set default menu args for supported menus
-if basename(args.menu) == 'dmenu':
-    menu_args += ['-i', '-f']
-elif basename(args.menu) == 'rofi':
-    menu_args += ['-i', '-show', '-dmenu']
+def format_menu_item(container):
+    fmt = '{ws.name}: {c.window_instance} - {c.name}'
+    return fmt.format(ws=container.workspace(), c=container)
 
 
-def show_menu(items, prompt):
-    prompt += ': '
+def call_rofi(containers):
+    items = sorted([format_menu_item(c) for c in containers])
+    cmd = ['rofi', '-l', str(len(items)), '-p', 'Focus: ', '-i', '-show', '-dmenu']
     menu_input = bytes(str.join('\n', items), 'UTF-8')
-    menu_cmd = [args.menu] + ['-l', str(len(items)), '-p', prompt] + menu_args
-    menu_result = check_output(menu_cmd, input=menu_input)
-    return menu_result.decode('UTF-8').strip()
+    pick = check_output(cmd, input=menu_input)
+    return pick.strip().decode('UTF-8')
 
 
-def show_container_menu(containers):
-    def do_format(c):
-        return '{workspace.name}: {container.window_instance} - {container.name}'\
-            .format(workspace=c.workspace(), container=c)
-
-    items = [do_format(c) for c in containers]
-    items.sort()
-
-    menu_result = show_menu(items, args.command)
-    for c in containers:
-        if do_format(c) == menu_result:
-            return c
+def handle_fullscreen(pick):
+    fullscreen = pick.workspace().find_fullscreen()
+    if fullscreen and fullscreen[0] != pick:
+        fullscreen[0].command('fullscreen toggle')
 
 
 if __name__ == '__main__':
-    containers = i3.get_tree().leaves()
+    containers = i3ipc.Connection().get_tree().leaves()
 
-    if len(containers):
-        if len(containers) == 1:
-            chosen_container = containers[0]
-        else:
-            chosen_container = show_container_menu(containers)
+    if not containers:
+        sys.exit()
 
-        if chosen_container:
-            chosen_container.command(args.command)
+    if len(containers) == 1:
+        pick = containers[0]
+    else:
+        pick = call_rofi(containers)
+        pick = next(c for c in containers if format_menu_item(c) == pick)
+
+    if pick:
+        handle_fullscreen(pick)
+        pick.command('focus')
