@@ -2,6 +2,7 @@ set completion-ignore-case on
 set show-all-if-ambiguous on
 
 set enable-bracketed-paste on
+set mark-directories on
 
 # set menu-complete-display-prefix on
 set colored-stats on

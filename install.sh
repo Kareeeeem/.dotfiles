@@ -7,6 +7,7 @@ ln -s "$dotfiles/vimrc" "$HOME/.vimrc" > /dev/null 2>&1
 ln -s "$dotfiles/tmux.conf" "$HOME/.tmux.conf" > /dev/null 2>&1
 ln -s "$dotfiles/rtorrent.rc" "$HOME/.rtorrent.rc" > /dev/null 2>&1
 ln -s "$dotfiles/bash_aliases" "$HOME/.bash_aliases" > /dev/null 2>&1
+ln -s "$dotfiles/bash_logout" "$HOME/.bash_logout" > /dev/null 2>&1
 ln -s "$dotfiles/profile" "$HOME/.profile" > /dev/null 2>&1
 ln -s "$dotfiles/npmrc" "$HOME/.npmrc" > /dev/null 2>&1
 ln -s "$dotfiles/gitconfig" "$HOME/.gitconfig" > /dev/null 2>&1

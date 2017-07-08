@@ -162,12 +162,6 @@ Plug 'Kareeeeem/python-docstring-comments'
 Plug 'pangloss/vim-javascript'
 Plug 'wlangstroth/vim-racket'
 
-Plug 'editorconfig/editorconfig-vim'
-" Don't load if there's no editorconfig file in the current folder.
-if !filereadable('.editorconfig')
-    let g:loaded_EditorConfig = 1
-endif
-
 call plug#end()
 
 "buftabline

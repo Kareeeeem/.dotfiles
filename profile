@@ -27,3 +27,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 hash vim && export VISUAL="vim"; export EDITOR="$VISUAL"
 hash st && export TERMINAL=st
+
+if [[ ! ${DISPLAY} && ${XDG_VTNR} == 1 ]]; then
+    exec startx
+fi
