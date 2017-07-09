@@ -1,5 +1,5 @@
 # Turn off and lock the screen after 1.5 minutes.
-xset dmps 0 0 90
+xset dpms 0 0 90
 xss-lock -- i3lock -c 262626 -n &
 
 # 200 ms delay and 40 ms repeat for keyboard auto-repeat
