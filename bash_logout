@@ -2,8 +2,9 @@
 
 # when leaving the console clear the screen to increase privacy
 
-if [ "$SHLVL" = 1 ]; then
-    [ -x /usr/bin/clear ] && /usr/bin/clear -q
-    # The below will break other VTs than are running an X server
-    # [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
-fi
+# FIXME seems just using clear is broken also
+# if [ "$SHLVL" = 1 ]; then
+#     [ -x /usr/bin/clear ] && /usr/bin/clear -q
+#     # The below will break other VTs than are running an X server
+#     # [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
+# fi

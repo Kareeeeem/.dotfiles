@@ -12,6 +12,6 @@ setxkbmap -option ctrl:nocaps
 pkill xcape 2> /dev/null; xcape -t 200 -e "Control_L=Escape"
 
 # Enable tap to click.
-xinput set-prop "SynPS/2 Synaptics TouchPad" 292 1
+xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
 
 exec i3
