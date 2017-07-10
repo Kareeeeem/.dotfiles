@@ -2,8 +2,12 @@
 
 import i3ipc
 
-i3 = i3ipc.Connection
+i3 = i3ipc.Connection()
+outputs = [o for o in i3.get_outputs() if o['active']]
+nr_outputs = len(outputs)
 
-for output in filter(lambda o: o['active'], i3.get_outputs()):
-    i3.command('workspace %d' + output['current_workspace'])
+for i, output in enumerate(outputs):
+    i3.command('workspace %s' % output['current_workspace'])
     i3.command('move workspace to output right')
+    if i + 1 < nr_outputs:
+        i3.command('focus output right')
