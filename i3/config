@@ -16,7 +16,7 @@ bindsym $mod+b exec --no-startup-id google-chrome
 
 bindsym $mod+d exec --no-startup-id rofi -show run
 bindsym $mod+Tab exec --no-startup-id switcher
-bindsym $mod+x exec --no-startup-id switch-workspaces-between-monitors
+bindsym $mod+x exec --no-startup-id rotate-workspaces
 
 # exec --no-startup-id compton --config $HOME/.config/compton.conf -b
 # exec --no-startup-id nm-applet
