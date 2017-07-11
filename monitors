@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# place the following in /etc/udev/rules.d/98-monitor-hotplug.rules
+#
+# KERNEL=="card0", SUBSYSTEM=="drm", ACTION=="change", ENV{DISPLAY}=":0", ENV{XAUTHORITY}="/home/kareem/.Xauthority", RUN+="/bin/bash /home/kareem/bin/monitors"
+#
+
+VGA=$(xrandr -q | grep -i "vga-1 connected")
+HDMI=$(xrandr -q | grep -i "hdmi-1 connected")
+
+if [ -n "$HDMI" -a -n "$VGA" ]; then
+    xrandr --output HDMI-1 --auto --primary --output VGA-1 --auto --left-of HDMI-1 --output LVDS-1 --off
+elif [ -n "$HDMI" ]; then
+    xrandr --output VGA-1 --off --output HDMI-1 --auto --primary --output LVDS-1 --auto --right-of HDMI-1
+else
+    xrandr --output HDMI-1 --off --output VGA-1 --off --output LVDS-1 --auto
+fi
