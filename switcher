@@ -12,17 +12,14 @@ def format_menu_item(container):
 
 
 def call_rofi(containers):
-    items = sorted([format_menu_item(c) for c in containers])
+    items = sorted([
+        format_menu_item(c) for c in containers
+        if not c.workspace().name.startswith('_')
+    ])
     cmd = ['rofi', '-l', str(len(items)), '-p', 'Focus: ', '-i', '-show', '-dmenu']
     menu_input = bytes(str.join('\n', items), 'UTF-8')
     pick = check_output(cmd, input=menu_input)
     return pick.strip().decode('UTF-8')
-
-
-def handle_fullscreen(pick):
-    fullscreen = pick.workspace().find_fullscreen()
-    if fullscreen and fullscreen[0] != pick:
-        fullscreen[0].command('fullscreen toggle')
 
 
 if __name__ == '__main__':
@@ -32,11 +29,15 @@ if __name__ == '__main__':
         sys.exit()
 
     if len(containers) == 1:
-        pick = containers[0]
+        containers[0].command('focus')
     else:
-        pick = call_rofi(containers)
-        pick = next(c for c in containers if format_menu_item(c) == pick)
+        selection = call_rofi(containers)
+        pick = next(c for c in containers if format_menu_item(c) == selection)
 
-    if pick:
-        handle_fullscreen(pick)
+        # If pick is on a workspace that is occupied by a fullscreen container
+        # that is not the pick, toggle fullscreen mode.
+        fullscreen = pick.workspace().find_fullscreen()
+        if fullscreen and fullscreen[0] != pick:
+            fullscreen[0].command('fullscreen toggle')
+
         pick.command('focus')

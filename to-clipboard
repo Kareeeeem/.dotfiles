@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+
+# Place the following in .local/share/applications/magnet-clipboard.desktop
+
+#    #!/usr/bin/env xdg-open
+#    [Desktop Entry]
+#    Version=1.0
+#    Type=Application
+#    Terminal=false
+#    Exec=/home/kareem/bin/to-clipboard
+#    Name=Magnet Clipboard Handler
+#    Comment=Copies magnet links to clipboard
+#    MimeType=x-scheme-handler/magnet
+
+
+# copy whatever is passed to the clipboard, delete new lines
+tr -d "\n" <<< "$@" | xclip -sel clip
