@@ -43,3 +43,19 @@ pyclean () {
     find . -name *.pyc -type f -delete
     find . -name __pycache__ -type d -exec rm -rf {} +
 }
+
+mnt () {
+    drive="$(ls -l /dev/disk/by-label \
+        | awk 'NF > 8 {printf "%s %s\n", $9, $11}' \
+        | fzf-tmux)"
+    pmount "/dev/disk/by-label/${drive%% *}" "/media/${drive%% *}" && \
+        notify-send "Drive mounted" "/dev/${drive##*/} mounted on /media/${drive%% *}"
+}
+
+umnt () {
+    drive="$(ls -l /media \
+        | awk 'NF > 8 {print $9}' \
+        | fzf-tmux)"
+    pumount "/dev/disk/by-label/$drive" && \
+        notify-send "Drive unmounted" "media/$drive unmounted"
+}
