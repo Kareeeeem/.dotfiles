@@ -16,6 +16,12 @@
 [ -d "$HOME/.local/bin" ]  && PATH="$HOME/.local/bin:$PATH"
 [ -d "$HOME/.npm" ] && PATH="$HOME/.npm/bin:$PATH"
 
+if [ -d "$HOME/sources/go" ]; then
+    export GOROOT=$HOME/sources/go
+    export GOPATH=$HOME/projects/go
+    PATH=$PATH:$GOROOT/bin
+fi
+
 # FZF
 if hash rg; then
 	export FZF_DEFAULT_COMMAND='rg --files'

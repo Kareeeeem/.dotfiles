@@ -202,8 +202,8 @@ let g:neomake_remove_invalid_entries = 1
 
 let g:neomake_javascript_enabled_makers = ['eslint_d']
 
-let g:neomake_c_enabled_makers = ['clang']
-let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything']
+let g:neomake_c_enabled_makers = ['gcc']
+" let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything']
 
 let g:neomake_python_enabled_makers = ['flake8']
 let g:neomake_python_flake8_args = ['--max-line-length=100']
@@ -275,12 +275,15 @@ augroup END
 
 augroup languages
     au!
+    au BufWritePre *.go call Preserve('%!gofmt')
+
     au FileType *markdown*,text setlocal fo+=t fp=par\ -72 tw=72 wrap
 
     " au FileType sh setlocal noexpandtab
 
     au FileType python setlocal keywordprg=pydoc
-    au FileType python nnoremap <leader>i oimport ipdb; ipdb.set_trace()<esc>
+    au FileType python inoremap pdb import pdb; pdb.set_trace()<esc>
+
 
     " I don't do c++ so always assume c
     au BufRead,BufNewFile *.h,*.c setlocal filetype=c
@@ -341,7 +344,7 @@ colorscheme nofrils-dark
 " call a command and restore view.
 function! Preserve(command)
     let w = winsaveview()
-    execute a:command
+    silent execute a:command
     call winrestview(w)
 endfunction
 

@@ -14,9 +14,10 @@ floating_modifier $mod
 bindsym $mod+Return exec --no-startup-id st
 bindsym $mod+b exec --no-startup-id google-chrome
 
-bindsym $mod+d exec --no-startup-id rofi -show run
+bindsym $mod+d exec --no-startup-id rofi -show drun
 bindsym $mod+Tab exec --no-startup-id switcher
 bindsym $mod+x exec --no-startup-id rotate-workspaces
+bindsym $mod+m exec --no-startup-id import -window root ~/screenshot.jpg
 
 # exec --no-startup-id compton --config $HOME/.config/compton.conf -b
 # exec --no-startup-id nm-applet

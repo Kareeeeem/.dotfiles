@@ -31,7 +31,7 @@ serve() {
 	fi
 
     # This makes it easier to open the link.
-    echo Will serve HTTP on http://0.0.0.0:8000 ...
+    echo Will serve HTTP on http://0.0.0.0:${port:-8000} ...
 	(cd "${1:-$PWD}" && python2 -m SimpleHTTPServer "${port:-8000}" > /dev/null)
 }
 
@@ -48,7 +48,7 @@ mnt () {
     drive="$(ls -l /dev/disk/by-label \
         | awk 'NF > 8 {printf "%s %s\n", $9, $11}' \
         | fzf-tmux)"
-    pmount "/dev/disk/by-label/${drive%% *}" "/media/${drive%% *}" && \
+    [ -n "$drive" ] && pmount "/dev/disk/by-label/${drive%% *}" "/media/${drive%% *}" && \
         notify-send "Drive mounted" "/dev/${drive##*/} mounted on /media/${drive%% *}"
 }
 
@@ -56,6 +56,30 @@ umnt () {
     drive="$(ls -l /media \
         | awk 'NF > 8 {print $9}' \
         | fzf-tmux)"
-    pumount "/dev/disk/by-label/$drive" && \
+    [ -n "$drive" ] && pumount "/dev/disk/by-label/$drive" && \
         notify-send "Drive unmounted" "media/$drive unmounted"
+}
+
+nt () {
+    [ ! -d $HOME/notes ] && mkdir $HOME/notes
+    [ -z $1 ] && echo "USAGE: nt [title]" && return 1
+    vim "$HOME/notes/$(date +%F)-$1.txt"
+}
+
+fnt () {
+    selection="$(ls -t $HOME/notes | fzf-tmux)"
+    [ -n "$selection" ] && vim $HOME/notes/$selection
+}
+
+monitor_git () {
+    old=
+    while [ true ]; do
+        output="$(git status --short)"
+        if [ "$output" != "$old" ]; then
+            clear
+            echo "$output"
+        fi
+        old="$output"
+        sleep 1
+    done
 }
