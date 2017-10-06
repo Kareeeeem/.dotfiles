@@ -9,7 +9,8 @@ xset r rate 200 40
 setxkbmap -option ctrl:nocaps
 
 # Left Ctrl is Escape when tapped, Ctrl when held..
-pkill xcape 2> /dev/null; xcape -t 200 -e "Control_L=Escape"
+pkill xcape 2> /dev/null
+xcape -t 200 -e "Control_L=Escape"
 
 # Enable tap to click.
 xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1

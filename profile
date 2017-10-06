@@ -24,9 +24,7 @@ fi
 
 # FZF
 if hash rg; then
-	export FZF_DEFAULT_COMMAND='rg --files'
-elif hash ag; then
-	export FZF_DEFAULT_COMMAND='ag -g ""'
+	export FZF_DEFAULT_COMMAND='rg --files --hidden'
 fi
 export FZF_DEFAULT_OPTS='--no-bold --color=bw'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

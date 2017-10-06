@@ -27,7 +27,7 @@ set hlsearch ignorecase smartcase incsearch
 set expandtab tabstop=4 softtabstop=4 shiftwidth=4
 
 set dir=$HOME/.vim/tmp
-set tags=.git/tags,tags
+set tags=.git/tags,./tags
 set undofile undodir=$HOME/.vim/undodir/
 
 if exists("&signcolumn")
@@ -42,9 +42,6 @@ endif
 if executable("rg")
     set grepprg=rg\ --vimgrep\ --no-heading
     set grepformat=%f:%l:%c:%m,%f:%l:%m
-elseif executable("ag")
-    set grepprg=ag\ --nogroup\ --nocolor\ --vimgrep
-    set grepformat=%f:%l:%c:%m
 endif
 
 " }}}
@@ -75,52 +72,33 @@ nnoremap 0 ^
 
 " break lines on a comma's, parens, brackets, braces.
 nnoremap <leader>, f,<right>i<cr><ESC>
-nnoremap <leader>9 f(<right>i<cr><ESC>
-nnoremap <leader>0 f)<cr><ESC>
-nnoremap <leader>[ f[<right>i<cr><ESC>
-nnoremap <leader>] f]i<cr><ESC>
-nnoremap <leader>{ f{<right>i<cr><ESC>
-nnoremap <leader>} f{i<cr><ESC>
-
 " Break line
 nnoremap K i<cr><esc>kg$
 " show manpage
 nnoremap M K
-
 " Original J on leader j
 nnoremap <leader>j J
 " Join lines without whitespace
 nnoremap <silent> J :call JoinSpaceless()<cr>
-
-" write if changed
-" nnoremap <Leader><Leader> :w<cr>
-
 " Toggle search highlighting
 nnoremap <BS> :nohl<cr>
-
 " j and k on columns rather than lines
 nnoremap j gj
 nnoremap k gk
-
 " Make Y consistent with C and D
 nnoremap Y y$
-
 " Highlight last inserted text
 nnoremap gV `[v`]
-
 " keep the visual selection after changing indentation
 xnoremap < <gv
 xnoremap > >gv
-
 " Navigate buffers
 nnoremap <S-Tab> :bp<cr>
-
 nnoremap <Tab> :bn<cr>
-
 nnoremap <leader>b :ls<cr>:b<space>
 
-" Don't use Ex mode, use it to delete a buffer.
-map Q :bd<cr>
+" Don't use Ex mode.
+map Q <nop>
 
 " }}}
 
@@ -130,7 +108,6 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'keith/tmux.vim'
 Plug 'ap/vim-buftabline'
-Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -177,7 +154,6 @@ nnoremap <C-p> :Files<cr>
 nnoremap <leader>t :Tags<cr>
 nnoremap <leader>m :History<cr>
 nnoremap <leader>b :Buffers<cr>
-
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
@@ -294,6 +270,8 @@ augroup languages
     au FileType htmljinja,htmldjango setlocal commentstring={#\ %s\ #}
     au FileType php setlocal commentstring=//\ %s
     au FileType racket,scheme setlocal commentstring=;\ %s
+
+    au FileType xdefaults setlocal commentstring=!\ %s
 
     au BufReadPre *vimrc setlocal foldenable foldmethod=marker
 

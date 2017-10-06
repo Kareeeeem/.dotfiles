@@ -32,7 +32,7 @@ serve() {
 
     # This makes it easier to open the link.
     echo Will serve HTTP on http://0.0.0.0:${port:-8000} ...
-	(cd "${1:-$PWD}" && python2 -m SimpleHTTPServer "${port:-8000}" > /dev/null)
+	(cd "${1:-$PWD}" && python3 -m http.server "${port:-8000}" > /dev/null)
 }
 
 mkcd () {
@@ -41,32 +41,36 @@ mkcd () {
 
 pyclean () {
     find . -name *.pyc -type f -delete
-    find . -name __pycache__ -type d -exec rm -rf {} +
+    find . -name __pycache__ -type d -delete
 }
+
+vclean () {
+    find $HOME/.vim/tmp -type f -delete
+}
+
 
 mnt () {
-    drive="$(ls -l /dev/disk/by-label \
-        | awk 'NF > 8 {printf "%s %s\n", $9, $11}' \
-        | fzf-tmux)"
-    [ -n "$drive" ] && pmount "/dev/disk/by-label/${drive%% *}" "/media/${drive%% *}" && \
-        notify-send "Drive mounted" "/dev/${drive##*/} mounted on /media/${drive%% *}"
+    [ -z "$1" ] && return 1
+    pmount "/dev/disk/by-label/$1" "/media/$1" && \
+        notify-send "Drive mounted" "Mounted /media/$1"
 }
+
+_mnt () {
+    local options="$(ls /dev/disk/by-label 2> /dev/null)"
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    COMPREPLY=( $(compgen -W "$options" -- $cur) )
+}
+complete -F _mnt mnt
 
 umnt () {
-    drive="$(ls -l /media \
-        | awk 'NF > 8 {print $9}' \
-        | fzf-tmux)"
-    [ -n "$drive" ] && pumount "/dev/disk/by-label/$drive" && \
-        notify-send "Drive unmounted" "media/$drive unmounted"
+    [ -z "$1" ] && return 1
+    pumount "/dev/disk/by-label/$1" && \
+        notify-send "Drive unmounted" "Unmounted /media/$1."
 }
 
-nt () {
-    [ ! -d $HOME/notes ] && mkdir $HOME/notes
-    [ -z $1 ] && echo "USAGE: nt [title]" && return 1
-    vim "$HOME/notes/$(date +%F)-$1.txt"
+_umnt () {
+    local options="$(ls /media 2> /dev/null)"
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    COMPREPLY=( $(compgen -W "$options" -- $cur) )
 }
-
-fnt () {
-    selection="$(ls -t $HOME/notes | fzf-tmux)"
-    [ -n "$selection" ] && vim $HOME/notes/$selection
-}
+complete -F _umnt umnt
