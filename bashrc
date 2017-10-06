@@ -55,21 +55,10 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-[ -f "$HOME/.dotfiles/prompt.sh" ] && . "$HOME/.dotfiles/prompt.sh"
-[ -f "$HOME/.dotfiles/autoenv.sh" ] && . "$HOME/.dotfiles/autoenv.sh"
-
-# Z https://github.com/rupa/z
-[ -d "$HOME/sources/z" ] && . "$HOME/sources/z/z.sh"
-# GIT Completion https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
-[ -f "$HOME/.dotfiles/git-completion.bash" ] && . "$HOME/.dotfiles/git-completion.bash"
-# TMUX complation https://github.com/imomaliev/tmux-bash-completion
-[ -f "$HOME/.dotfiles/tmux.completion.bash" ] && . "$HOME/.dotfiles/tmux.completion.bash"
-
-[ -f "/$HOME/sources/ripgrep-*/complete/rg.bash-completion" ] && . \
-    "/$HOME/sources/ripgrep-*/complete/rg.bash-completion"
-
-[ -f "$HOME/.dotfiles/bash_functions" ] && . "$HOME/.dotfiles/bash_functions"
+. ./prompt.sh"
+. ./autoenv.sh"
+. ./z/z.sh
+. ./bash_functions
+. ./bash_aliases
 
 [ -f ~/.fzf.bash ] && . ~/.fzf.bash
-
-. ~/.bash_aliases
