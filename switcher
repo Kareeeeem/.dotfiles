@@ -14,8 +14,9 @@ def format_menu_item(container):
 def call_rofi(containers):
     items = sorted([
         format_menu_item(c) for c in containers
-        if not c.workspace().name.startswith('_')
+        if not c.workspace().name.startswith('_') and not c.focused
     ])
+
     cmd = ['rofi', '-l', str(len(items)), '-p', 'Focus: ', '-i', '-show', '-dmenu']
     menu_input = bytes(str.join('\n', items), 'UTF-8')
     pick = check_output(cmd, input=menu_input)
