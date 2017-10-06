@@ -17,7 +17,7 @@ bindsym $mod+b exec --no-startup-id google-chrome
 bindsym $mod+d exec --no-startup-id rofi -show drun
 bindsym $mod+Tab exec --no-startup-id switcher
 bindsym $mod+x exec --no-startup-id rotate-workspaces
-bindsym $mod+m exec --no-startup-id import -window root ~/screenshot.jpg
+bindsym $mod+m exec --no-startup-id import -window root ~/screenshot-$(date +%FT%T%Z).jpg
 
 # exec --no-startup-id compton --config $HOME/.config/compton.conf -b
 # exec --no-startup-id nm-applet

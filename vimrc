@@ -42,7 +42,7 @@ endif
 if executable("rg")
     set grepprg=rg\ --vimgrep\ --no-heading
     set grepformat=%f:%l:%c:%m,%f:%l:%m
-elseif executable("rg")
+elseif executable("ag")
     set grepprg=ag\ --nogroup\ --nocolor\ --vimgrep
     set grepformat=%f:%l:%c:%m
 endif
@@ -67,11 +67,6 @@ set statusline+=\ %P         " percentage into file
 " Expand `%%` to current directory.
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
-" cycle through completions with tab
-" |i_CTRL-G_u| CTRL-G u start new undoable edit
-inoremap <expr> <Tab> pumvisible() ? "<C-n>" : "<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "<C-p>" : "<Tab>"
-
 " Because backslash is in a awkward place.
 let mapleader = "\<Space>"
 
@@ -89,6 +84,8 @@ nnoremap <leader>} f{i<cr><ESC>
 
 " Break line
 nnoremap K i<cr><esc>kg$
+" show manpage
+nnoremap M K
 
 " Original J on leader j
 nnoremap <leader>j J
@@ -97,9 +94,6 @@ nnoremap <silent> J :call JoinSpaceless()<cr>
 
 " write if changed
 " nnoremap <Leader><Leader> :w<cr>
-
-" show manpage
-nnoremap M K
 
 " Toggle search highlighting
 nnoremap <BS> :nohl<cr>
@@ -115,8 +109,8 @@ nnoremap Y y$
 nnoremap gV `[v`]
 
 " keep the visual selection after changing indentation
-" xnoremap < <gv
-" xnoremap > >gv
+xnoremap < <gv
+xnoremap > >gv
 
 " Navigate buffers
 nnoremap <S-Tab> :bp<cr>
@@ -183,6 +177,13 @@ nnoremap <C-p> :Files<cr>
 nnoremap <leader>t :Tags<cr>
 nnoremap <leader>m :History<cr>
 nnoremap <leader>b :Buffers<cr>
+
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
 
 " Slime
 let g:slime_target = 'tmux'

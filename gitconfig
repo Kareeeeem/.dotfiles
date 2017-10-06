@@ -6,8 +6,9 @@
     br = branch
     ci = commit
     st = status
-	lg = log --oneline
+    lg = log --oneline
+    lm = log origin/master.. --pretty=format:*' '%s%n%b
 [push]
 	default = simple
 [log]
-	decorate = auto
+    decorate = auto

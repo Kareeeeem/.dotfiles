@@ -70,16 +70,3 @@ fnt () {
     selection="$(ls -t $HOME/notes | fzf-tmux)"
     [ -n "$selection" ] && vim $HOME/notes/$selection
 }
-
-monitor_git () {
-    old=
-    while [ true ]; do
-        output="$(git status --short)"
-        if [ "$output" != "$old" ]; then
-            clear
-            echo "$output"
-        fi
-        old="$output"
-        sleep 1
-    done
-}
