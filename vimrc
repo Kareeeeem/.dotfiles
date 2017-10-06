@@ -224,9 +224,9 @@ augroup vimStartup
     " Don't do it when the position is invalid or when inside an event handler
     " (happens when dropping a file on gvim).
     autocmd BufReadPost *
-                \ if line("'\"") >= 1 && line("'\"") <= line("$") |
-                \   exe "normal! g`\"" |
-                \ endif
+                \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft != 'gitcommit'
+                \ | exe "normal! g`\""
+                \ | endif
 augroup END
 
 " Only register these autocommands if the necessary executables are present
@@ -234,7 +234,6 @@ if executable('ctags') && executable('git-tags')
     augroup tags
         au!
         au BufWritePost *.py,*.c call system('git-tags &')
-        " au BufWritePost *.js call system("(git-tags && clean_js_tags) &")
     augroup END
 endif
 
@@ -257,10 +256,11 @@ augroup languages
     au FileType *markdown*,text setlocal fo+=t fp=par\ -72 tw=72 wrap
 
     " au FileType sh setlocal noexpandtab
-
+    "
     au FileType python setlocal keywordprg=pydoc
     au FileType python inoremap pdb import pdb; pdb.set_trace()<esc>
 
+    au BufReadPre *vimrc setlocal foldenable foldmethod=marker
 
     " I don't do c++ so always assume c
     au BufRead,BufNewFile *.h,*.c setlocal filetype=c
@@ -270,14 +270,8 @@ augroup languages
     au FileType htmljinja,htmldjango setlocal commentstring={#\ %s\ #}
     au FileType php setlocal commentstring=//\ %s
     au FileType racket,scheme setlocal commentstring=;\ %s
-
     au FileType xdefaults setlocal commentstring=!\ %s
-
-    au BufReadPre *vimrc setlocal foldenable foldmethod=marker
-
     au FileType rc setlocal commentstring=#\ %s
-
-    au BufNewFile,BufRead *.ctp setlocal autoindent
 augroup END
 
 augroup qf
@@ -298,13 +292,9 @@ augroup nofrils
 augroup END
 
 function! ModifyNofrils()
-    " hi clear Signcolumn
-    " hi clear LineNr
-
     hi clear CursorLineNr
     hi link CursorLineNr Normal
     hi TODO cterm=bold
-
     hi Repeat cterm=bold
     hi Conditional cterm=bold
     hi Statement cterm=bold
