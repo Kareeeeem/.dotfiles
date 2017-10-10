@@ -46,7 +46,7 @@ _authorize_envfile () {
 
 # MAIN
 _autoenv () {
-	if [ "$AUTOENV_LAST_PWD" = "$PWD" ]; then
+	if [ -z "$TMUX" -o "$AUTOENV_LAST_PWD" = "$PWD" ]; then
         return
     else
         AUTOENV_LAST_PWD=$PWD
@@ -120,13 +120,31 @@ if [ -z "$_AUTOENV_NO_PROMPT_COMMAND" ]; then
 		PROMPT_COMMAND="_autoenv; $PROMPT_COMMAND"
 fi
 
-e () {
+aue () {
     case $1 in
-        "ac") _activate_environment ;;
-        "de") _deactivate_environment ;;
-        "re") _deactivate_environment && _activate_environment ;;
-        "show") _showenv ;;
-        "edit") _editenv ;;
-        *) echo "[USAGE] e ac|de|re" ;;
+        a*)
+            _activate_environment
+            ;;
+        d*)
+            _deactivate_environment
+            ;;
+        r*)
+            _deactivate_environment && _activate_environment
+            ;;
+        s*)
+            _showenv
+            ;;
+        e*)
+            _editenv
+            ;;
+        *) echo "[USAGE] e activate|deactivate|reactivate|show|edit" ;;
     esac
 }
+
+_aue () {
+    local options="activate deactivate reactivate show edit"
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    COMPREPLY=( $(compgen -W "$options" -- $cur) )
+}
+
+complete -F _aue aue
