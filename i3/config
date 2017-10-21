@@ -99,12 +99,6 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
-# bindsym $mod+minus exec --no-startup-id simulate-media-keys lower
-# bindsym $mod+0 exec --no-startup-id simulate-media-keys mute
-# bindsym $mod+Down exec --no-startup-id simulate-media-keys play
-# bindsym $mod+Right exec --no-startup-id simulate-media-keys next
-# bindsym $mod+Left exec --no-startup-id simulate-media-keys prev
-
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
@@ -160,6 +154,7 @@ bar {
         tray_output primary
 }
 
+# setup a scratchpad.
 exec --no-startup-id st
 exec --no-startup-id "sleep 0.1; i3-msg 'border pixel 2'"
 exec --no-startup-id "sleep 0.8; i3-msg 'move scratchpad'"

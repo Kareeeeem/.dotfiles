@@ -13,4 +13,7 @@ Tab: menu-complete
 
 "\C-n": history-search-forward
 "\e[B": history-search-forward
+
+"\C-o": "open-urls-from-tmux-buffer\n"
+
 set blink-matching-paren on

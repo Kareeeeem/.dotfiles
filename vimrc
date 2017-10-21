@@ -272,6 +272,8 @@ augroup languages
     au FileType racket,scheme setlocal commentstring=;\ %s
     au FileType xdefaults setlocal commentstring=!\ %s
     au FileType rc setlocal commentstring=#\ %s
+
+    au FileType yaml setlocal tabstop=2 softtabstop=2 shiftwidth=2
 augroup END
 
 augroup qf
