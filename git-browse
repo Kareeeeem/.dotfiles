@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Open repo in browser. Transform the ssh url into https.
+
+# One caveat, if you don't already have a browser open. It'll open one and
+# your terminal will hang.
+
+git config --get remote.origin.url | \
+    sed -r 's#git@(.*):(.*)#https://\1/\2#' | \
+    xargs -r xdg-open 2> /dev/null
