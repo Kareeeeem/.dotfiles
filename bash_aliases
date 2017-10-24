@@ -2,6 +2,8 @@
 alias evim='vim $HOME/.dotfiles/vimrc'
 alias ebash='vim $HOME/.dotfiles/{bashrc,profile,bash_aliases,bash_prompt,bash_functions}'
 
+alias clip="xclip -sel clip"
+
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'

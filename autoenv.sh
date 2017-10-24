@@ -61,7 +61,7 @@ _autoenv () {
 _deactivate_environment () {
 	AUTOENV=
 	AUTOENV_PROMPT=
-    _deactivate > /dev/null 2>&1
+    _deactivate 2> /dev/null
     unset -f _deactivate
 }
 

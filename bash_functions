@@ -43,13 +43,13 @@ c() {
     fzf --ansi --multi | sed 's#.*\(https*://\)#\1#' | xargs $open > /dev/null 2> /dev/null
 }
 
-# Fzf intergration with z
-unalias z 2> /dev/null
-z() {
-	# If arguments are given give them to z. Otherwise use fzf.
-	[ $# -gt 0 ] && _z "$*" && return
-	cd "$(_z -l 2>&1 | fzf-tmux +s --tac --query "$*" | sed 's/^[0-9,.]* *//')" || exit
-}
+# # Fzf intergration with z
+# unalias z 2> /dev/null
+# z() {
+# 	# If arguments are given give them to z. Otherwise use fzf.
+# 	[ $# -gt 0 ] && _z "$*" && return
+# 	cd "$(_z -l 2>&1 | fzf-tmux +s --tac --query "$*" | sed 's/^[0-9,.]* *//')" || exit
+# }
 
 # Serve a directory.
 # param: dir (not required)

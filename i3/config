@@ -3,7 +3,7 @@
 set $mod Mod4
 
 # exec --no-startup-id feh --bg-fill ~/Pictures/trees.jpg
-new_window none
+# new_window none
 focus_follows_mouse no
 font pango:monospace 8
 
@@ -156,5 +156,4 @@ bar {
 
 # setup a scratchpad.
 exec --no-startup-id st
-exec --no-startup-id "sleep 0.1; i3-msg 'border pixel 2'"
-exec --no-startup-id "sleep 0.8; i3-msg 'move scratchpad'"
+exec --no-startup-id "sleep 0.5; i3-msg 'move scratchpad'"
