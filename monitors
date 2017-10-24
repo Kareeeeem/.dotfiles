@@ -9,7 +9,7 @@ VGA=$(xrandr -q | grep -i "vga-1 connected")
 HDMI=$(xrandr -q | grep -i "hdmi-1 connected")
 
 if [ -n "$HDMI" -a -n "$VGA" ]; then
-    xrandr --output HDMI-1 --auto --primary --output VGA-1 --auto --left-of HDMI-1 --output LVDS-1 --off
+    xrandr --output HDMI-1 --auto --primary --output VGA-1 --auto --right-of HDMI-1 --output LVDS-1 --off
 elif [ -n "$HDMI" ]; then
     xrandr --output VGA-1 --off --output HDMI-1 --auto --primary --output LVDS-1 --auto --right-of HDMI-1
 else
