@@ -29,6 +29,7 @@ set expandtab tabstop=4 softtabstop=4 shiftwidth=4
 set dir=$HOME/.vim/tmp
 set tags=.git/tags,./tags
 set undofile undodir=$HOME/.vim/undodir/
+set fp=par\ -72
 
 if exists("&signcolumn")
     set signcolumn=yes
@@ -253,7 +254,7 @@ augroup languages
     au!
     au BufWritePre *.go call Preserve('%!gofmt')
 
-    au FileType *markdown*,text setlocal fo+=t fp=par\ -72 tw=72 wrap
+    au FileType *markdown*,text setlocal fo+=t tw=72 wrap
 
     " au FileType sh setlocal noexpandtab
     "

@@ -23,9 +23,12 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 hash vim && export VISUAL="vim" && export EDITOR="$VISUAL"
 hash st && export TERMINAL=st
 
-if [[ ! ${DISPLAY} && ${XDG_VTNR} == 1 ]]; then
-    exec startx
-fi
 # https://www.gnu.org/software/coreutils/manual/html_node/Formatting-the-file-names.html
 # https://unix.stackexchange.com/q/258679
 export QUOTING_STYLE=literal
+export GPGKEY=E72BB81B25ECC9846DF9A264D27F81F4DE0539D0
+export GPG_TTY=$(tty)
+
+if [[ ! ${DISPLAY} && ${XDG_VTNR} == 1 ]]; then
+    exec startx
+fi

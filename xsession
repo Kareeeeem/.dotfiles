@@ -15,4 +15,7 @@ xcape -t 200 -e "Control_L=Escape"
 # Enable tap to click.
 xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
 
+# $HOME/bin/monitors
+monitors
+
 exec i3

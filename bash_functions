@@ -1,15 +1,5 @@
 #!/usr/bin/env bash
 
-swvpn () {
-    [ ! -d $HOME/sw-vpn/ ] && return 1
-    read -s -p "Password: " password
-    echo
-
-    TMUX= tmux new -d -s sw-vpn -c $HOME/sw-vpn
-    tmux send-keys -t sw-vpn "sudo openvpn openvpn-client.cfg" ENTER "$password" ENTER
-    # TODO while the vpn output is not found in `nmcli` keep prompting.
-}
-
 # Open files in .viminfo with fzf
 v() {
 	# If arguments are given give them to vim. Otherwise use fzf.
