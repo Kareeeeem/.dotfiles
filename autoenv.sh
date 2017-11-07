@@ -20,12 +20,12 @@ export AUTOENV=
 
 # HELPERS
 _checksum_filename () {
-    echo "$AUTOENV_CHECKSUM/$(echo -n "$PWD" | md5sum | awk '{print $1}')"
+    echo "$AUTOENV_CHECKSUM/$(echo -n "$PWD" | sha256sum | awk '{print $1}')"
 }
 
 _envfile_is_authorized () {
     checksum=$(_checksum_filename)
-    [ -f "$checksum" ] && md5sum -c "$checksum" < $AUTOENV_ENVFILE > /dev/null 2>&1
+    [ -f "$checksum" ] && sha256sum -c "$checksum" < $AUTOENV_ENVFILE > /dev/null 2>&1
 }
 
 _authorize_envfile () {
@@ -36,7 +36,7 @@ _authorize_envfile () {
 	echo
 
 	if [ "${answer,,}" = "y" ]; then
-        md5sum < $AUTOENV_ENVFILE > "$(_checksum_filename)"
+        sha256sum < $AUTOENV_ENVFILE > "$(_checksum_filename)"
 		return 0
 	else
 		return 1

@@ -64,3 +64,6 @@ if [ -d $HOME/.dotfiles ]; then
 fi
 
 [ -f ~/.fzf.bash ] && . ~/.fzf.bash
+
+export GPGKEY=E72BB81B25ECC9846DF9A264D27F81F4DE0539D0
+export GPG_TTY=$(tty)
