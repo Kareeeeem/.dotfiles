@@ -11,13 +11,13 @@ def format_menu_item(container):
     return fmt.format(ws=container.workspace(), c=container)
 
 
-def call_rofi(containers):
+def call_dmenu(containers):
     items = sorted([
         format_menu_item(c) for c in containers
         if not c.workspace().name.startswith('_') and not c.focused
     ])
 
-    cmd = ['rofi', '-l', str(len(items)), '-p', 'Focus: ', '-i', '-show', '-dmenu']
+    cmd = ['dmenu', '-l', '10', '-i']
     menu_input = bytes(str.join('\n', items), 'UTF-8')
     pick = check_output(cmd, input=menu_input)
     return pick.strip().decode('UTF-8')
@@ -32,7 +32,7 @@ if __name__ == '__main__':
     if len(containers) == 1:
         containers[0].command('focus')
     else:
-        selection = call_rofi(containers)
+        selection = call_dmenu(containers)
         pick = next(c for c in containers if format_menu_item(c) == selection)
 
         # If pick is on a workspace that is occupied by a fullscreen container

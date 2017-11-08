@@ -13,5 +13,5 @@ if [ -n "$HDMI" -a -n "$VGA" ]; then
 elif [ -n "$HDMI" ]; then
     xrandr --output VGA-1 --off --output HDMI-1 --auto --primary --output LVDS-1 --auto --right-of HDMI-1
 else
-    xrandr --output HDMI-1 --off --output VGA-1 --off --output LVDS-1 --auto
+    xrandr --output HDMI-1 --off --output VGA-1 --off --output LVDS-1 --auto --primary
 fi
