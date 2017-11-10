@@ -175,12 +175,13 @@ let g:neomake_error_sign = {'text': 'E', 'texthl': 'ErrorMsg'}
 let g:neomake_warning_sign = {'text': 'W', 'texthl': 'WarningMsg'}
 let g:neomake_message_sign = {'text': 'M', 'texthl': 'StatusLine'}
 let g:neomake_info_sign = {'text': 'I', 'texthl': 'StatusLine'}
-let g:neomake_remove_invalid_entries = 1
 
-let g:neomake_javascript_enabled_makers = ['eslint_d']
+let g:neomake_remove_invalid_entries=1
 
-let g:neomake_c_enabled_makers = ['gcc']
-" let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything']
+let g:neomake_c_enabled_makers = ['clang']
+let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything', '-I./']
+" for some reason this global option is not respected so define it here again
+let g:neomake_c_clang_remove_invalid_entries=1
 
 let g:neomake_python_enabled_makers = ['flake8']
 let g:neomake_python_flake8_args = ['--max-line-length=100']

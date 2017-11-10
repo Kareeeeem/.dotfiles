@@ -2,6 +2,8 @@
 
 set $mod Mod4
 
+workspace_layout tabbed
+
 # new_window none
 focus_follows_mouse no
 font pango:monospace 8
