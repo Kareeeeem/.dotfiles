@@ -14,10 +14,11 @@ floating_modifier $mod
 bindsym $mod+Return exec --no-startup-id x-terminal-emulator
 bindsym $mod+b exec --no-startup-id x-www-browser
 
-bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -i -l 10'
+bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -i'
 bindsym $mod+Tab exec --no-startup-id switcher
-bindsym $mod+m exec --no-startup-id import -window root ~/screenshot-$(date +%FT%T%Z).jpg
+bindsym $mod+m exec --no-startup-id import -window root $HOME/Pictures/screenshot-$(date +%FT%T%Z).jpg
 bindsym $mod+p exec --no-startup-id passmenu
+# bindsym $mod+u [urgent=latest] focus
 
 # exec --no-startup-id compton --config $HOME/.config/compton.conf -b
 # exec --no-startup-id nm-applet
@@ -155,5 +156,8 @@ bar {
 }
 
 # setup a scratchpad.
-exec --no-startup-id st
-exec --no-startup-id "sleep 0.5; i3-msg 'move scratchpad'"
+for_window [class="^st-scratch"] move scratchpad
+exec --no-startup-id st -c "st-scratch"
+
+exec --no-startup-id switch-recent.py
+bindsym $mod+BackSpace exec --no-startup-id echo "switch-recent"
