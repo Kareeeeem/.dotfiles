@@ -5,11 +5,8 @@ WINDOW_STACK = []
 
 
 def on_command(conn, event):
-    if WINDOW_STACK and 'switch-recent' in event.binding.command:
-        if len(WINDOW_STACK) == 1:
-            window_id = WINDOW_STACK[0]
-        else:
-            window_id = WINDOW_STACK.pop()
+    if len(WINDOW_STACK) > 1 and 'switch-recent' in event.binding.command:
+        window_id = WINDOW_STACK.pop()
         conn.command('[con_id="%s"] focus' % window_id)
 
 

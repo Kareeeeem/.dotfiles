@@ -1,29 +1,14 @@
 #!/usr/bin/env bash
 
-# Capture urls from a tmux buffer and open the link. If more than one url
-# is available select one with dmenu
-
-# Depends on [xurls][0], a distribution of which is included in this repo.
-# [0]: https://github.com/mvdan/xurls
+# Capture test from a tmux buffer and send it to a script that can extract
+# links and open them.
 
 set -euf -o pipefail
 
 _BUFFER_FILE=/tmp/tmux-buffer
 _BUFFER_NAME=url_buffer
-_CHOICE=
 
 tmux capture-pane -b $_BUFFER_NAME
 tmux save-buffer -b $_BUFFER_NAME $_BUFFER_FILE
 
-urls=$(xurls < $_BUFFER_FILE | sort -u)
-urls_count=$(wc -l <<< $urls)
-
-if [ $urls_count -eq 1 ]; then
-    _CHOICE=$urls
-elif [ $urls_count -gt 1 ]; then
-    _CHOICE=$(dmenu -l 3 <<< $urls || true)
-fi
-
-if [ -n "$_CHOICE" ]; then
-    xdg-open "$_CHOICE" &> /dev/null
-fi
+open-url < $_BUFFER_FILE
