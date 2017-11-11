@@ -1,32 +1,27 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
-# Use Mouse+$mod to drag floating windows to their wanted position
+
 floating_modifier $mod
-
 font pango:monospace 8
-
 workspace_layout tabbed
 focus_follows_mouse no
+focus_on_window_activation focus
 
 # run programs
-bindsym $mod+Return exec --no-startup-id x-terminal-emulator
+bindsym $mod+Return exec --no-startup-id st
 bindsym $mod+b exec --no-startup-id x-www-browser
 bindsym $mod+m exec --no-startup-id import -window root $HOME/Pictures/screenshot-$(date +%FT%T%Z).jpg
- # run menus
+# open terminal scratchpad
+bindsym $mod+Shift+Return exec --no-startup-id st -c "scratch"
+ # run menus and scripts
 bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -i'
 bindsym $mod+Tab exec --no-startup-id switcher
 bindsym $mod+p exec --no-startup-id passmenu
-
+# custom commands
 bindsym $mod+x swap-workspaces
-# bindsym $mod+u [urgent=latest] focus
-
-# Set up the switch-recent event loop.
-exec --no-startup-id switch-recent
 # Switch-recent will look for this binding and take action.
 bindsym $mod+BackSpace nop
-
-
 bindsym $mod+Shift+q kill
 
 # change focus
@@ -132,7 +127,6 @@ mode "resize" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
-
 bindsym $mod+r mode "resize"
 
 set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
@@ -141,13 +135,13 @@ mode "$mode_system" {
     bindsym e exec --no-startup-id i3-msg exit, mode "default"
     bindsym s exec --no-startup-id systemctl suspend, mode "default"
     bindsym h exec --no-startup-id systemctl hibernate, mode "default"
-    bindsym r exec --no-startup-id systemctl reboot, mode "default"bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
 
     # back to normal: Enter or Escape
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
-
 bindsym $mod+Pause mode "$mode_system"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
@@ -158,7 +152,15 @@ bar {
         tray_output primary
 }
 
-# setup a scratchpad.
+assign [class="xterm"] 1
+assign [class="Google-chrome"] 2
+assign [class="Slack"] 2
+
+for_window [class="Google-chrome" urgent=latest] focus
 for_window [class="^scratch"] move scratchpad
+
+# startup programs
+exec_always --no-startup-id switch-recent
 exec --no-startup-id st -c "scratch"
-bindsym $mod+Shift+Return exec --no-startup-id st -c "scratch"
+exec --no-startup-id st
+exec --no-startup-id x-www-browser
