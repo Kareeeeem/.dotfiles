@@ -1,23 +1,56 @@
 #!/usr/bin/env python3
+"""
+Switch between 2 most recent containers while ignoring scratchpads.
+
+Ignoring scratchpads is implemented with a blacklist because the window::move
+event provides the most authoritive information in container.scratchpad_state.
+
+Other events will have this attribute set to 'none' but when you focus a
+scratchpad it moves in the tree first and the scratchpad_state is set to
+'fresh'.
+"""
+
 import i3ipc
 
+SCRATCHPAD_BLACKLIST = set()
 WINDOW_STACK = []
 SWITCH_KEYBIND = 'Mod4+BackSpace'
 
 
-def on_command(conn, event):
+def switch(conn, event):
     binding = '%s+%s' % ('+'.join(event.binding.mods), event.binding.symbol)
     if len(WINDOW_STACK) > 1 and binding == SWITCH_KEYBIND:
+        # if currently focused window is scratchpad hide it.
+        # 'scratchpad show' toggles not just shows.
+        if conn.get_tree().find_focused().id in SCRATCHPAD_BLACKLIST:
+            conn.command('scratchpad show')
+
         window_id = WINDOW_STACK.pop()
         conn.command('[con_id="%s"] focus' % window_id)
 
 
-def on_focus(conn, event):
-    WINDOW_STACK.insert(0, event.container.id)
-    del WINDOW_STACK[2:]
+def insert(conn, event):
+    id_ = event.container.id
+    # if the stack contains the same id twice the switch becomes a noop.
+    if id_ not in SCRATCHPAD_BLACKLIST and id_ not in WINDOW_STACK:
+        WINDOW_STACK.insert(0, id_)
+        del WINDOW_STACK[2:]
 
 
-conn = i3ipc.Connection()
-conn.on('binding::run', on_command)
-conn.on('window::focus', on_focus)
-conn.main()
+def blacklist(conn, event):
+    global SCRATCHPAD_BLACKLIST
+    if event.container.scratchpad_state == 'fresh':
+        SCRATCHPAD_BLACKLIST |= {c.id for c in event.container.leaves()}
+
+
+def clean(conn, event):
+    SCRATCHPAD_BLACKLIST.discard(event.container.id)
+
+
+if __name__ == '__main__':
+    conn = i3ipc.Connection()
+    conn.on('binding::run', switch)
+    conn.on('window::focus', insert)
+    conn.on('window::move', blacklist)
+    conn.on('window::close', clean)
+    conn.main()
