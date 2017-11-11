@@ -1,32 +1,31 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
-
-workspace_layout tabbed
-
-# new_window none
-focus_follows_mouse no
-font pango:monospace 8
-
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+font pango:monospace 8
+
+workspace_layout tabbed
+focus_follows_mouse no
+
+# run programs
 bindsym $mod+Return exec --no-startup-id x-terminal-emulator
 bindsym $mod+b exec --no-startup-id x-www-browser
-
+bindsym $mod+m exec --no-startup-id import -window root $HOME/Pictures/screenshot-$(date +%FT%T%Z).jpg
+ # run menus
 bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -i'
 bindsym $mod+Tab exec --no-startup-id switcher
-bindsym $mod+m exec --no-startup-id import -window root $HOME/Pictures/screenshot-$(date +%FT%T%Z).jpg
 bindsym $mod+p exec --no-startup-id passmenu
+
+bindsym $mod+x swap-workspaces
 # bindsym $mod+u [urgent=latest] focus
 
+# Set up the switch-recent event loop.
 exec --no-startup-id switch-recent
-# switch-recent will look for this binding and take action.
+# Switch-recent will look for this binding and take action.
 bindsym $mod+BackSpace nop
-bindsym $mod+x swap-workspaces
 
-# exec --no-startup-id compton --config $HOME/.config/compton.conf -b
-# exec --no-startup-id nm-applet
 
 bindsym $mod+Shift+q kill
 
@@ -160,5 +159,6 @@ bar {
 }
 
 # setup a scratchpad.
-for_window [class="^st-scratch"] move scratchpad
-exec --no-startup-id st -c "st-scratch"
+for_window [class="^scratch"] move scratchpad
+exec --no-startup-id st -c "scratch"
+bindsym $mod+Shift+Return exec --no-startup-id st -c "scratch"
