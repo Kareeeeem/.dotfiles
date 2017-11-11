@@ -12,10 +12,7 @@ def format_menu_item(container):
 
 
 def call_dmenu(containers):
-    items = sorted([
-        format_menu_item(c) for c in containers
-        if not c.workspace().name.startswith('_') and not c.focused
-    ])
+    items = sorted([format_menu_item(c) for c in containers])
 
     cmd = ['dmenu', '-l', '10', '-i']
     menu_input = bytes(str.join('\n', items), 'UTF-8')
@@ -24,7 +21,12 @@ def call_dmenu(containers):
 
 
 if __name__ == '__main__':
-    containers = i3ipc.Connection().get_tree().leaves()
+    containers = [
+        c for c in i3ipc.Connection().get_tree().leaves()
+        if not c.focused
+        # don't put scratchpad windows in the menu.
+        and c.workspace().name != '__i3_scratch'
+    ]
 
     if not containers:
         sys.exit()

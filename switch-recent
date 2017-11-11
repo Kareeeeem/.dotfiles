@@ -2,10 +2,12 @@
 import i3ipc
 
 WINDOW_STACK = []
+SWITCH_KEYBIND = 'Mod4+BackSpace'
 
 
 def on_command(conn, event):
-    if len(WINDOW_STACK) > 1 and 'switch-recent' in event.binding.command:
+    binding = '%s+%s' % ('+'.join(event.binding.mods), event.binding.symbol)
+    if len(WINDOW_STACK) > 1 and binding == SWITCH_KEYBIND:
         window_id = WINDOW_STACK.pop()
         conn.command('[con_id="%s"] focus' % window_id)
 
