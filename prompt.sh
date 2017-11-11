@@ -47,10 +47,14 @@ _git_prompt() {
 		git name-rev --name-only --no-undefined --always HEAD 2> /dev/null)
 
 	if [ -n "$ref" ]; then
-		if [ -n "$(git status --porcelain 2> /dev/null)" ]; then
+		if [ -n "$(git status --porcelain -uno 2> /dev/null)" ]; then
 			prompt=$PROMPT_UNDERLINE
 		fi
 		prompt+=$PROMPT_BOLD${ref#refs/heads/}$PROMPT_RESET
+
+		if [ -n "$(git ls-files --others --exclude-standard 2> /dev/null)" ]; then
+			prompt+="*"
+		fi
 
 		st_num=$(git stash list 2> /dev/null | wc -l | tr -d ' ')
 		if [[ $st_num != "0" ]]; then
@@ -81,7 +85,6 @@ _prompt_command() {
 	PS1+=$(_git_prompt)
 	PS1+=" $ "
 
-	export PS1
 
 	# merge history after each command
 	history -a # Append new lines to history file
@@ -95,5 +98,6 @@ _prompt_command() {
 	fi
 }
 
+export PS1
 export _AUTOENV_NO_PROMPT_COMMAND=1
 export PROMPT_COMMAND="_prompt_command; "

@@ -178,10 +178,12 @@ let g:neomake_info_sign = {'text': 'I', 'texthl': 'StatusLine'}
 
 let g:neomake_remove_invalid_entries=1
 
-let g:neomake_c_enabled_makers = ['clang']
-let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything', '-I./']
+let g:neomake_c_enabled_makers = ['gcc']
+let g:neomake_c_gcc_args = ['-fsyntax-only', '-Wall', '-Wextra', '-I./', '-fno-diagnostics-show-caret']
 " for some reason this global option is not respected so define it here again
-let g:neomake_c_clang_remove_invalid_entries=1
+let g:neomake_c_gcc_remove_invalid_entries=1
+
+" let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything', '-I./']
 
 let g:neomake_python_enabled_makers = ['flake8']
 let g:neomake_python_flake8_args = ['--max-line-length=100']
