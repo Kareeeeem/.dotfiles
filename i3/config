@@ -159,5 +159,6 @@ bar {
 for_window [class="^st-scratch"] move scratchpad
 exec --no-startup-id st -c "st-scratch"
 
-exec --no-startup-id switch-recent.py
-bindsym $mod+BackSpace exec --no-startup-id echo "switch-recent"
+exec --no-startup-id switch-recent
+# switch-recent will look for this binding and take action.
+bindsym $mod+BackSpace nop
