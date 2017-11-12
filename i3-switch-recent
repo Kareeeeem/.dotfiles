@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """
-Switch between 2 most recent containers while ignoring scratchpads.
+Switch between 2 most recent containers.
 
-Ignoring scratchpads is implemented with a blacklist because the window::move
+This operation ignores scratchpads and explicitly unfocuses them when called to
+switch between normal containers.
+
+Ignoring scratchpads is implemented with a blacklist, the window::move
 event provides the most authoritive information in container.scratchpad_state.
-
-Other events will have this attribute set to 'none' but when you focus a
-scratchpad it moves in the tree first and the scratchpad_state is set to
-'fresh'.
 """
 
 import i3ipc
@@ -35,7 +34,7 @@ def insert(conn, event):
             # prevent a stack with the same id twice.
             and not (WINDOW_STACK and id_ == WINDOW_STACK[0])):
         WINDOW_STACK.insert(0, id_)
-        # Only keep a list of max two elements. [current, most-recent].
+        # Only keep a list of max two elements. [focused, recent].
         del WINDOW_STACK[2:]
 
 
@@ -43,7 +42,8 @@ def blacklist(conn, event):
     global SCRATCHPAD_BLACKLIST
     # when a scratchpad is focused it is first moved in the tree. The state is
     # then set to fresh. This is the clearest point to identify a scratchpad
-    # and to blacklist it.
+    # and to blacklist it. Also, a scratchpad can also have multiple clients,
+    # so add all to the blacklist.
     if event.container.scratchpad_state == 'fresh':
         SCRATCHPAD_BLACKLIST |= {c.id for c in event.container.leaves()}
 

@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+
+# NOTE WIP! has not been tested
+
 import i3ipc
 
 

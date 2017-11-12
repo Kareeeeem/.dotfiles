@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-# place the following in /etc/udev/rules.d/98-monitor-hotplug.rules
-#
-# KERNEL=="card0", SUBSYSTEM=="drm", ACTION=="change", ENV{DISPLAY}=":0", ENV{XAUTHORITY}="/home/kareem/.Xauthority", RUN+="/bin/bash /home/kareem/bin/monitors"
-#
-
 VGA=$(xrandr -q | grep -i "vga-1 connected")
 HDMI=$(xrandr -q | grep -i "hdmi-1 connected")
 
