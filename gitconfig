@@ -12,3 +12,5 @@
 	default = simple
 [log]
     decorate = auto
+[core]
+	excludesfile = /home/kareem/.gitignore_global

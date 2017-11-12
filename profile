@@ -26,6 +26,7 @@ hash st && export TERMINAL=st
 # https://www.gnu.org/software/coreutils/manual/html_node/Formatting-the-file-names.html
 # https://unix.stackexchange.com/q/258679
 export QUOTING_STYLE=literal
+export TERMINAL=st
 
 if [[ ! ${DISPLAY} && ${XDG_VTNR} == 1 ]]; then
     exec startx
