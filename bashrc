@@ -53,6 +53,11 @@ stty -ixon				# Disable START/STOP signals
 # enable bash completion in interactive shells
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
+    if [ -d $HOME/.bash_completion.d ]; then
+        for f in $HOME/.bash_completion.d/* ; do
+            . $f
+        done
+    fi
 fi
 
 if [ -d $HOME/.dotfiles ]; then
