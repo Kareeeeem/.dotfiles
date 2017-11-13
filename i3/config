@@ -6,7 +6,6 @@ floating_modifier $mod
 font pango:monospace 8
 workspace_layout tabbed
 focus_follows_mouse no
-focus_on_window_activation focus
 
 # run programs
 bindsym $mod+Return exec --no-startup-id i3-sensible-terminal
@@ -158,7 +157,14 @@ assign [class="Slack"] 2
 for_window [class="Google-chrome" urgent=latest] focus
 for_window [class="^scratch"] move scratchpad
 
+focus_on_window_activation none
 # startup programs
 exec_always --no-startup-id i3-switch-recent
+exec_always --no-startup-id i3-assign-workspaces
 exec --no-startup-id i3-sensible-terminal -c "scratch"
 exec --no-startup-id i3-sensible-terminal
+exec --no-startup-id x-www-browser
+
+# always focus workspace 1 on startup
+exec --no-startup-id i3-msg workspace 1
+focus_on_window_activation smart

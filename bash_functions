@@ -95,22 +95,3 @@ _umnt () {
     COMPREPLY=( $(compgen -W "$options" -- $cur) )
 }
 complete -F _umnt umnt
-
-kb () {
-    run_keybase && killall Keybase
-}
-
-kkb () {
-    if killall Keybase &> /dev/null ; then
-      echo Shutting down Keybase GUI...
-    fi
-    if fusermount -uz /keybase &> /dev/null ; then
-      echo Unmounting /keybase...
-    fi
-    if killall kbfsfuse &> /dev/null ; then
-      echo Shutting down kbfsfuse...
-    fi
-    if killall keybase &> /dev/null ; then
-      echo Shutting down keybase service...
-    fi
-}
