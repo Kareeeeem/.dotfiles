@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 
-# NOTE WIP! has not been tested
-
 import i3ipc
 
 
 def main(conn):
-    for workspace in conn.get_workspaces():
-        # workspaces wrap so right of right is left
-        conn.command('[workspace="%s"] move workspace to output right'
-                     % workspace['name'])
+    workspaces = conn.get_workspaces()
+    focused = conn.get_tree().find_focused().id
+
+    for workspace in workspaces:
+        conn.command('workspace "%s"' % workspace['name'])
+        conn.command('move workspace to output right')
+
+    conn.command('[con_id=%s] focus' % focused)
 
 
 if __name__ == '__main__':
