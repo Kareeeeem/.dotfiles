@@ -1,44 +1,35 @@
 #!/usr/bin/env python3
-"""
-This dynamically assigns workspaces based on three possible configurations.
-It does this on startup or when outputs are plugged in/out.
-
-work:   HDMI-1 (left: [1]) VGA-1 (right: [2])
-home:   HDMI-1 (left: [1]) LVDS-1 (right: [2])
-laptop: LVDS-1 [1]
-
-I really only care about workspace 1 and 2.
-
-"""
-import functools
+from functools import partial
 
 import i3ipc
 
-# NOTE this script is hacky.
-
 
 def move(ouput1, output2, conn):
+    focused = conn.get_tree().find_focused().id
     conn.command('[workspace=1] move workspace to output %s' % ouput1)
     conn.command('[workspace=2] move workspace to output %s' % output2)
+    conn.command('[workspace=3] move workspace to output %s' % output2)
+    conn.command('[con_id=%s] focus' % focused)
 
 
 ASSIGNMENTS = {
-    ('HDMI-1', 'VGA-1'): functools.partial(move, 'HDMI-1', 'VGA-1'),
-    ('HDMI-1', 'LVDS-1'): functools.partial(move, 'HDMI-1', 'LVDS-1'),
+    'HDMI-1 VGA-1': partial(move, 'HDMI-1', 'VGA-1'),
+    'HDMI-1 LVDS-1': partial(move, 'HDMI-1', 'LVDS-1'),
 }
 
 
-def configure(conn, event):
-    active = sorted([o['name'] for o in conn.get_outputs() if o['active']])
+def configure(conn, event=None):
+    outputs = conn.get_outputs()
+    active = ' '.join(sorted([o['name'] for o in outputs if o['active']]))
+
     try:
-        # tuple because tuples are hashable.
-        ASSIGNMENTS[tuple(active)](conn)
+        ASSIGNMENTS[active](conn)
     except KeyError:
-        pass
+        return
 
 
 if __name__ == '__main__':
     conn = i3ipc.Connection()
-    configure(conn, None)
+    configure(conn)
     conn.on('output::unspecified', configure)
     conn.main()

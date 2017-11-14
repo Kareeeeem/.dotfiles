@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+_NOTES_DIR=${1:-$HOME/notes}
+
+while true; do
+    files=$(rg --files $_NOTES_DIR)
+    file="$(ls -t $files | \
+        sed "s#$_NOTES_DIR/##" | \
+        fzf --print-query \
+        --preview="cat $_NOTES_DIR/{}" | \
+        # remove leading new line
+        xargs echo -n
+    )"
+
+    if [ -z "$file" ]; then
+        break
+    fi
+
+    file="$_NOTES_DIR/$file"
+    dir=$(dirname "$file")
+
+    if [ ! -d $(dirname file) ]; then
+        mkdir -p $dir
+    fi
+
+    $EDITOR $file
+done
