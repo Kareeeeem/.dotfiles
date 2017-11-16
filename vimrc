@@ -6,9 +6,6 @@ syntax on
 set wildmenu
 set showcmd
 
-set ttimeout        " time out for key codes
-set ttimeoutlen=100 " wait up to 100ms after Esc for special key
-
 set completeopt-=preview
 " set complete-=t
 set autoindent
@@ -22,6 +19,7 @@ set nowrap
 set scrolloff=3
 set pastetoggle=<F6>
 set number
+set nojoinspaces  " don't insert double spaces.
 
 set hlsearch ignorecase smartcase incsearch
 set expandtab tabstop=4 softtabstop=4 shiftwidth=4
@@ -47,7 +45,6 @@ endif
 " }}}
 
 " Statusline {{{
-
 set laststatus=2             " always show
 set statusline=%n            " buffer number
 set statusline+=\ %.50f      " file path
@@ -63,14 +60,11 @@ set statusline+=\ %P         " percentage into file
 
 " Expand `%%` to current directory.
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
-
 " Because backslash is in a awkward place.
 let mapleader = "\<Space>"
-
 " I almost never want to go to the ABSOLUTE beginning of a line
 nnoremap 0 ^
-
-" break lines on a comma's, parens, brackets, braces.
+" break lines on a comma's
 nnoremap <leader>, f,<right>i<cr><ESC>
 " Break line
 nnoremap K i<cr><esc>kg$
@@ -118,13 +112,7 @@ Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'moll/vim-bbye', {'on': 'Bdelete'}
-Plug 'christoomey/vim-tmux-navigator',
-            \ {'on': [
-            \ 'TmuxNavigateLeft',
-            \ 'TmuxNavigateRight',
-            \ 'TmuxNavigateDown',
-            \ 'TmuxNavigateUp',
-            \ 'TmuxNavigatePrevious']}
+Plug 'christoomey/vim-tmux-navigator'
 
 " language help
 Plug 'mattn/emmet-vim'
@@ -140,10 +128,6 @@ let g:buftabline_numbers = 1
 let g:buftabline_indicators = 1
 
 " Tmux navigator
-nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
-nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
-nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
-nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
 let g:tmux_navigator_disable_when_zoomed=1
 
 " vim bbye
@@ -247,7 +231,6 @@ augroup cleanup_ws
     au BufWritePre * if index(ws_blacklist, &ft) < 0
                 \ | call Preserve('%s/\s\+$//ge')
                 \ | endif
-
     " strip trailing white lines.
     au BufWritePre * call Preserve('v/\n*./d')
 augroup END
@@ -256,7 +239,7 @@ augroup languages
     au!
     au BufWritePre *.go call Preserve('%!gofmt')
 
-    au FileType *markdown*,text setlocal fo+=t tw=72 wrap fp=par\ -w72
+    au FileType *markdown*,text setlocal fo+=t tw=72 wrap
     " au FileType sh setlocal noexpandtab
     "
     au FileType python setlocal keywordprg=pydoc
@@ -321,12 +304,6 @@ function! Preserve(command)
     call winrestview(w)
 endfunction
 
-if !exists(":DiffOrig")
-  command DiffOrig vert new | set bt=nofile | file diffscratch | r ++edit # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
-  command DiffClose diffoff! | bd diffscratch
-endif
-
 " http://superuser.com/a/558885
 function! SetSigncolumn()
     sign define dummy
@@ -350,6 +327,5 @@ function! ToggleNofrils()
         colorscheme nofrils-dark
     endif
 endfunction
-
 
 " }}}
