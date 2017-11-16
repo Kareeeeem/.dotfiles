@@ -70,28 +70,28 @@ vclean () {
 }
 
 
-mnt () {
-    [ -z "$1" ] && return 1
-    pmount "/dev/disk/by-label/$1" "/media/$1" && \
-        notify-send "Drive mounted" "Mounted /media/$1"
-}
+# mnt () {
+#     [ -z "$1" ] && return 1
+#     pmount "/dev/disk/by-label/$1" "/media/$1" && \
+#         notify-send "Drive mounted" "Mounted /media/$1"
+# }
 
-_mnt () {
-    local options="$(ls /dev/disk/by-label 2> /dev/null)"
-    local cur=${COMP_WORDS[COMP_CWORD]}
-    COMPREPLY=( $(compgen -W "$options" -- $cur) )
-}
-complete -F _mnt mnt
+# _mnt () {
+#     local options="$(ls /dev/disk/by-label 2> /dev/null)"
+#     local cur=${COMP_WORDS[COMP_CWORD]}
+#     COMPREPLY=( $(compgen -W "$options" -- $cur) )
+# }
+# complete -F _mnt mnt
 
-umnt () {
-    [ -z "$1" ] && return 1
-    pumount "/dev/disk/by-label/$1" && \
-        notify-send "Drive unmounted" "Unmounted /media/$1."
-}
+# umnt () {
+#     [ -z "$1" ] && return 1
+#     pumount "/dev/disk/by-label/$1" && \
+#         notify-send "Drive unmounted" "Unmounted /media/$1."
+# }
 
-_umnt () {
-    local options="$(ls /media 2> /dev/null)"
-    local cur=${COMP_WORDS[COMP_CWORD]}
-    COMPREPLY=( $(compgen -W "$options" -- $cur) )
-}
-complete -F _umnt umnt
+# _umnt () {
+#     local options="$(ls /media 2> /dev/null)"
+#     local cur=${COMP_WORDS[COMP_CWORD]}
+#     COMPREPLY=( $(compgen -W "$options" -- $cur) )
+# }
+# complete -F _umnt umnt

@@ -18,4 +18,7 @@ xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
 # $HOME/bin/monitors
 monitors
 
+# automounting
+udiskie --no-tray &
+
 exec i3
