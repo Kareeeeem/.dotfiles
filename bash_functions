@@ -69,12 +69,21 @@ vclean () {
     find $HOME/.vim/tmp -type f -delete
 }
 
-mnta () {
-    # TODO ignore what is already in /media
-    local devices=$(lsblk --output HOTPLUG,TYPE,NAME,MODEL,SERIAL --path --raw | \
+_get_hotpluggable_devices () {
+    lsblk --output HOTPLUG,TYPE,NAME,MODEL,UUID,MOUNTPOINT --path --raw | \
         awk '$1 != 1 { next }
-             $2 == "disk" { name=tolower($4"_"$5); gsub(/\\x20/,"",name)}
-             $2 == "part" { print $3, "/media/"name}')
+    $2 == "disk" { name=tolower($4); gsub(/\\x20/,"",name)}
+    $2 == "part" && $5 !~ /^\// { printf "%s %s\n", $3, "/media/"name"_"$4}'
+}
+_get_mounted_hotpluggable_devices () {
+    pmount | awk '/^\/.* on / { printf "%s %s\n", $1, $3 }'
+}
+
+mnt () {
+    local devices=$(_get_hotpluggable_devices)
+    if [ -n "$1" ]; then
+        devices=$(grep "$1" <<< $devices)
+    fi
 
     if [ -n "$devices" ]; then
         while read -r d; do
@@ -83,23 +92,29 @@ mnta () {
     fi
 }
 
-umnta () {
-    local mounted=$(ls /media)
+_mnt () {
+    local options=$(_get_hotpluggable_devices)
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    COMPREPLY=( $(compgen -W "$options" -- $cur) )
+}
+complete -F _mnt mnt
+
+umnt () {
+    local label mounted=$(_get_mounted_hotpluggable_devices)
+    if [ -n "$1" ]; then
+        mounted=$(grep "$1" <<< $mounted)
+    fi
+
     if [ -n "$mounted" ]; then
         while read -r d; do
-            pumount $d && notify-send "Drive unmounted" "$d"
+            label=$(cut -f2 -d ' ' <<< $d)
+            pumount $label && notify-send "Drive unmounted" $label
         done <<< "$mounted"
     fi
 }
 
-umnt () {
-    [ -z "$1" ] && return 1
-    pumount "$1" && \
-        notify-send "Drive unmounted" "$1."
-}
-
 _umnt () {
-    local options="$(ls /media 2> /dev/null)"
+    local options=$(_get_mounted_hotpluggable_devices)
     local cur=${COMP_WORDS[COMP_CWORD]}
     COMPREPLY=( $(compgen -W "$options" -- $cur) )
 }
