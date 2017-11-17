@@ -69,29 +69,38 @@ vclean () {
     find $HOME/.vim/tmp -type f -delete
 }
 
+mnta () {
+    # TODO ignore what is already in /media
+    local devices=$(lsblk --output HOTPLUG,TYPE,NAME,MODEL,SERIAL --path --raw | \
+        awk '$1 != 1 { next }
+             $2 == "disk" { name=tolower($4"_"$5); gsub(/\\x20/,"",name)}
+             $2 == "part" { print $3, "/media/"name}')
 
-# mnt () {
-#     [ -z "$1" ] && return 1
-#     pmount "/dev/disk/by-label/$1" "/media/$1" && \
-#         notify-send "Drive mounted" "Mounted /media/$1"
-# }
+    if [ -n "$devices" ]; then
+        while read -r d; do
+            pmount $d && notify-send "Drive mounted" "$d"
+        done <<< "$devices"
+    fi
+}
 
-# _mnt () {
-#     local options="$(ls /dev/disk/by-label 2> /dev/null)"
-#     local cur=${COMP_WORDS[COMP_CWORD]}
-#     COMPREPLY=( $(compgen -W "$options" -- $cur) )
-# }
-# complete -F _mnt mnt
+umnta () {
+    local mounted=$(ls /media)
+    if [ -n "$mounted" ]; then
+        while read -r d; do
+            pumount $d && notify-send "Drive unmounted" "$d"
+        done <<< "$mounted"
+    fi
+}
 
-# umnt () {
-#     [ -z "$1" ] && return 1
-#     pumount "/dev/disk/by-label/$1" && \
-#         notify-send "Drive unmounted" "Unmounted /media/$1."
-# }
+umnt () {
+    [ -z "$1" ] && return 1
+    pumount "$1" && \
+        notify-send "Drive unmounted" "$1."
+}
 
-# _umnt () {
-#     local options="$(ls /media 2> /dev/null)"
-#     local cur=${COMP_WORDS[COMP_CWORD]}
-#     COMPREPLY=( $(compgen -W "$options" -- $cur) )
-# }
-# complete -F _umnt umnt
+_umnt () {
+    local options="$(ls /media 2> /dev/null)"
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    COMPREPLY=( $(compgen -W "$options" -- $cur) )
+}
+complete -F _umnt umnt
