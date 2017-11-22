@@ -1,25 +1,34 @@
 #!/usr/bin/env bash
 
-_NOTES_DIR=${1:-$HOME/notes}
+set -euf -o pipefail
+
+_NOTES_DIR=$HOME/notes
+_FILE="${1:-""}"
 
 while true; do
-    files=$(rg --files $_NOTES_DIR)
-    file="$(ls -t $files | \
-        sed "s#$_NOTES_DIR/##" | \
-        fzf --print-query \
-        --preview="cat $_NOTES_DIR/{}" | \
-        # remove leading new line
-        xargs echo -n
-    )"
-
-    if [ -z "$file" ]; then
-        break
+    if [ -n "$_FILE" ]; then
+        file="$_FILE"
+        shift
+    else
+        files=$(find $_NOTES_DIR -type f ! -path "$_NOTES_DIR/.*/*" ! -name ".*")
+        file="$(ls -t $files | \
+            sed "s#$_NOTES_DIR/##" | \
+            fzf --print-query \
+            --select-1 \
+            --preview="cat $_NOTES_DIR/{}" | \
+            tail -n1 | \
+            # remove leading new line
+            xargs echo -n
+        )"
+        if [ -z "$file" ]; then
+            break
+        fi
     fi
 
     file="$_NOTES_DIR/$file"
     dir=$(dirname "$file")
 
-    if [ ! -d $(dirname file) ]; then
+    if [ ! -d "$dir" ]; then
         mkdir -p $dir
     fi
 
