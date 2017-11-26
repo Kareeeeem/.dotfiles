@@ -15,9 +15,10 @@ bindsym $mod+m exec --no-startup-id import -window root $HOME/Pictures/screensho
  # run menus and scripts
 bindsym $mod+Tab exec --no-startup-id i3-switcher
 bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -i'
-bindsym $mod+p exec --no-startup-id passmenu
+bindsym $mod+p exec --no-startup-id passmenu --type
 bindsym $mod+x exec --no-startup-id i3-swap-workspaces
 bindsym $mod+BackSpace nop  # i3-switch-recent will react to this binding
+bindsym $mod+t exec --no-startup-id i3-input
 
 # close window
 bindsym $mod+Shift+q kill
@@ -156,6 +157,7 @@ assign [class="Slack"] 2
 
 for_window [class="Google-chrome" urgent=latest] focus
 for_window [class="^scratch"] move scratchpad
+for_window [class="i3-input-window"] focus
 
 focus_on_window_activation none
 # startup programs

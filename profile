@@ -27,6 +27,7 @@ hash st && export TERMINAL=st
 # https://unix.stackexchange.com/q/258679
 export QUOTING_STYLE=literal
 export TERMINAL=st
+export KEYBASE_SYSTEMD=1
 
 if [[ ! ${DISPLAY} && ${XDG_VTNR} == 1 ]]; then
     exec startx

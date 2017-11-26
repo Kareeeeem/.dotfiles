@@ -70,13 +70,21 @@ vclean () {
 }
 
 _get_hotpluggable_devices () {
-    lsblk --output HOTPLUG,TYPE,NAME,MODEL,UUID,MOUNTPOINT --path --raw | \
-        awk '$1 != 1 { next }
-    $2 == "disk" { name=tolower($4); gsub(/\\x20/,"",name)}
-    $2 == "part" && $5 !~ /^\// { printf "%s %s\n", $3, "/media/"name"_"$4}'
+    lsblk --output HOTPLUG,TYPE,NAME,MODEL,MAJ:MIN,MOUNTPOINT --path --raw | \
+    awk -F '[ ]' '
+        $1 != 1 { next }
+        $2 == "disk" {
+            gsub(/\\x20/,"",$4)
+            name=tolower($4);
+        }
+            $2 == "part" && $6 == "" {
+            sub(":","",$5);
+            mntpnt="/media/"name$5;
+            printf "%s %s\n", $3, mntpnt
+        }'
 }
 _get_mounted_hotpluggable_devices () {
-    pmount | awk '/^\/.* on / { printf "%s %s\n", $1, $3 }'
+    pmount | head -n-1 | tail -n+2 | awk '{ printf "%s %s\n", $1, $3 }'
 }
 
 mnt () {
@@ -86,8 +94,8 @@ mnt () {
     fi
 
     if [ -n "$devices" ]; then
-        while read -r d; do
-            pmount $d && notify-send "Drive mounted" "$d"
+        while read -r device; do
+            pmount $device && notify-send "Drive mounted" "$device"
         done <<< "$devices"
     fi
 }
@@ -100,15 +108,15 @@ _mnt () {
 complete -F _mnt mnt
 
 umnt () {
-    local label mounted=$(_get_mounted_hotpluggable_devices)
+    local mountpoint mounted=$(_get_mounted_hotpluggable_devices)
     if [ -n "$1" ]; then
         mounted=$(grep "$1" <<< $mounted)
     fi
 
     if [ -n "$mounted" ]; then
         while read -r d; do
-            label=$(cut -f2 -d ' ' <<< $d)
-            pumount $label && notify-send "Drive unmounted" $label
+            mountpoint=$(cut -f2 -d ' ' <<< $d)
+            pumount $mountpoint && notify-send "Drive unmounted" $mountpoint
         done <<< "$mounted"
     fi
 }
