@@ -10,16 +10,12 @@
 
 # Bash
 [ -n "$BASH_VERSION" ] && [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
-
 [ -d "$HOME/bin" ]  && PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.local/bin" ]  && PATH="$HOME/.local/bin:$PATH"
 
-if hash rg; then
-	export FZF_DEFAULT_COMMAND='rg --files --hidden'
-fi
 export FZF_DEFAULT_OPTS='--no-bold --color=bw'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-
+hash rg && export FZF_DEFAULT_COMMAND='rg --files --hidden'
 hash vim && export VISUAL="vim" && export EDITOR="$VISUAL"
 hash st && export TERMINAL=st
 

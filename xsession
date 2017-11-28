@@ -3,7 +3,7 @@ xset s 180 180
 xss-lock -- i3lock -c 262626 -n &
 
 # 200 ms delay and 40 ms repeat for keyboard auto-repeat
-xset r rate 200 50
+xset r rate 150 80
 
 # Capslock is Ctrl.
 setxkbmap -option ctrl:nocaps

@@ -25,30 +25,20 @@ fi
 
 # colored manpages with max width 80
 export MANWIDTH=80
-# man() {
-# 	env \
-# 		LESS_TERMCAP_mb="$(printf "\e[1;34m")" \
-# 		LESS_TERMCAP_md="$(printf "\e[1;34m")" \
-# 		LESS_TERMCAP_me="$(printf "\e[0m")" \
-# 		LESS_TERMCAP_se="$(printf "\e[0m")" \
-# 		LESS_TERMCAP_so="$(printf "\e[7m")" \
-# 		LESS_TERMCAP_ue="$(printf "\e[0m")" \
-# 		LESS_TERMCAP_us="$(printf "\e[1;36m")" \
-# 			man "$@"
-# }
 
 # no duplicates or lines starting with space
 HISTCONTROL=ignoreboth:erasedups
 HISTSIZE=1000000
 HISTFILESIZE=1000000
 
-shopt -s histappend		# append to history file, don't overwrite it
-shopt -s checkwinsize	# update the values of LINES and COLUMNS.
-shopt -s globstar		# ** matches all files and 0 or more (sub)directories
-shopt -s autocd			# cd without typing cd
-shopt -s cmdhist		# save multiline commands as one
+shopt -s histappend   # append to history file, don't overwrite it
+shopt -s checkwinsize # update the values of LINES and COLUMNS.
+shopt -s globstar     # ** matches all files and 0 or more (sub)directories
+shopt -s autocd       # cd without typing cd
+shopt -s cmdhist      # save multiline commands as one
 shopt -s extglob
-stty -ixon				# Disable START/STOP signals
+
+stty -ixon            # Disable START/STOP signals
 
 # enable bash completion in interactive shells
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
@@ -61,14 +51,11 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 if [ -d $HOME/.dotfiles ]; then
-. $HOME/.dotfiles/prompt.sh
-. $HOME/.dotfiles/autoenv.sh
-. $HOME/.dotfiles/z/z.sh
-. $HOME/.dotfiles/bash_functions
-. $HOME/.dotfiles/bash_aliases
+    . $HOME/.dotfiles/prompt.sh
+    . $HOME/.dotfiles/autoenv.sh
+    . $HOME/.dotfiles/z/z.sh
+    . $HOME/.dotfiles/bash_functions
+    . $HOME/.dotfiles/bash_aliases
 fi
 
 [ -f ~/.fzf.bash ] && . ~/.fzf.bash
-
-export GPGKEY=E72BB81B25ECC9846DF9A264D27F81F4DE0539D0
-export GPG_TTY=$(tty)

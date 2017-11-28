@@ -7,16 +7,16 @@
 # The filename of environment files
 AUTOENV_ENVFILE=.env
 # Where it will store checksums
-AUTOENV_CHECKSUM=~/.envsum
-
+AUTOENV_CHECKSUM=$HOME/.envsum/
 # Used as a heuristic to see if we want to check for environment files.
 AUTOENV_LAST_PWD=
-
 export AUTOENV_PROMPT=
 export AUTOENV=
 
 # create the checksum directory if it does not exist
-[ ! -d "$AUTOENV_CHECKSUM" ] && mkdir -p "$AUTOENV_CHECKSUM"
+if [ ! -d "$AUTOENV_CHECKSUM" ]; then
+    mkdir -p "$AUTOENV_CHECKSUM"
+fi
 
 # HELPERS
 _checksum_filename () {
@@ -114,29 +114,13 @@ _editenv () {
 	fi
 }
 
-# Set up the prompt command and entrypoint
-if [ -z "$_AUTOENV_NO_PROMPT_COMMAND" ]; then
-	grep --quiet _autoenv <<< "$PROMPT_COMMAND" || \
-		PROMPT_COMMAND="_autoenv; $PROMPT_COMMAND"
-fi
-
 aue () {
     case $1 in
-        a*)
-            _activate_environment
-            ;;
-        d*)
-            _deactivate_environment
-            ;;
-        r*)
-            _deactivate_environment && _activate_environment
-            ;;
-        s*)
-            _showenv
-            ;;
-        e*)
-            _editenv
-            ;;
+        a*) _activate_environment ;;
+        d*) _deactivate_environment ;;
+        r*) _deactivate_environment && _activate_environment ;;
+        s*) _showenv ;;
+        e*) _editenv ;;
         *) echo "[USAGE] e activate|deactivate|reactivate|show|edit" ;;
     esac
 }

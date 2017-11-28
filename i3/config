@@ -4,7 +4,7 @@ set $mod Mod4
 
 floating_modifier $mod
 font pango:monospace 8
-workspace_layout tabbed
+# workspace_layout tabbed
 focus_follows_mouse no
 
 # run programs
@@ -151,9 +151,9 @@ bar {
         tray_output primary
 }
 
-assign [class="xterm"] 1
+# assign [class="xterm"] 1
 assign [class="Google-chrome"] 2
-assign [class="Slack"] 2
+assign [class="Slack"] 3
 
 for_window [class="Google-chrome" urgent=latest] focus
 for_window [class="^scratch"] move scratchpad
@@ -164,9 +164,8 @@ focus_on_window_activation none
 exec_always --no-startup-id i3-switch-recent
 exec_always --no-startup-id i3-assign-workspaces
 exec --no-startup-id i3-sensible-terminal -c "scratch"
-exec --no-startup-id i3-sensible-terminal
+exec --no-startup-id workspace 1; i3-sensible-terminal
 exec --no-startup-id x-www-browser
 
-# always focus workspace 1 on startup
-exec --no-startup-id i3-msg workspace 1
+# exec --no-startup-id i3-msg workspace 1
 focus_on_window_activation smart
