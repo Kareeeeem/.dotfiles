@@ -2,7 +2,7 @@
 
 _autoenv_prompt() {
     if [[ -n $AUTOENV ]]; then
-        echo -n "[${AUTOENV_PROMPT:-env}] "
+        echo -n "(${AUTOENV_PROMPT:-env}) "
     fi
 }
 
@@ -28,7 +28,7 @@ _prompt_command() {
     fi
 
     _autoenv
-    __git_ps1 "$_status$(_autoenv_prompt)" "\W $_prompt_end" "[%s] "
+    __git_ps1 "$_status$(_autoenv_prompt)" "\W $_prompt_end" "(%s) "
 
     history -a # Append new lines to history file
     history -c # Clear the history list
