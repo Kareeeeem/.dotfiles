@@ -1,28 +1,25 @@
 #!/usr/bin/env bash
 
-set -euf -o pipefail
-
 _NOTES_DIR=$HOME/notes
-_FILE="${1:-""}"
+
+if [ "${1:-""}" = "--log" ]; then
+    $EDITOR $_NOTES_DIR/log/$(date +%F).md
+    exit
+fi
 
 while true; do
-    if [ -n "$_FILE" ]; then
-        file="$_FILE"
-        shift
-    else
-        files=$(find $_NOTES_DIR -type f ! -path "$_NOTES_DIR/.*/*" ! -name ".*")
-        file="$(ls -t $files | \
-            sed "s#$_NOTES_DIR/##" | \
-            fzf --print-query \
-            --select-1 \
-            --preview="cat $_NOTES_DIR/{}" | \
-            tail -n1 | \
-            # remove leading new line
-            xargs echo -n
-        )"
-        if [ -z "$file" ]; then
-            break
-        fi
+    files=$(find $_NOTES_DIR -type f ! -path "$_NOTES_DIR/.*/*" ! -name ".*")
+    file="$(ls -t $files | \
+        sed "s#$_NOTES_DIR/##" | \
+        fzf --print-query \
+        --select-1 \
+        --preview="cat $_NOTES_DIR/{}" | \
+        tail -n1 | \
+        # remove leading new line
+        xargs echo -n
+    )"
+    if [ -z "$file" ]; then
+        break
     fi
 
     file="$_NOTES_DIR/$file"
