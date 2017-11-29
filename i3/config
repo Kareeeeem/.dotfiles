@@ -164,7 +164,7 @@ focus_on_window_activation none
 exec_always --no-startup-id i3-switch-recent
 exec_always --no-startup-id i3-assign-workspaces
 exec --no-startup-id i3-sensible-terminal -c "scratch"
-exec --no-startup-id workspace 1; i3-sensible-terminal
+exec --no-startup-id i3-msg 'workspace 1; exec i3-sensible-terminal'
 exec --no-startup-id x-www-browser
 
 # exec --no-startup-id i3-msg workspace 1
