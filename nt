@@ -3,11 +3,13 @@
 _NOTES_DIR=$HOME/notes
 
 if [ "${1:-""}" = "--log" ]; then
+    set-window-title.sh logbook
     $EDITOR $_NOTES_DIR/log/$(date +%F).md
     exit
 fi
 
 while true; do
+    set-window-title.sh notes
     files=$(find $_NOTES_DIR -type f ! -path "$_NOTES_DIR/.*/*" ! -name ".*")
     file="$(ls -t $files | \
         sed "s#$_NOTES_DIR/##" | \
@@ -29,5 +31,6 @@ while true; do
         mkdir -p $dir
     fi
 
+    set-window-title.sh notes ${file}
     $EDITOR $file
 done
