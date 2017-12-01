@@ -18,7 +18,7 @@ set hidden
 set nowrap
 set scrolloff=3
 set pastetoggle=<F6>
-set number
+" set number
 set nojoinspaces  " don't insert double spaces.
 
 set hlsearch ignorecase smartcase incsearch
@@ -28,14 +28,14 @@ set dir=$HOME/.vim/tmp
 set tags=.git/tags,./tags
 set undofile undodir=$HOME/.vim/undodir/
 
-if exists("&signcolumn")
-    set signcolumn=yes
-else
-    augroup signs
-        au!
-        au BufEnter * call SetSigncolumn()
-    augroup END
-endif
+" if exists("&signcolumn")
+"     set signcolumn=yes
+" else
+"     augroup signs
+"         au!
+"         au BufEnter * call SetSigncolumn()
+"     augroup END
+" endif
 
 if executable("rg")
     set grepprg=rg\ --vimgrep\ --no-heading
@@ -160,6 +160,9 @@ let g:neomake_warning_sign = {'text': 'W', 'texthl': 'WarningMsg'}
 let g:neomake_message_sign = {'text': 'M', 'texthl': 'StatusLine'}
 let g:neomake_info_sign = {'text': 'I', 'texthl': 'StatusLine'}
 
+" try and see how it goes without signs
+let g:neomake_place_signs = 0
+
 let g:neomake_remove_invalid_entries=1
 
 let g:neomake_c_enabled_makers = ['gcc']
@@ -279,14 +282,23 @@ augroup nofrils
 augroup END
 
 function! ModifyNofrils()
-    hi clear CursorLineNr
-    hi link CursorLineNr Normal
-    hi TODO cterm=bold
-    hi Repeat cterm=bold
-    hi Conditional cterm=bold
-    hi Statement cterm=bold
-    hi Exception cterm=bold
-    hi Comment ctermfg=244
+    if (&cursorline)
+        hi clear CursorLineNr
+        hi link CursorLineNr Normal
+    endif
+
+    " Some modifications I like for nofrils-dark
+    if (g:colors_name == "nofrils-dark")
+        " brighten the comments and dim the normal text a little bit.
+        hi Comment ctermfg=244
+        hi Normal ctermfg=253
+
+        " hi TODO cterm=bold
+        " hi Repeat cterm=bold
+        " hi Conditional cterm=bold
+        " hi Statement cterm=bold
+        " hi Exception cterm=bold
+    endif
 endfunction
 
 " set the colorscheme last to allow any ColorScheme autocmds to get set.

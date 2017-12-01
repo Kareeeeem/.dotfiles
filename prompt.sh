@@ -2,7 +2,7 @@
 
 _autoenv_prompt() {
     if [[ -n $AUTOENV ]]; then
-        echo -n "(${AUTOENV_PROMPT:-env}) "
+        echo -n "${AUTOENV_PROMPT:-env} "
     fi
 }
 
@@ -14,7 +14,6 @@ _status_prompt() {
     fi
 }
 
-_PROMPT_WIDTH_THRESHOLD=60
 export GIT_PS1_SHOWDIRTYSTATE=1
 export GIT_PS1_SHOWSTASHSTATE=1
 export GIT_PS1_SHOWUNTRACKEDFILES=1
@@ -23,12 +22,17 @@ _prompt_command() {
     # Save the status before anything else so $? does not get overwritten.
     local _status=$(_status_prompt) _prompt_end="$ "
     # Add a newline if the terminal width is below a $_PROMPT_WIDTH_THRESHOLD.
-    if [ $COLUMNS -lt $_PROMPT_WIDTH_THRESHOLD ]; then
+    if [ $COLUMNS -lt $_60 ]; then
         _prompt_end="\n${_prompt_end}"
     fi
 
     _autoenv
-    __git_ps1 "$_status$(_autoenv_prompt)" "\W $_prompt_end" "(%s) "
+    __git_ps1 "$_status$(_autoenv_prompt)" "\W $_prompt_end" "%s "
+
+    # Append new lines to history file
+    # Clear the history list
+    # Append the history file to the history list
+    ( history -a && history -c && history -r & )
 
     history -a # Append new lines to history file
     history -c # Clear the history list
