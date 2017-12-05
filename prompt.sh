@@ -10,33 +10,32 @@ _autoenv_prompt() {
 _status_prompt() {
     local EXIT=$?
     if [[ $EXIT != 0 ]]; then
-        echo -n "\[\e[91m\]$EXIT\[\e[0m\] "
+        echo -n "$EXIT "
     fi
 }
 
+export GIT_PS1_STATESEPARATOR=""
 export GIT_PS1_SHOWDIRTYSTATE=1
 export GIT_PS1_SHOWSTASHSTATE=1
 export GIT_PS1_SHOWUNTRACKEDFILES=1
 export PROMPT_COMMAND="_prompt_command"
 _prompt_command() {
     # Save the status before anything else so $? does not get overwritten.
-    local _status=$(_status_prompt) _prompt_end="$ "
-    # Add a newline if the terminal width is below a $_PROMPT_WIDTH_THRESHOLD.
-    if [ $COLUMNS -lt $_60 ]; then
-        _prompt_end="\n${_prompt_end}"
-    fi
+    local _status=$(_status_prompt) pwd
 
     _autoenv
-    __git_ps1 "$_status$(_autoenv_prompt)" "\W $_prompt_end" "%s "
 
-    # Append new lines to history file
-    # Clear the history list
-    # Append the history file to the history list
-    ( history -a && history -c && history -r & )
+    _pwd=$(awk '
+        BEGIN { FS="/" }
+        NF <= 2 { printf "%s", $0 }
+        NF > 2 { p=sprintf("%s/%s", $(NF-1), $NF); gsub(/.*kareem/, "~", p); printf "%s", p }
+    ' <<< $PWD )
 
-    history -a # Append new lines to history file
-    history -c # Clear the history list
-    history -r # Append the history file to the history list
+    __git_ps1 "$_status\[\e[2m\]$(_autoenv_prompt)" "\[\e[0m\]${_pwd} $ " "%s "
+
+    history -a  # Append new lines to history file
+    history -c  # Clear the history list
+    history -r  # Append the history file to the history list
 
     # Set the window title to the $PWD
     echo -ne "\033]0;$PWD\007"

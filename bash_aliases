@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 alias evim='vim $HOME/.dotfiles/vimrc'
 alias ebash='vim $HOME/.dotfiles/{bashrc,profile,bash_aliases,bash_prompt,bash_functions}'
+alias ssh='TERM=screen-256color ssh'
 
 alias clip="xclip -sel clip"
 

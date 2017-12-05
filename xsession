@@ -2,8 +2,8 @@
 xset s 180 180
 xss-lock -- i3lock -c 262626 -n &
 
-# 200 ms delay and 40 ms repeat for keyboard auto-repeat
-xset r rate 150 80
+# x ms delay and y ms repeat for keyboard auto-repeat
+xset r rate 180 80
 
 # Capslock is Ctrl.
 setxkbmap -option ctrl:nocaps
@@ -17,8 +17,5 @@ xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
 
 # $HOME/bin/monitors
 monitors
-
-# automounting
-udiskie --no-tray &
 
 exec i3
