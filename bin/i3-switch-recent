@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+"""
+Switch between 2 most recent containers.
+
+This operation ignores scratchpads and explicitly unfocuses them when called to
+switch between normal containers.
+
+Ignoring scratchpads is implemented with a blacklist, the window::move
+event provides the most authoritive information in container.scratchpad_state.
+"""
+
+import i3ipc
+
+SCRATCHPAD_BLACKLIST = set()
+WINDOW_STACK = []
+SWITCH_KEYBIND = 'Mod4+BackSpace'  # see $HOME/.config/i3/config
+
+
+def switch(conn, event):
+    binding = '%s+%s' % ('+'.join(event.binding.mods), event.binding.symbol)
+    if len(WINDOW_STACK) > 1 and binding == SWITCH_KEYBIND:
+        # if currently focused window is scratchpad hide it. `scratchpad show`
+        # actually toggles and doesn't just "show".
+        if conn.get_tree().find_focused().id in SCRATCHPAD_BLACKLIST:
+            conn.command('scratchpad show')
+
+        window_id = WINDOW_STACK.pop()
+        conn.command('[con_id="%s"] focus' % window_id)
+
+
+def insert(conn, event):
+    id_ = event.container.id
+    if (id_ not in SCRATCHPAD_BLACKLIST
+            # prevent a stack with the same id twice.
+            and not (WINDOW_STACK and id_ == WINDOW_STACK[0])):
+        WINDOW_STACK.insert(0, id_)
+        # Only keep a list of max two elements. [focused, recent].
+        del WINDOW_STACK[2:]
+
+
+def blacklist(conn, event):
+    global SCRATCHPAD_BLACKLIST
+    # when a scratchpad is focused it is first moved in the tree. The state is
+    # then set to fresh. This is the clearest point to identify a scratchpad
+    # and to blacklist it. Also, a scratchpad can also have multiple clients,
+    # so add all to the blacklist.
+    if event.container.scratchpad_state == 'fresh':
+        SCRATCHPAD_BLACKLIST |= {c.id for c in event.container.leaves()}
+
+
+def clean(conn, event):
+    # Prevent the blacklist from growing out of control.
+    SCRATCHPAD_BLACKLIST.discard(event.container.id)
+
+
+if __name__ == '__main__':
+    conn = i3ipc.Connection()
+    conn.on('binding::run', switch)
+    conn.on('window::focus', insert)
+    conn.on('window::move', blacklist)
+    conn.on('window::close', clean)
+    conn.main()

@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+
+"""
+USAGE: dyceware [wordlist file] [OPTIONS]
+
+DESCRIPTION:
+    Generate a diceware passphrase. This requires a diceware wordlist.
+    You can download one from the EFF[0].
+
+    [0]: https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt
+
+    -n
+        Wordcount of diceware passphrase.
+
+    -j
+        Join diceware passphrase words together. Default False.
+"""
+
+import sys
+import random
+
+def main():
+    """Generate a diceware passphrase."""
+    delimiter = ' '
+    wordcount = 10
+
+    try:
+        args = iter(sys.argv[1:])
+        for arg in args:
+            if arg == '-j':
+                delimiter = ''
+            elif arg == '-n':
+                wordcount = int(next(args))
+            else:
+                raise ValueError
+    except (IndexError, ValueError):
+        print(__doc__)
+        sys.exit(1)
+
+    with open('wordlist.txt') as f:
+        wordlist = dict([
+            line.split() for line in f.readlines()
+        ])
+
+    phrase = []
+    for _ in range(wordcount):
+        key = ''.join([str(random.randrange(1, 7)) for _ in range(5)])
+        phrase.append(wordlist[key])
+
+    print(delimiter.join(phrase), end='')
+
+
+if __name__ == '__main__':
+    main()

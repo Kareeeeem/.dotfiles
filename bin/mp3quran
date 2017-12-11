@@ -1,0 +1,120 @@
+#!/usr/bin/env python2
+
+import os
+import re
+import json
+import sys
+
+from collections import OrderedDict
+from contextlib import closing
+
+import requests
+
+ENTRY_POINT = 'http://mp3quran.net/api/_english.json'
+CHUNK_SIZE = 1024
+RECITATION_STRING = "{id}: {reciter_name}, {recitation_type} {complete}"
+PROMPT = "\nEnter the ID of the recitation you wish to download.\n>>> "
+DOWNLOAD_DIRECTORY = os.path.expanduser('~/Downloads/quran')
+
+
+def format_surah_number(surah):
+    return str(surah).zfill(3)
+
+
+def format_surah_url(server_url, surah):
+    surah_number = format_surah_number(surah)
+    return server_url + '/' + surah_number + '.mp3'
+
+
+def create_directory(name):
+    if not os.path.exists(name):
+        os.makedirs(name)
+
+
+def download_sura(server_url, surah, path):
+    surah_url = format_surah_url(server_url, surah)
+    filename = os.path.join(path, surah_url.split('/')[-1])
+
+    with closing(requests.get(surah_url, stream=True)) as r:
+        if r.ok:
+            print 'Downloading surah ' + str(surah)
+            with open(filename, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=1024):
+                    f.write(chunk)
+
+
+def download(recitation):
+    server = recitation['Server']
+    directory_name = server.split('/')[-1]
+    directory_path = os.path.join(DOWNLOAD_DIRECTORY, directory_name)
+    create_directory(directory_path)
+
+    for surah_number in xrange(1, 115):
+        download_sura(server, surah_number, directory_path)
+
+
+def get_available_recitations():
+    r = requests.get(ENTRY_POINT)
+    recitations_list = json.loads(r.content)['reciters']
+    recitations_list.sort(key=lambda r: int(r['id']))
+    recitations_dict = OrderedDict((r['id'], r) for r in recitations_list)
+    return recitations_dict
+
+
+def is_complete(recitation):
+    suwar = len(recitation['suras'].split(','))
+    return 'complete' if suwar == 114 else ''
+
+
+def print_listing(recitations):
+    for id, recitation in recitations.iteritems():
+        listing = RECITATION_STRING.format(
+            id=id,
+            reciter_name=recitation['name'],
+            recitation_type=recitation['rewaya'],
+            complete=is_complete(recitation),
+        )
+        print(listing)
+
+
+def get_id():
+    argument = None
+
+    if not sys.stdin.isatty():
+        argument = sys.stdin.readline()
+    else:
+        try:
+            argument = sys.argv[1]
+        except IndexError:
+            pass
+
+    if argument:
+        match = re.match('[1-9]*', argument)
+        if match:
+            rv = argument[match.start():match.end()]
+            return rv
+
+
+def main():
+    create_directory(DOWNLOAD_DIRECTORY)
+    available_recitations = get_available_recitations()
+
+    requested_recitation_id = get_id()
+    if not requested_recitation_id:
+        print_listing(available_recitations)
+
+        if set(sys.argv).intersection(['--list', '-l']):
+            sys.exit()
+        requested_recitation_id = raw_input(PROMPT)
+
+    try:
+        requested_recitation = available_recitations[requested_recitation_id]
+    except KeyError:
+        print 'No recitation found with that ID.'
+        sys.exit(1)
+
+    download(requested_recitation)
+
+
+if __name__ == '__main__':
+    main()

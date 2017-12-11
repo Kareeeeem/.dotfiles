@@ -1,0 +1,52 @@
+#! /usr/bin/env python
+'''A script that will generate tags for a project in the .git folder.
+
+I use it in vim on each write like so:
+
+augroup tags
+    au BufWritePost *.py,*.c call system('git-tags')
+augroup END
+'''
+
+import os
+import shlex
+import sys
+from subprocess import Popen, PIPE
+
+
+def run_command(command):
+    '''Run a command and return the stdout content.'''
+    tokenized_command = shlex.split(command)
+    p = Popen(tokenized_command, stdout=PIPE, stderr=PIPE)
+    return p.stdout.read().rstrip()
+
+
+project_dir = run_command('git rev-parse --show-toplevel').decode('u8')
+git_dir = os.path.join(project_dir, '.git')
+
+if not project_dir:
+    sys.exit(1)
+
+tags_path = os.path.join(git_dir, 'tags')
+tmp_tags_path = os.path.join(git_dir, 'tags.tmp')
+
+try:
+    # remove the old temp file if for whatever reason it's still there
+    os.remove(tmp_tags_path)
+except OSError:
+    pass
+
+ctags_command = 'ctags -R -o %s %s' % (tmp_tags_path, project_dir)
+run_command(ctags_command)
+
+if len(sys.argv) > 1 and sys.argv[1] == 'venv':
+    modules_path = ' '.join('{}'.format(d) for d in sys.path if os.path.isdir(d))
+    ctags_command = 'ctags -R -o %s %s' % (tags_path + '.py', modules_path)
+    run_command(ctags_command)
+
+if os.path.isfile(tags_path + '.py'):
+    with open(tmp_tags_path, 'a') as tags:
+        with open(tags_path + '.py', 'r') as pytags:
+            tags.write(pytags.read())
+
+os.rename(tmp_tags_path, tags_path)
