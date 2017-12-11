@@ -10,7 +10,11 @@ fi
 
 while true; do
     set-window-title.sh notes
-    files=$(find $_NOTES_DIR -type f ! -path "$_NOTES_DIR/.*/*" ! -name ".*")
+    files=$(find $_NOTES_DIR -type f \
+        ! -path "$_NOTES_DIR/.*/*" \
+        ! -path "$_NOTES_DIR/log/*" \
+        ! -name ".*" \
+    )
     file="$(ls -t $files | \
         sed "s#$_NOTES_DIR/##" | \
         fzf --print-query \

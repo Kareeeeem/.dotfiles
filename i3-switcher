@@ -17,7 +17,7 @@ def call_dmenu(containers):
     cmd = ['dmenu', '-l', '10', '-i']
     menu_input = bytes(str.join('\n', items), 'UTF-8')
     pick = check_output(cmd, input=menu_input)
-    return pick.strip().decode('UTF-8')
+    return pick.decode('UTF-8').rstrip('\n')
 
 
 if __name__ == '__main__':
