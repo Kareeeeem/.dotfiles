@@ -8,6 +8,21 @@ case $- in
       *) return;;
 esac
 
+# colored manpages with max width 80
+export MANWIDTH=80
+# man() {
+# 	env \
+# 		LESS_TERMCAP_mb="$(printf "\e[1;34m")" \
+# 		LESS_TERMCAP_md="$(printf "\e[1;34m")" \
+# 		LESS_TERMCAP_me="$(printf "\e[0m")" \
+# 		LESS_TERMCAP_se="$(printf "\e[0m")" \
+# 		LESS_TERMCAP_so="$(printf "\e[7m")" \
+# 		LESS_TERMCAP_ue="$(printf "\e[0m")" \
+# 		LESS_TERMCAP_us="$(printf "\e[1;36m")" \
+# 			man "$@"
+# }
+
+
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 

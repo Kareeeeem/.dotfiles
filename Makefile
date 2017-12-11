@@ -2,9 +2,9 @@
 mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 current_dir := $(patsubst %/,%,$(dir $(mkfile_path)))
 
-.PHONY: symlinks completions all
+.PHONY: symlinks completions bin all
 
-all: symlinks completions
+all: symlinks completions bin
 
 symlinks:
 	mkdir -p $(HOME)/.config
@@ -23,11 +23,15 @@ symlinks:
 	ln -f -s $(current_dir)/gitconfig $(HOME)/.gitconfig &> /dev/null
 	ln -f -s $(current_dir)/compton.conf $(HOME)/.config/compton.conf &> /dev/null
 
-	# prevent looped back symlinks to directories.
 	rm -f $(HOME)/.config/i3*
 	ln -f -s $(current_dir)/i3 $(HOME)/.config/i3 &> /dev/null
 	ln -f -s $(current_dir)/i3status $(HOME)/.config/i3status &> /dev/null
 
 completions:
-	mkdir -p $(HOME)/.bash_completion.d
-	cp *completion.bash $(HOME)/.bash_completion.d/
+	rm -rf $(HOME)/.bash_completion.d
+	ln -f -s $(current_dir)/bash_completion.d $(HOME)/.bash_completion.d
+
+bin:
+	python3 -m pip install --user -U -r bin/requirements.txt
+	rm -rf $(HOME)/bin
+	ln -f -s $(current_dir)/bin $(HOME)/bin

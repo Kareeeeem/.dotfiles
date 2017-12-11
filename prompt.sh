@@ -2,7 +2,7 @@
 
 _autoenv_prompt() {
     if [[ -n $AUTOENV ]]; then
-        echo -n "${AUTOENV_PROMPT:-env} "
+        echo -n "[${AUTOENV_PROMPT:-env}] "
     fi
 }
 
@@ -31,7 +31,7 @@ _prompt_command() {
         NF > 2 { p=sprintf("%s/%s", $(NF-1), $NF); gsub(/.*kareem/, "~", p); printf "%s", p }
     ' <<< $PWD )
 
-    __git_ps1 "$_status\[\e[2m\]$(_autoenv_prompt)" "\[\e[0m\]${_pwd} $ " "%s "
+    __git_ps1 "$_status$(_autoenv_prompt)" "${_pwd} $ " "[%s] "
 
     history -a  # Append new lines to history file
     history -c  # Clear the history list
