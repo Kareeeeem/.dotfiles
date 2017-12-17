@@ -253,7 +253,7 @@ augroup languages
     " I don't do c++ so always assume c
     au BufRead,BufNewFile *.h,*.c setlocal filetype=c
     au FileType c setlocal commentstring=//\ %s
-    au FileType c setlocal cinoptions+=:0 " Don't indent case
+    " au FileType c setlocal cinoptions+=:0 " Don't indent case
     au FileType awk setlocal commentstring=#\ %s
     au FileType htmljinja,htmldjango setlocal commentstring={#\ %s\ #}
     au FileType php setlocal commentstring=//\ %s

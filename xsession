@@ -18,4 +18,6 @@ xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
 # $HOME/bin/monitors
 monitors
 
+redshift  -O 3700K
+
 exec i3

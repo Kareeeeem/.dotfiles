@@ -9,7 +9,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
-alias la='l -A' # A Hidden files, ignore . and ..
+alias la='ls -FLAH --group-directories-first' # A Hidden files, ignore . and ..
 alias l='ls -lhF --group-directories-first'
 #            ├l long listing
 #            ├─h human readable sizes

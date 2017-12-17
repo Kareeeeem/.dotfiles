@@ -31,7 +31,7 @@ _prompt_command() {
         NF > 2 { p=sprintf("%s/%s", $(NF-1), $NF); gsub(/.*kareem/, "~", p); printf "%s", p }
     ' <<< $PWD )
 
-    __git_ps1 "$_status$(_autoenv_prompt)" "${_pwd} $ " "[%s] "
+    __git_ps1 "$_status\[\e[92m\]$(_autoenv_prompt)" "${_pwd} $ \[\e[0m\]" "[%s] "
 
     history -a  # Append new lines to history file
     history -c  # Clear the history list
