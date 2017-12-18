@@ -4,9 +4,9 @@ from functools import partial
 import i3ipc
 
 
-def move(ouput1, output2, conn):
+def move(output1, output2, conn):
     focused = conn.get_tree().find_focused().id
-    conn.command('[workspace=1] move workspace to output %s' % ouput1)
+    conn.command('[workspace=1] move workspace to output %s' % output1)
     conn.command('[workspace=2] move workspace to output %s' % output2)
     conn.command('[workspace=3] move workspace to output %s' % output2)
     conn.command('[con_id=%s] focus' % focused)
@@ -19,6 +19,7 @@ ASSIGNMENTS = {
 
 
 def configure(conn, event=None):
+    import pdb; pdb.set_trace()
     outputs = conn.get_outputs()
     active = ' '.join(sorted([o['name'] for o in outputs if o['active']]))
 

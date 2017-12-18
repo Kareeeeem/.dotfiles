@@ -28,6 +28,10 @@ set dir=$HOME/.vim/tmp
 set tags=.git/tags,./tags
 set undofile undodir=$HOME/.vim/undodir/
 
+if has("unnamedplus")
+    set clipboard=unnamedplus
+endif
+
 " if exists("&signcolumn")
 "     set signcolumn=yes
 " else
@@ -89,7 +93,7 @@ xnoremap > >gv
 " Navigate buffers
 nnoremap <S-Tab> :bp<cr>
 nnoremap <Tab> :bn<cr>
-nnoremap <leader>b :ls<cr>:b<space>
+" nnoremap <leader>b :ls<cr>:b<space>
 
 " Don't use Ex mode.
 map Q <nop>
@@ -277,15 +281,11 @@ augroup END
 
 augroup nofrils
     au!
-    au ColorScheme nofrils* call ModifyNofrils()
+    au ColorScheme nofrils* call ModifyColorscheme()
     au ColorScheme nofrils* nnoremap <F7> :call ToggleNofrils()<cr>
 augroup END
 
-function! ModifyNofrils()
-    if (&cursorline)
-        hi clear CursorLineNr
-        hi link CursorLineNr Normal
-    endif
+function! ModifyColorscheme()
 
     " Some modifications I like for nofrils-dark
     if (g:colors_name == "nofrils-dark")
@@ -298,6 +298,11 @@ function! ModifyNofrils()
         " hi Conditional cterm=bold
         " hi Statement cterm=bold
         " hi Exception cterm=bold
+
+        if (&cursorline)
+            hi clear CursorLineNr
+            hi link CursorLineNr Normal
+        endif
     endif
 endfunction
 
