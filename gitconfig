@@ -14,3 +14,10 @@
     decorate = auto
 [core]
 	excludesfile = /home/kareem/.gitignore_global
+[merge]
+	tool = vimdiff
+	conflictstyle = diff3
+[mergetool]
+	prompt = false
+[mergetool "vimdiff"]
+	trustExitCode = false

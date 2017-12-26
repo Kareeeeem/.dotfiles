@@ -6,6 +6,7 @@ syntax on
 set wildmenu
 set showcmd
 
+set breakindent
 set completeopt-=preview
 " set complete-=t
 set autoindent
@@ -91,9 +92,10 @@ nnoremap gV `[v`]
 xnoremap < <gv
 xnoremap > >gv
 " Navigate buffers
-nnoremap <S-Tab> :bp<cr>
-nnoremap <Tab> :bn<cr>
+" nnoremap <S-Tab> :bp<cr>
+" nnoremap <Tab> :bn<cr>
 " nnoremap <leader>b :ls<cr>:b<space>
+"
 
 " Don't use Ex mode.
 map Q <nop>
@@ -142,12 +144,6 @@ nnoremap <C-p> :Files<cr>
 nnoremap <leader>t :Tags<cr>
 nnoremap <leader>m :History<cr>
 nnoremap <leader>b :Buffers<cr>
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
 
 " Slime
 let g:slime_target = 'tmux'
@@ -248,7 +244,7 @@ augroup languages
 
     au FileType *markdown*,text setlocal fo+=t tw=72 wrap
     " au FileType sh setlocal noexpandtab
-    "
+
     au FileType python setlocal keywordprg=pydoc
     au FileType python inoremap pdb import pdb; pdb.set_trace()<esc>
 
@@ -281,23 +277,47 @@ augroup END
 
 augroup nofrils
     au!
-    au ColorScheme nofrils* call ModifyColorscheme()
+    au ColorScheme * call ModifyColorscheme()
     au ColorScheme nofrils* nnoremap <F7> :call ToggleNofrils()<cr>
 augroup END
 
 function! ModifyColorscheme()
-
     " Some modifications I like for nofrils-dark
     if (g:colors_name == "nofrils-dark")
-        " brighten the comments and dim the normal text a little bit.
-        hi Comment ctermfg=244
+        " brighten the comments
+        hi Comment ctermfg=243
+        " dim the normal text a little bit.
         hi Normal ctermfg=253
 
-        " hi TODO cterm=bold
-        " hi Repeat cterm=bold
-        " hi Conditional cterm=bold
-        " hi Statement cterm=bold
-        " hi Exception cterm=bold
+        hi TODO cterm=bold
+
+        " Nofrils undoes all the links. I want to reestablish some of the
+        " main ones to experiment with some minimal highlighting.
+
+        " hi Statement ctermfg=11
+        " hi link Conditional Statement
+        " hi link Repeat Statement
+        " hi link Label Statement
+        " hi link Operator Statement
+        " hi link Keyword Statement
+        " hi link Exception Statement
+
+        " hi PreProc ctermfg=81
+        " hi link Include PreProc
+        " hi link Define PreProc
+        " hi link Macro PreProc
+        " hi link PreCondit PreProc
+
+        " hi Identifier ctermfg=14
+        " hi link Function Identifier
+
+        " hi Constant ctermbg=233
+        " hi link String Constant
+        " hi link Character Constant
+        " hi link Number Constant
+        " hi link Boolean Constant
+        " hi link Float Constant
+
 
         if (&cursorline)
             hi clear CursorLineNr
@@ -306,7 +326,17 @@ function! ModifyColorscheme()
     endif
 endfunction
 
+function! ToggleNofrils()
+    if (g:colors_name == 'nofrils-dark')
+        colorscheme nofrils-light
+    elseif (g:colors_name == 'nofrils-light')
+        colorscheme nofrils-dark
+    endif
+endfunction
+
+
 " set the colorscheme last to allow any ColorScheme autocmds to get set.
+" colorscheme nofrils-dark
 colorscheme nofrils-dark
 
 " }}}
@@ -337,12 +367,6 @@ function! JoinSpaceless()
     endif
 endfunction
 
-function! ToggleNofrils()
-    if (g:colors_name == 'nofrils-dark')
-        colorscheme nofrils-light
-    elseif (g:colors_name == 'nofrils-light')
-        colorscheme nofrils-dark
-    endif
 endfunction
 
 " }}}

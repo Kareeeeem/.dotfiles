@@ -25,7 +25,6 @@ export QUOTING_STYLE=literal
 export TERMINAL=st
 export KEYBASE_SYSTEMD=1
 
-export PATH=$PATH:$HOME/.local/go/bin
 export GOROOT=$HOME/.local/go
 export PATH=$PATH:$GOROOT/bin
 

@@ -45,6 +45,7 @@ export MANWIDTH=80
 HISTCONTROL=ignoreboth:erasedups
 HISTSIZE=1000000
 HISTFILESIZE=1000000
+HISTIGNORE='ls:bg:fg:history:cd::l:la'
 
 shopt -s histappend   # append to history file, don't overwrite it
 shopt -s checkwinsize # update the values of LINES and COLUMNS.

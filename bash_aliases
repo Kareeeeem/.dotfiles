@@ -30,3 +30,6 @@ alias rcp="rsync -ah -P"
 #                 └─h human readable numbers
 
 alias rt="rtorrent"
+
+alias tk="tmux kill-session"
+alias tn="tmux new -s"

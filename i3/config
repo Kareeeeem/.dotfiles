@@ -3,8 +3,8 @@
 set $mod Mod4
 
 floating_modifier $mod
-font pango:monospace 8
-# font pango:DejaVu Sans Mono 8
+# font pango:monospace 8
+font pango:DejaVu Sans Mono 8
 # workspace_layout tabbed
 focus_follows_mouse no
 
@@ -134,7 +134,7 @@ mode "$mode_system" {
     bindsym l exec --no-startup-id xset dpms force off, mode "default"
     bindsym e exec --no-startup-id i3-msg exit, mode "default"
     bindsym s exec --no-startup-id systemctl suspend, mode "default"
-    bindsym h exec --no-startup-id systemctl hibernate, mode "default"
+    # bindsym h exec --no-startup-id systemctl hibernate, mode "default"
     bindsym r exec --no-startup-id systemctl reboot, mode "default"
     bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
 

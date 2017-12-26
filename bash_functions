@@ -127,3 +127,15 @@ _umnt () {
     COMPREPLY=( $(compgen -W "$options" -- $cur) )
 }
 complete -F _umnt umnt
+
+tat () {
+    tmux attach -t $@
+
+}
+function _tat() {
+    local options=$(tmux list-sessions -F '#{session_name}' 2> /dev/null)
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    COMPREPLY=( ${COMPREPLY[@]:-} $(compgen -W "$options" -- "${cur}") )
+}
+
+complete -F _tat tat
