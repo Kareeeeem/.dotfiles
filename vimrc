@@ -367,6 +367,4 @@ function! JoinSpaceless()
     endif
 endfunction
 
-endfunction
-
 " }}}
