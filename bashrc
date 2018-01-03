@@ -67,11 +67,11 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 if [ -d $HOME/.dotfiles ]; then
-    . $HOME/.dotfiles/prompt.sh
-    . $HOME/.dotfiles/autoenv.sh
-    . $HOME/.dotfiles/z/z.sh
+    . $HOME/.dotfiles/prompt
+    . $HOME/.dotfiles/autoenv
     . $HOME/.dotfiles/bash_functions
     . $HOME/.dotfiles/bash_aliases
+    . $HOME/.dotfiles/z/z.sh
 fi
 
 [ -f ~/.fzf.bash ] && . ~/.fzf.bash

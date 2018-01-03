@@ -33,6 +33,9 @@ if has("unnamedplus")
     set clipboard=unnamedplus
 endif
 
+let c_no_curly_error = 1
+let c_syntax_for_h = 1
+
 " if exists("&signcolumn")
 "     set signcolumn=yes
 " else
@@ -250,9 +253,7 @@ augroup languages
 
     au BufReadPre *vimrc setlocal foldenable foldmethod=marker
 
-    " I don't do c++ so always assume c
-    au BufRead,BufNewFile *.h,*.c setlocal filetype=c
-    au FileType c setlocal commentstring=//\ %s
+    " au FileType c setlocal commentstring=//\ %s
     " au FileType c setlocal cinoptions+=:0 " Don't indent case
     au FileType awk setlocal commentstring=#\ %s
     au FileType htmljinja,htmldjango setlocal commentstring={#\ %s\ #}
@@ -287,7 +288,7 @@ function! ModifyColorscheme()
         " brighten the comments
         hi Comment ctermfg=243
         " dim the normal text a little bit.
-        hi Normal ctermfg=253
+        hi Normal ctermfg=253 ctermbg=NONE
 
         hi TODO cterm=bold
 

@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+
+_AUTOENVFILE=.env
+_AUTOENVCHECKSUMS=$HOME/.envsums
+
+# Used as a heuristic to see if the directory has changed between invocations.
+_AUTOENV_LAST_PWD=
+
+# can be used outside to see which environment is activated.
+export AUTOENV=
+
+_autoenv () {
+    # If we did not change directory do nothing.
+	if [[ $AUTOENV_LAST_PWD == $PWD ]]; then
+        return
+    fi
+    AUTOENV_LAST_PWD=$PWD
+
+    # We don't support activating multiple environments.
+    if [[ -n $AUTOENV ]]; then
+        return
+    fi
+
+    _activate_environment
+}
+
+_activate_environment () {
+	local slashes current_dir original_dir envfile
+
+	original_dir="$PWD"
+	current_dir="$original_dir"
+	slashes=${current_dir//[^\/]/}
+
+    # Bubble up to $HOME to find an .env file
+	for (( n=${#slashes}; n>1; --n )); do
+		if [ -f "${current_dir}/${_AUTOENVFILE}" ]; then
+
+            envfile="$(readlink -e "${current_dir}/${_AUTOENVFILE}")"
+
+            if _verify_envfile "$envfile" || _authorize_envfile "$envfile" ; then
+
+                # cd to the directory because the env file might refer to
+                # relative paths.
+                cd "$current_dir"
+
+                . $_AUTOENVFILE
+                AUTOENV=$envfile
+
+                cd "$original_dir"
+            fi
+            break;
+		else
+			current_dir="$current_dir/.."
+		fi
+	done
+}
+
+_verify_envfile () {
+    sha256sum -c <(awk -v path="$1" '$2 == path' $_AUTOENVCHECKSUMS) &> /dev/null
+}
+
+_authorize_envfile () {
+	cat "$1"
+	read -r -n 1 -p "Authorize envfile? y/n " answer
+    echo  # for the new line
+
+	if [ "${answer,,}" = "y" ]; then
+        awk -v path="$1" '$2 != path' $_AUTOENVCHECKSUMS > tmp \
+            && mv tmp $_AUTOENVCHECKSUMS
+        sha256sum "$1" >> $_AUTOENVCHECKSUMS
+		return 0
+	fi
+    return 1
+}
+
+
+_reactivate_environment () {
+	_deactivate_environment
+	# Force the activation to run again upon running the prompt command.
+	AUTOENV_LAST_PWD=
+}
+
+_deactivate_environment () {
+	AUTOENV=
+    _deactivate 2> /dev/null
+    unset -f _deactivate
+}
+
+_showenv () {
+	if [ -f "$AUTOENV" ]; then
+		cat "$AUTOENV"
+		echo "$AUTOENV"
+	else
+		echo "No environment sourced or envfile has been moved or deleted."
+	fi
+}
+
+_editenv () {
+	if [ -f "$AUTOENV" ]; then
+		$EDITOR "$AUTOENV"
+	else
+		echo "No environment sourced or envfile has been moved or deleted."
+	fi
+}
+
+aue () {
+    case $1 in
+        a*) _activate_environment ;;
+        d*) _deactivate_environment ;;
+        r*) _reactivate_environment ;;
+        s*) _showenv ;;
+        e*) _editenv ;;
+        *) echo "[USAGE] e activate|deactivate|reactivate|show|edit" ;;
+    esac
+}
+
+_aue () {
+    local options="activate deactivate reactivate show edit"
+    local cur=${COMP_WORDS[COMP_CWORD]}
+    COMPREPLY=( $(compgen -W "$options" -- $cur) )
+}
+complete -F _aue aue
