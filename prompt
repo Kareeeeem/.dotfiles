@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 export GIT_PS1_STATESEPARATOR=":"
 export GIT_PS1_SHOWDIRTYSTATE=1
 export GIT_PS1_SHOWSTASHSTATE=1
@@ -18,15 +17,18 @@ _prompt_command() {
         _status="$EXIT "
     fi
 
-    _autoenv
+    # only auto active environments in tmux sessions
+    if [ -n "$TMUX" ]; then
+        _autoenv
 
-    if [ -n "$AUTOENV" ]; then
-        if [ -z "$AUTOENV_PROMPT" ]; then
-            _autoenv_prompt="${_hl}$(basename $(dirname $AUTOENV))${_reset} "
-        else
-            _autoenv_prompt="${_hl}${AUTOENV_PROMPT}${_reset} "
+        if [ -n "$AUTOENV" ]; then
+            if [ -z "$AUTOENV_PROMPT" ]; then
+                _autoenv_prompt="$(basename $(dirname $AUTOENV))"
+            else
+                _autoenv_prompt="${AUTOENV_PROMPT}"
+            fi
+            _autoenv_prompt="${_hl}${_autoenv_prompt}${_reset} "
         fi
-
     fi
 
     _pwd=$(pwd | awk -F/ 'NF <= 3 { printf "%s", $0 } NF > 3 { printf "%s/%s", $(NF-1), $NF  }')

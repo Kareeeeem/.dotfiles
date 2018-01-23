@@ -16,7 +16,6 @@ symlinks:
 	ln -f -s $(current_dir)/bashrc $(HOME)/.bashrc &> /dev/null
 	ln -f -s $(current_dir)/bash_logout $(HOME)/.bash_logout &> /dev/null
 	ln -f -s $(current_dir)/profile $(HOME)/.profile &> /dev/null
-	ln -f -s $(current_dir)/npmrc $(HOME)/.npmrc &> /dev/null
 	ln -f -s $(current_dir)/inputrc $(HOME)/.inputrc &> /dev/null
 	ln -f -s $(current_dir)/racketrc $(HOME)/.racketrc &> /dev/null
 	ln -f -s $(current_dir)/gitignore $(HOME)/.gitignore &> /dev/null
