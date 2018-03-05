@@ -29,10 +29,6 @@ set dir=$HOME/.vim/tmp
 set tags=.git/tags,./tags
 set undofile undodir=$HOME/.vim/undodir/
 
-if has("unnamedplus")
-    set clipboard=unnamedplus
-endif
-
 let c_no_curly_error = 1
 let c_syntax_for_h = 1
 
