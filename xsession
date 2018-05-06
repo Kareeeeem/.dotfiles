@@ -1,5 +1,5 @@
 # activate screensaver after 1.5 minutes.
-xset s 180 180
+xset s 300 300
 xss-lock -- i3lock -c 262626 -n &
 
 # x ms delay and y ms repeat for keyboard auto-repeat

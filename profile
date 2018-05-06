@@ -12,6 +12,7 @@
 [ -n "$BASH_VERSION" ] && [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
 [ -d "$HOME/bin" ]  && PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.local/bin" ]  && PATH="$HOME/.local/bin:$PATH"
+[ -d "$HOME/.local/racket/bin" ]  && PATH="$HOME/.local/racket/bin:$PATH"
 
 # https://github.com/creationix/nvm/issues/1277#issuecomment-356309457
 # Defer initialization of nvm until nvm, node or a node-dependent command is

@@ -72,6 +72,7 @@ nnoremap 0 ^
 nnoremap <leader>, f,<right>i<cr><ESC>
 " Break line
 nnoremap K i<cr><esc>kg$
+
 " show manpage
 nnoremap M K
 " Original J on leader j
@@ -154,6 +155,8 @@ nmap <leader>s <Plug>SlimeParagraphSend
 nmap <leader>v <Plug>SlimeConfig
 
 " Neomake
+let g:neomake_javascript_enabled_makers = ['eslint']
+
 let g:neomake_error_sign = {'text': 'E', 'texthl': 'ErrorMsg'}
 let g:neomake_warning_sign = {'text': 'W', 'texthl': 'WarningMsg'}
 let g:neomake_message_sign = {'text': 'M', 'texthl': 'StatusLine'}
@@ -173,15 +176,12 @@ let g:neomake_c_gcc_remove_invalid_entries=1
 
 let g:neomake_python_enabled_makers = ['flake8']
 let g:neomake_python_flake8_args = ['--max-line-length=100']
+" let g:neomake_python_pylint_args = ['--rcfile=/home/kareem/.pylintrc']
 
 let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091']
 
-let g:neomake_racket_raco_maker = {
-            \ 'exe': 'raco',
-            \ 'args': ['expand'],
-            \ 'errorformat': '%-G %.%#,%E%f:%l:%c: %m'
-            \ }
 let g:neomake_racket_enabled_makers = ['raco']
+let g:neomake_racket_raco_remove_invalid_entries=1
 
 set statusline+=\ %#Error#%{neomake#statusline#LoclistStatus('loc\ ')}%*
 
@@ -241,6 +241,9 @@ augroup languages
     au!
     au BufWritePre *.go call Preserve('%!gofmt')
 
+    " vim-racket overrides my K mapping
+    au FileType racket nunmap <buffer> K
+
     au FileType *markdown*,text setlocal fo+=t tw=72 wrap
     " au FileType sh setlocal noexpandtab
 
@@ -255,6 +258,7 @@ augroup languages
     au FileType htmljinja,htmldjango setlocal commentstring={#\ %s\ #}
     au FileType php setlocal commentstring=//\ %s
     au FileType racket,scheme setlocal commentstring=;\ %s
+
     au FileType xdefaults setlocal commentstring=!\ %s
     au FileType rc setlocal commentstring=#\ %s
 

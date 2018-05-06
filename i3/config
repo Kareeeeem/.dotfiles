@@ -12,7 +12,7 @@ focus_follows_mouse no
 bindsym $mod+Return exec --no-startup-id i3-sensible-terminal
 bindsym $mod+Shift+Return exec --no-startup-id i3-sensible-terminal -c "scratch"
 bindsym $mod+b exec --no-startup-id x-www-browser
-bindsym $mod+m exec --no-startup-id import -window root $HOME/Pictures/screenshot-$(date +%FT%T%Z).jpg
+bindsym $mod+m exec --no-startup-id import -window $HOME/Pictures/screenshot-$(date +%FT%T%Z).jpg
  # run menus and scripts
 bindsym $mod+Tab exec --no-startup-id i3-switcher
 bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='dmenu -i'
