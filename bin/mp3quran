@@ -1,9 +1,10 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import os
 import re
 import json
 import sys
+import asyncio
 
 from collections import OrderedDict
 from contextlib import closing
@@ -31,13 +32,13 @@ def create_directory(name):
         os.makedirs(name)
 
 
-def download_sura(server_url, surah, path):
+async def download_sura(server_url, surah, path):
     surah_url = format_surah_url(server_url, surah)
     filename = os.path.join(path, surah_url.split('/')[-1])
 
     with closing(requests.get(surah_url, stream=True)) as r:
         if r.ok:
-            print 'Downloading surah ' + str(surah)
+            print('Downloading surah ' + str(surah))
             with open(filename, 'wb') as f:
                 for chunk in r.iter_content(chunk_size=1024):
                     f.write(chunk)
@@ -48,9 +49,14 @@ def download(recitation):
     directory_name = server.split('/')[-1]
     directory_path = os.path.join(DOWNLOAD_DIRECTORY, directory_name)
     create_directory(directory_path)
+    surah_args = [(server, n, directory_path) for n in range(115)]
 
-    for surah_number in xrange(1, 115):
-        download_sura(server, surah_number, directory_path)
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(
+        asyncio.gather(
+            *(download_sura(*args) for args in surah_args)
+        )
+    )
 
 
 def get_available_recitations():
@@ -67,7 +73,7 @@ def is_complete(recitation):
 
 
 def print_listing(recitations):
-    for id, recitation in recitations.iteritems():
+    for id, recitation in recitations.items():
         listing = RECITATION_STRING.format(
             id=id,
             reciter_name=recitation['name'],
@@ -105,12 +111,12 @@ def main():
 
         if set(sys.argv).intersection(['--list', '-l']):
             sys.exit()
-        requested_recitation_id = raw_input(PROMPT)
+        requested_recitation_id = input(PROMPT)
 
     try:
         requested_recitation = available_recitations[requested_recitation_id]
     except KeyError:
-        print 'No recitation found with that ID.'
+        print('No recitation found with that ID.')
         sys.exit(1)
 
     download(requested_recitation)
