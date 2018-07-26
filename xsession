@@ -6,7 +6,9 @@ xss-lock -- i3lock -c 262626 -n &
 xset r rate 180 80
 
 # Capslock is Ctrl.
+setxkbmap -layout us,ara
 setxkbmap -option ctrl:nocaps
+setxkbmap -option grp:ctrls_toggle
 
 # Left Ctrl is Escape when tapped, Ctrl when held..
 pkill xcape 2> /dev/null

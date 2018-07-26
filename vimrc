@@ -26,7 +26,7 @@ set hlsearch ignorecase smartcase incsearch
 set expandtab tabstop=4 softtabstop=4 shiftwidth=4
 
 set dir=$HOME/.vim/tmp
-set tags=.git/tags,./tags
+set tags=.git/tags,./tags,../tags
 set undofile undodir=$HOME/.vim/undodir/
 
 let c_no_curly_error = 1
