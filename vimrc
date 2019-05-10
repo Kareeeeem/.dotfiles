@@ -226,7 +226,7 @@ if executable('ctags') && executable('git-tags')
     augroup END
 endif
 
-let ws_blacklist = ['markdown', 'text']
+let ws_blacklist = []
 augroup cleanup_ws
     au!
     " strip trailing whitespace.
@@ -262,7 +262,7 @@ augroup languages
     au FileType xdefaults setlocal commentstring=!\ %s
     au FileType rc setlocal commentstring=#\ %s
 
-    au FileType yaml setlocal tabstop=2 softtabstop=2 shiftwidth=2
+    au FileType yaml,ruby setlocal tabstop=2 softtabstop=2 shiftwidth=2
 augroup END
 
 augroup qf

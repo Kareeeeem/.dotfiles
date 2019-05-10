@@ -13,6 +13,7 @@
 [ -d "$HOME/bin" ]  && PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.local/bin" ]  && PATH="$HOME/.local/bin:$PATH"
 [ -d "$HOME/.local/racket/bin" ]  && PATH="$HOME/.local/racket/bin:$PATH"
+[ -d "$HOME/.gem/ruby/2.5.0/bin" ] && PATH="$HOME/.gem/ruby/2.5.0/bin:$PATH"
 
 # https://github.com/creationix/nvm/issues/1277#issuecomment-356309457
 # Defer initialization of nvm until nvm, node or a node-dependent command is
@@ -44,7 +45,11 @@ export TERMINAL=st
 export KEYBASE_SYSTEMD=1
 
 export GOROOT=$HOME/.local/go
-export PATH=$PATH:$GOROOT/bin
+PATH=$PATH:$GOROOT/bin
+
+PATH=$HOME/.pyenv/bin:$PATH
+
+export PATH
 
 if [[ ! ${DISPLAY} && ${XDG_VTNR} == 1 ]]; then
     exec startx

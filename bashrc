@@ -75,3 +75,6 @@ if [ -d $HOME/.dotfiles ]; then
 fi
 
 [ -f ~/.fzf.bash ] && . ~/.fzf.bash
+
+eval "$($HOME/.pyenv/bin/pyenv init -)"
+eval "$($HOME/.pyenv/bin/pyenv virtualenv-init -)"
