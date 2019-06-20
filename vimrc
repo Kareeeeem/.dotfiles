@@ -11,7 +11,7 @@ set completeopt-=preview
 " set complete-=t
 set autoindent
 set backspace=2
-set colorcolumn=80
+set colorcolumn=88
 set encoding=utf-8
 set fileencoding=utf-8
 set formatoptions=tjrocqn
@@ -119,6 +119,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'moll/vim-bbye', {'on': 'Bdelete'}
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'python/black'
 
 " language help
 Plug 'mattn/emmet-vim'
@@ -154,6 +155,10 @@ xmap <leader>s <Plug>SlimeRegionSend
 nmap <leader>s <Plug>SlimeParagraphSend
 nmap <leader>v <Plug>SlimeConfig
 
+" black
+let g:black_fast = 1
+let g:black_skip_string_normalization = 1
+
 " Neomake
 let g:neomake_javascript_enabled_makers = ['eslint']
 
@@ -175,8 +180,7 @@ let g:neomake_c_gcc_remove_invalid_entries=1
 " let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything', '-I./']
 
 let g:neomake_python_enabled_makers = ['flake8']
-let g:neomake_python_flake8_args = ['--max-line-length=100']
-" let g:neomake_python_pylint_args = ['--rcfile=/home/kareem/.pylintrc']
+let g:neomake_python_flake8_args = ['--max-line-length=88']
 
 let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091']
 
@@ -240,6 +244,7 @@ augroup END
 augroup languages
     au!
     au BufWritePre *.go call Preserve('%!gofmt')
+    au BufWritePre *.py execute ':Black'
 
     " vim-racket overrides my K mapping
     au FileType racket nunmap <buffer> K
@@ -248,7 +253,7 @@ augroup languages
     " au FileType sh setlocal noexpandtab
 
     au FileType python setlocal keywordprg=pydoc
-    au FileType python inoremap <buffer> pdb import pdb; pdb.set_trace()<esc>
+    au FileType python inoremap <buffer> breakpoint()  # noqa<esc>
 
     au BufReadPre *vimrc setlocal foldenable foldmethod=marker
 

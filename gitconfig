@@ -7,7 +7,9 @@
     ci = commit
     st = status
     lg = log --oneline
+    lgr = log --oneline --graph --all
     lm = log origin/master.. --pretty=format:*' '%s%n%b
+    fr = "!git fetch && git rebase origin/master"
 [push]
 	default = simple
 [log]
