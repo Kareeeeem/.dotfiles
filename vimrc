@@ -253,7 +253,7 @@ augroup languages
     " au FileType sh setlocal noexpandtab
 
     au FileType python setlocal keywordprg=pydoc
-    au FileType python inoremap <buffer> breakpoint()  # noqa<esc>
+    au FileType python inoremap <buffer> pdb breakpoint()  # noqa<esc>
 
     au BufReadPre *vimrc setlocal foldenable foldmethod=marker
 
