@@ -11,7 +11,7 @@ set completeopt-=preview
 " set complete-=t
 set autoindent
 set backspace=2
-set colorcolumn=88
+set colorcolumn=80
 set encoding=utf-8
 set fileencoding=utf-8
 set formatoptions=tjrocqn
@@ -92,8 +92,8 @@ nnoremap gV `[v`]
 xnoremap < <gv
 xnoremap > >gv
 " Navigate buffers
-" nnoremap <S-Tab> :bp<cr>
-" nnoremap <Tab> :bn<cr>
+nnoremap <S-Tab> :bp<cr>
+nnoremap <Tab> :bn<cr>
 " nnoremap <leader>b :ls<cr>:b<space>
 "
 
@@ -127,8 +127,21 @@ Plug 'hynek/vim-python-pep8-indent'
 Plug 'Kareeeeem/python-docstring-comments'
 Plug 'pangloss/vim-javascript'
 Plug 'wlangstroth/vim-racket'
+Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
 
 call plug#end()
+
+" Automatically set the preview window height.
+set previewheight=5
+
+au BufEnter ?* call PreviewHeightWorkAround()
+    if &previewwindow
+        exec 'setlocal winheight='.&previewheight
+    endif
+
+function! PreviewHeightWorkAround()
+endfunc
+
 
 "buftabline
 let g:buftabline_numbers = 1
@@ -180,7 +193,7 @@ let g:neomake_c_gcc_remove_invalid_entries=1
 " let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything', '-I./']
 
 let g:neomake_python_enabled_makers = ['flake8']
-let g:neomake_python_flake8_args = ['--max-line-length=88']
+let g:neomake_python_flake8_args = ['--max-line-length=79']
 
 let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091']
 
@@ -216,10 +229,11 @@ augroup vimStartup
     " When editing a file, always jump to the last known cursor position.
     " Don't do it when the position is invalid or when inside an event handler
     " (happens when dropping a file on gvim).
-    autocmd BufReadPost *
+    au BufReadPost *
                 \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft != 'gitcommit'
                 \ | exe "normal! g`\""
                 \ | endif
+    au InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 augroup END
 
 " Only register these autocommands if the necessary executables are present
@@ -241,10 +255,19 @@ augroup cleanup_ws
     au BufWritePre * call Preserve('v/\n*./d')
 augroup END
 
+" Work related autocommands
+augroup softwear
+    au!
+    au BufWritePre $HOME/projects/softwear/**/*.py execute ':Black'
+    au BufReadPre,FileReadPre $HOME/projects/softwear/**/*.py
+                \ set colorcolumn=88
+    au BufReadPre,FileReadPre $HOME/projects/softwear/**/*.py
+                \ let b:neomake_python_flake8_args = ['--max-line-length=88']
+augroup END
+
 augroup languages
     au!
     au BufWritePre *.go call Preserve('%!gofmt')
-    au BufWritePre *.py execute ':Black'
 
     " vim-racket overrides my K mapping
     au FileType racket nunmap <buffer> K

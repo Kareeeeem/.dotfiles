@@ -103,6 +103,22 @@ _editenv () {
 	fi
 }
 
+_init () {
+	if [ ! -f "$AUTOENV" -a ! -f $_AUTOENVFILE ]; then
+        cat > $_AUTOENVFILE << EOF
+AUTOENV_PROMPT=
+
+. venv/bin/activate
+
+_deactivate () {
+    deactivate
+    unset AUTOENV_PROMPT
+}
+EOF
+    vi $_AUTOENVFILE
+	fi
+}
+
 aue () {
     case $1 in
         a*) _activate_environment ;;
@@ -110,6 +126,7 @@ aue () {
         r*) _reactivate_environment ;;
         s*) _showenv ;;
         e*) _editenv ;;
+        i*) _init ;;
         *) echo "[USAGE] e activate|deactivate|reactivate|show|edit" ;;
     esac
 }
