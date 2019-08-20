@@ -286,11 +286,15 @@ augroup languages
     au FileType htmljinja,htmldjango setlocal commentstring={#\ %s\ #}
     au FileType php setlocal commentstring=//\ %s
     au FileType racket,scheme setlocal commentstring=;\ %s
+    au FileType racket,scheme setlocal commentstring=;\ %s
 
     au FileType xdefaults setlocal commentstring=!\ %s
     au FileType rc setlocal commentstring=#\ %s
 
     au FileType yaml,ruby setlocal tabstop=2 softtabstop=2 shiftwidth=2
+
+    au BufRead,BufNewFile *.zpl set filetype=zpl
+    au FileType zpl setlocal commentstring=^FX\ %s
 augroup END
 
 augroup qf

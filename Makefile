@@ -21,8 +21,8 @@ symlinks:
 	ln -f -s $(current_dir)/gitignore $(HOME)/.gitignore &> /dev/null
 	ln -f -s $(current_dir)/gitconfig $(HOME)/.gitconfig &> /dev/null
 	ln -f -s $(current_dir)/compton.conf $(HOME)/.config/compton.conf &> /dev/null
-	ln -f -s $(current_dir)/xsession $(HOME)/.xsession
-	ln -f -s $(current_dir)/rgignore $(HOME)/.rgignore
+	ln -f -s $(current_dir)/xsession $(HOME)/.xsession &> /dev/null
+	ln -f -s $(current_dir)/rgignore $(HOME)/.rgignore &> /dev/null
 
 	rm -f $(HOME)/.config/i3*
 	ln -f -s $(current_dir)/i3 $(HOME)/.config/i3 &> /dev/null
