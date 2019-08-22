@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-_AUTOENVFILE=.env
+_AUTOENVFILE=.environment
 _AUTOENVCHECKSUMS=$HOME/.envsums
 
 # Used as a heuristic to see if the directory has changed between invocations.

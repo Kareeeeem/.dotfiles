@@ -5,9 +5,9 @@ syntax on
 
 set wildmenu
 set showcmd
-
+set signcolumn=yes
 set breakindent
-set completeopt-=preview
+set completeopt+=preview
 " set complete-=t
 set autoindent
 set backspace=2
@@ -21,6 +21,7 @@ set scrolloff=3
 set pastetoggle=<F6>
 " set number
 set nojoinspaces  " don't insert double spaces.
+set updatetime=1000
 
 set hlsearch ignorecase smartcase incsearch
 set expandtab tabstop=4 softtabstop=4 shiftwidth=4
@@ -31,15 +32,6 @@ set undofile undodir=$HOME/.vim/undodir/
 
 let c_no_curly_error = 1
 let c_syntax_for_h = 1
-
-" if exists("&signcolumn")
-"     set signcolumn=yes
-" else
-"     augroup signs
-"         au!
-"         au BufEnter * call SetSigncolumn()
-"     augroup END
-" endif
 
 if executable("rg")
     set grepprg=rg\ --vimgrep\ --no-heading
@@ -72,7 +64,6 @@ nnoremap 0 ^
 nnoremap <leader>, f,<right>i<cr><ESC>
 " Break line
 nnoremap K i<cr><esc>kg$
-
 " show manpage
 nnoremap M K
 " Original J on leader j
@@ -95,7 +86,6 @@ xnoremap > >gv
 nnoremap <S-Tab> :bp<cr>
 nnoremap <Tab> :bn<cr>
 " nnoremap <leader>b :ls<cr>:b<space>
-"
 
 " Don't use Ex mode.
 map Q <nop>
@@ -103,6 +93,13 @@ map Q <nop>
 " }}}
 
 " Plugins {{{
+
+function! PlugLoaded(name)
+    return (
+        \ has_key(g:plugs, a:name) &&
+        \ isdirectory(g:plugs[a:name].dir) &&
+        \ stridx(&rtp, g:plugs[a:name].dir) >= 0)
+endfunction
 
 call plug#begin('~/.vim/plugged')
 
@@ -127,21 +124,30 @@ Plug 'hynek/vim-python-pep8-indent'
 Plug 'Kareeeeem/python-docstring-comments'
 Plug 'pangloss/vim-javascript'
 Plug 'wlangstroth/vim-racket'
-Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
+" Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'Shougo/echodoc.vim'
 
 call plug#end()
 
-" Automatically set the preview window height.
-set previewheight=5
+" COC Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
-au BufEnter ?* call PreviewHeightWorkAround()
-    if &previewwindow
-        exec 'setlocal winheight='.&previewheight
-    endif
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-function! PreviewHeightWorkAround()
-endfunc
-
+augroup COC
+    au!
+    au CursorHold * :call CocAction('doHover')
+augroup END
 
 "buftabline
 let g:buftabline_numbers = 1
@@ -175,13 +181,12 @@ let g:black_skip_string_normalization = 1
 " Neomake
 let g:neomake_javascript_enabled_makers = ['eslint']
 
-let g:neomake_error_sign = {'text': 'E', 'texthl': 'ErrorMsg'}
-let g:neomake_warning_sign = {'text': 'W', 'texthl': 'WarningMsg'}
-let g:neomake_message_sign = {'text': 'M', 'texthl': 'StatusLine'}
-let g:neomake_info_sign = {'text': 'I', 'texthl': 'StatusLine'}
+" let g:neomake_error_sign = {'text': '>>', 'texthl': 'ErrorMsg'}
+" let g:neomake_warning_sign = {'text': '>>', 'texthl': 'WarningMsg'}
+" let g:neomake_message_sign = {'text': '>>', 'texthl': 'StatusLine'}
+" let g:neomake_info_sign = {'text': '>>', 'texthl': 'StatusLine'}
 
-" try and see how it goes without signs
-let g:neomake_place_signs = 0
+let g:neomake_place_signs = 1
 
 let g:neomake_remove_invalid_entries=1
 
@@ -200,11 +205,16 @@ let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091'
 let g:neomake_racket_enabled_makers = ['raco']
 let g:neomake_racket_raco_remove_invalid_entries=1
 
-set statusline+=\ %#Error#%{neomake#statusline#LoclistStatus('loc\ ')}%*
+if PlugLoaded('coc.nvim')
+    set statusline+=\ %{coc#status()}
+endif
+if PlugLoaded('neomake')
+    set statusline+=\ %#Error#%{neomake#statusline#LoclistStatus('loc\ ')}%*
+endif
 
 augroup neo_make
     au!
-    au BufWritePost * Neomake
+    " au BufWritePost * Neomake
     au ColorScheme * hi link NeomakeError SpellBad
     au ColorScheme * hi link NeomakeWarning SpellCap
 augroup END
@@ -233,7 +243,7 @@ augroup vimStartup
                 \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft != 'gitcommit'
                 \ | exe "normal! g`\""
                 \ | endif
-    au InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+    au InsertLeave * if pumvisible() == 0 | pclose | endif
 augroup END
 
 " Only register these autocommands if the necessary executables are present
@@ -264,6 +274,7 @@ augroup softwear
     au BufReadPre,FileReadPre $HOME/projects/softwear/**/*.py
                 \ let b:neomake_python_flake8_args = ['--max-line-length=88']
 augroup END
+
 
 augroup languages
     au!
@@ -369,7 +380,6 @@ endfunction
 
 
 " set the colorscheme last to allow any ColorScheme autocmds to get set.
-" colorscheme nofrils-dark
 colorscheme nofrils-dark
 
 " }}}
