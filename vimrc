@@ -24,6 +24,7 @@ set nojoinspaces  " don't insert double spaces.
 
 set hlsearch ignorecase smartcase incsearch
 set expandtab tabstop=4 softtabstop=4 shiftwidth=4
+set signcolumn=yes
 
 set dir=$HOME/.vim/tmp
 set tags=.git/tags,./tags,../tags
@@ -122,7 +123,8 @@ Plug 'Kareeeeem/python-docstring-comments'
 Plug 'pangloss/vim-javascript'
 Plug 'wlangstroth/vim-racket'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'neoclide/coc-vim'
+" Plug 'neoclide/coc-python'
+" Plug 'neoclide/coc-json'
 
 
 call plug#end()

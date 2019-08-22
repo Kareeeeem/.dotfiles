@@ -14,6 +14,7 @@
 [ -d "$HOME/.local/bin" ]  && PATH="$HOME/.local/bin:$PATH"
 [ -d "$HOME/.local/racket/bin" ]  && PATH="$HOME/.local/racket/bin:$PATH"
 [ -d "$HOME/.gem/ruby/2.5.0/bin" ] && PATH="$HOME/.gem/ruby/2.5.0/bin:$PATH"
+[ -d "$HOME/.npm/bin" ] && PATH="$HOME/.npm/bin:$PATH"
 
 hash rg && export FZF_DEFAULT_COMMAND='rg --files --hidden'
 hash vim && export VISUAL="vim" && export EDITOR="$VISUAL"
