@@ -1,58 +1,4 @@
-" General settings {{{
-
-filetype plugin indent on
-syntax on
-
-set wildmenu
-set showcmd
-set signcolumn=yes
-set breakindent
-set completeopt+=preview
-" set complete-=t
-set autoindent
-set backspace=2
-set colorcolumn=80
-set encoding=utf-8
-set fileencoding=utf-8
-set formatoptions=tjrocqn
-set hidden
-set nowrap
-set scrolloff=3
-set pastetoggle=<F6>
-" set number
-set nojoinspaces  " don't insert double spaces.
-set updatetime=1000
-
-set hlsearch ignorecase smartcase incsearch
-set expandtab tabstop=4 softtabstop=4 shiftwidth=4
-
-set dir=$HOME/.vim/tmp
-set tags=.git/tags,./tags,../tags
-set undofile undodir=$HOME/.vim/undodir/
-
-let c_no_curly_error = 1
-let c_syntax_for_h = 1
-
-if executable("rg")
-    set grepprg=rg\ --vimgrep\ --no-heading
-    set grepformat=%f:%l:%c:%m,%f:%l:%m
-endif
-
-" }}}
-
-" Statusline {{{
-set laststatus=2             " always show
-set statusline=%n            " buffer number
-set statusline+=\ %.50f      " file path
-set statusline+=\ %Y         " file path
-set statusline+=\ %H%M%R     " help / modified / readonly flags
-set statusline+=%=           " right alignment from this point
-set statusline+=%l,%c%V      " linenr,columnnr,percentage into file
-set statusline+=\ %P         " percentage into file
-
-" }}}
-
-" Mappings {{{
+" Mappings
 
 " Expand `%%` to current directory.
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
@@ -90,9 +36,8 @@ nnoremap <Tab> :bn<cr>
 " Don't use Ex mode.
 map Q <nop>
 
-" }}}
 
-" Plugins {{{
+" Plugins
 
 function! PlugLoaded(name)
     return (
@@ -230,9 +175,8 @@ augroup END
 nnoremap <F5> :UndotreeToggle<cr>
 let g:undotree_SetFocusWhenToggle = 1
 
-" }}}
 
-" Autocommands {{{
+" Autocommands
 
 augroup vimStartup
     au!
@@ -289,8 +233,6 @@ augroup languages
     au FileType python setlocal keywordprg=pydoc
     au FileType python inoremap <buffer> pdb breakpoint()  # noqa<esc>
 
-    au BufReadPre *vimrc setlocal foldenable foldmethod=marker
-
     " au FileType c setlocal commentstring=//\ %s
     " au FileType c setlocal cinoptions+=:0 " Don't indent case
     au FileType awk setlocal commentstring=#\ %s
@@ -315,9 +257,8 @@ augroup qf
     au BufEnter * if &buftype=="quickfix" && winnr('$') < 2 | quit! | endif
 augroup END
 
-" }}}
 
-" Colorscheme {{{
+" Colorscheme
 
 augroup nofrils
     au!
@@ -382,9 +323,8 @@ endfunction
 " set the colorscheme last to allow any ColorScheme autocmds to get set.
 colorscheme nofrils-dark
 
-" }}}
 
-" Functions and Commands {{{
+" Functions and Commands
 
 " http://stackoverflow.com/a/7086709
 " call a command and restore view.
@@ -409,5 +349,3 @@ function! JoinSpaceless()
         execute 'normal dw'
     endif
 endfunction
-
-" }}}
