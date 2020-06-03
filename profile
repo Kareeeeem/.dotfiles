@@ -31,7 +31,7 @@ export KEYBASE_SYSTEMD=1
 export GOROOT=$HOME/.local/go
 PATH=$PATH:$GOROOT/bin
 
-# PATH=$HOME/.pyenv/bin:$PATH
+PATH=$HOME/.pyenv/bin:$PATH
 
 export PATH
 

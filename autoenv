@@ -108,7 +108,7 @@ _init () {
         cat > $_AUTOENVFILE << EOF
 AUTOENV_PROMPT=
 
-. venv/bin/activate
+. .venv/bin/activate
 
 _deactivate () {
     deactivate

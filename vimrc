@@ -6,6 +6,7 @@ syntax on
 set wildmenu
 set showcmd
 
+set updatetime=500
 set breakindent
 set completeopt-=preview
 " set complete-=t
@@ -46,6 +47,8 @@ set statusline=%n            " buffer number
 set statusline+=\ %.50f      " file path
 set statusline+=\ %Y         " file path
 set statusline+=\ %H%M%R     " help / modified / readonly flags
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+set statusline+=\[%{&fileformat}\]
 set statusline+=%=           " right alignment from this point
 set statusline+=%l,%c%V      " linenr,columnnr,percentage into file
 set statusline+=\ %P         " percentage into file
@@ -122,7 +125,7 @@ Plug 'hynek/vim-python-pep8-indent'
 Plug 'Kareeeeem/python-docstring-comments'
 Plug 'pangloss/vim-javascript'
 Plug 'wlangstroth/vim-racket'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Plug 'neoclide/coc-python'
 " Plug 'neoclide/coc-json'
 
@@ -135,6 +138,8 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
+let g:coc_global_extensions=['coc-python']
+
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
@@ -143,10 +148,10 @@ inoremap <silent><expr> <TAB>
       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-augroup COC
-    au!
-    au CursorHold * :call CocAction('doHover')
-augroup END
+" augroup COC
+"     au!
+"     au CursorHold * :call CocAction('doHover')
+" augroup END
 
 "buftabline
 let g:buftabline_numbers = 1
@@ -180,10 +185,10 @@ let g:black_skip_string_normalization = 1
 " Neomake
 let g:neomake_javascript_enabled_makers = ['eslint']
 
-" let g:neomake_error_sign = {'text': '>>', 'texthl': 'ErrorMsg'}
-" let g:neomake_warning_sign = {'text': '>>', 'texthl': 'WarningMsg'}
-" let g:neomake_message_sign = {'text': '>>', 'texthl': 'StatusLine'}
-" let g:neomake_info_sign = {'text': '>>', 'texthl': 'StatusLine'}
+let g:neomake_error_sign = {'text': '>>', 'texthl': 'ErrorMsg'}
+let g:neomake_warning_sign = {'text': '>>', 'texthl': 'WarningMsg'}
+let g:neomake_message_sign = {'text': '>>', 'texthl': 'StatusLine'}
+let g:neomake_info_sign = {'text': '>>', 'texthl': 'StatusLine'}
 
 let g:neomake_place_signs = 1
 
@@ -213,9 +218,9 @@ endif
 
 augroup neo_make
     au!
-    " au BufWritePost * Neomake
-    au ColorScheme * hi link NeomakeError SpellBad
-    au ColorScheme * hi link NeomakeWarning SpellCap
+    au BufWritePost * Neomake
+    " au ColorScheme * hi link NeomakeError SpellBad
+    " au ColorScheme * hi link NeomakeWarning SpellCap
 augroup END
 
 " Emmet
