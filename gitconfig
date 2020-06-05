@@ -9,13 +9,12 @@
     lg = log --oneline
     lgr = log --oneline --graph --all
     lm = log origin/master.. --pretty=format:*' '%s%n%b
-    fr = "!git fetch && git rebase origin/master"
 [push]
 	default = simple
 [log]
     decorate = auto
 [core]
-	excludesfile = /home/kareem/.gitignore_global
+	excludesfile = /Users/kareem/.gitignore
 [merge]
 	tool = vimdiff
 	conflictstyle = diff3

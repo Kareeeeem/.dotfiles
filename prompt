@@ -10,8 +10,10 @@ _prompt_command() {
     local EXIT=$? _status _autoenv_prompt _pwd
     # highlight with gray background.
     local _hl="\[\e[48;5;237m\]"
+    local _hl=""
     # reset all attributes
     local _reset="\[\e[0m\]"
+    local _reset=""
 
     if [ "$EXIT" != 0 ]; then
         _status="$EXIT "

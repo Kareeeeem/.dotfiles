@@ -1,2 +1,4 @@
 .env
 .envsum
+.python-version
+.DS_Store

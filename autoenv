@@ -2,6 +2,7 @@
 
 _AUTOENVFILE=.environment
 _AUTOENVCHECKSUMS=$HOME/.envsums
+touch $_AUTOENVCHECKSUMS
 
 # Used as a heuristic to see if the directory has changed between invocations.
 _AUTOENV_LAST_PWD=
@@ -115,7 +116,7 @@ _deactivate () {
     unset AUTOENV_PROMPT
 }
 EOF
-    vi $_AUTOENVFILE
+    $EDITOR $_AUTOENVFILE
 	fi
 }
 

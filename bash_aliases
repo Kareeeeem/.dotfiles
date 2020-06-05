@@ -33,3 +33,4 @@ alias rt="rtorrent"
 
 alias tk="tmux kill-session"
 alias tn="tmux new -s"
+hash nvim && alias vim="nvim"
