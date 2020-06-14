@@ -15,6 +15,7 @@
 [ -d "$HOME/.local/bin" ]  && PATH="$HOME/.local/bin:$PATH"
 [ -d "$HOME/.pyenv/bin" ] && PATH=$HOME/.pyenv/bin:$PATH
 [ -d "/usr/local/opt/coreutils/libexec/gnubin" ] && PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+[ -d "/Users/kareem/Library/Python/3.7/bin" ] && PATH="/Users/kareem/Library/Python/3.7/bin:$PATH"
 
 if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"

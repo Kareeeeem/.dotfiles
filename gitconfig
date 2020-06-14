@@ -10,7 +10,7 @@
     lgr = log --oneline --graph --all
     lm = log origin/master.. --pretty=format:*' '%s%n%b
 [push]
-	default = simple
+	default = current
 [log]
     decorate = auto
 [core]
@@ -24,3 +24,5 @@
 	trustExitCode = false
 [fetch]
 	prune = true
+[pull]
+	ff = only

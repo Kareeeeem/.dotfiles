@@ -125,7 +125,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'moll/vim-bbye', {'on': 'Bdelete'}
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'python/black'
+Plug 'psf/black', { 'branch': 'stable' }
 
 " language help
 Plug 'mattn/emmet-vim'
@@ -141,25 +141,29 @@ Plug 'wlangstroth/vim-racket'
 call plug#end()
 
 " COC Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+" nmap <silent> gd <Plug>(coc-definition)
+" nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gr <Plug>(coc-references)
 
-let g:coc_global_extensions=['coc-python']
+" let g:coc_global_extensions=['coc-python']
 
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 " augroup COC
 "     au!
 "     au CursorHold * :call CocAction('doHover')
 " augroup END
+
+let g:python3_host_prog = '/Users/kareem/.nvimpy3_venv/bin/python'
+" disable python support
+let g:loaded_python_provider = 0
 
 "buftabline
 let g:buftabline_numbers = 1
@@ -279,7 +283,8 @@ augroup END
 " Work related autocommands
 augroup softwear
     au!
-    au BufWritePre $HOME/projects/softwear/**/*.py execute ':Black'
+    " Automatically format python files with Black for work.
+    au BufWritePre $HOME/Work/**/*.py execute ':Black'
 augroup END
 
 
