@@ -11,7 +11,7 @@
 # Bash
 [ -n "$BASH_VERSION" ] && [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
 
-[ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
+[ -d "$HOME/.dotfiles/bin" ] && PATH="$HOME/.dotfiles/bin:$PATH"
 [ -d "$HOME/.local/bin" ]  && PATH="$HOME/.local/bin:$PATH"
 [ -d "$HOME/.pyenv/bin" ] && PATH=$HOME/.pyenv/bin:$PATH
 [ -d "/usr/local/opt/coreutils/libexec/gnubin" ] && PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
