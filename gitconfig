@@ -26,3 +26,5 @@
 	prune = true
 [pull]
 	ff = only
+[diff]
+	submodule = log

@@ -2,6 +2,6 @@ check_hash = yes
 directory = ~/Downloads
 session = ~/.rtorrent.session
 
-schedule = watch_directory,5,5,load.start=/home/kareem/Downloads/*.torrent
+schedule = watch_directory,5,5,load.start=/Users/kareem//Downloads/*.torrent
 schedule = untied_directory,5,5,stop_untied=
 schedule = tied_directory,5,5,start_tied=

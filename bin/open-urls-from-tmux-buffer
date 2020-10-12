@@ -9,6 +9,4 @@ _BUFFER_FILE=/tmp/tmux-buffer
 _BUFFER_NAME=url_buffer
 
 tmux capture-pane -J -b $_BUFFER_NAME
-tmux save-buffer -b $_BUFFER_NAME $_BUFFER_FILE
-
-open-url < $_BUFFER_FILE
+open-url <<< $(tmux show-buffer -b $_BUFFER_NAME)

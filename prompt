@@ -35,7 +35,7 @@ _prompt_command() {
 
     _pwd=$(pwd | awk -F/ 'NF <= 3 { printf "%s", $0 } NF > 3 { printf "%s/%s", $(NF-1), $NF  }')
 
-    __git_ps1 "${_status}${_autoenv_prompt}" "${_hl}${_pwd}${_reset} $ " "${_hl}%s${_reset} "
+    __git_ps1 "$(date +%R) ${_status}${_autoenv_prompt}" "${_hl}${_pwd}${_reset} $ " "${_hl}%s${_reset} "
 
     history -a  # Append new lines to history file
     history -c  # Clear the history list

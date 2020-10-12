@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 '''A script that will generate tags for a project in the .git folder.
 
 I use it in vim on each write like so:
@@ -36,7 +36,8 @@ try:
 except OSError:
     pass
 
-ctags_command = 'ctags -R -o %s %s' % (tmp_tags_path, project_dir)
+brew_prefix = run_command('brew --prefix').decode('u8')
+ctags_command = '%s/bin/ctags -R -o %s %s' % (brew_prefix, tmp_tags_path, project_dir)
 run_command(ctags_command)
 
 if len(sys.argv) > 1 and sys.argv[1] == 'venv':

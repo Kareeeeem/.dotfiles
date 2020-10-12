@@ -125,7 +125,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'moll/vim-bbye', {'on': 'Bdelete'}
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'psf/black', { 'branch': 'stable' }
+" Plug 'psf/black', { 'branch': 'stable' }
 
 " language help
 Plug 'mattn/emmet-vim'
@@ -193,6 +193,7 @@ nmap <leader>v <Plug>SlimeConfig
 " black
 let g:black_fast = 1
 let g:black_skip_string_normalization = 1
+let g:black_line_length = 120
 
 " Neomake
 let g:neomake_javascript_enabled_makers = ['eslint']
@@ -214,19 +215,15 @@ let g:neomake_c_gcc_remove_invalid_entries=1
 " let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything', '-I./']
 
 let g:neomake_python_enabled_makers = ['flake8']
-let g:neomake_python_flake8_args = ['--max-line-length=120']
+let g:neomake_python_flake8_args = ['--max-line-length=120', '--ban-relative-imports']
+
 
 let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091']
 
 let g:neomake_racket_enabled_makers = ['raco']
 let g:neomake_racket_raco_remove_invalid_entries=1
 
-if PlugLoaded('coc.nvim')
-    set statusline+=\ %{coc#status()}
-endif
-if PlugLoaded('neomake')
-    set statusline+=\ %#Error#%{neomake#statusline#LoclistStatus('loc\ ')}%*
-endif
+set statusline+=\ %#Error#%{neomake#statusline#LoclistStatus('loc\ ')}%*
 
 augroup neo_make
     au!
@@ -281,11 +278,11 @@ augroup cleanup_ws
 augroup END
 
 " Work related autocommands
-augroup softwear
-    au!
-    " Automatically format python files with Black for work.
-    au BufWritePre $HOME/Work/**/*.py execute ':Black'
-augroup END
+" augroup softwear
+"     au!
+"     " Automatically format python files with Black for work.
+"     au BufWritePre $HOME/Work/**/*.py execute ':Black'
+" augroup END
 
 
 augroup languages
