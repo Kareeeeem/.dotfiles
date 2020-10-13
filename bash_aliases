@@ -1,4 +1,6 @@
 #!/usr/bin/bash
+alias vim='nvim'
+alias vi='nvim'
 alias evim='vim $HOME/.dotfiles/vimrc'
 alias ebash='vim $HOME/.dotfiles/{bashrc,profile,bash_aliases,prompt.sh,bash_functions}'
 alias ssh='TERM=screen-256color ssh'

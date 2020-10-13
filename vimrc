@@ -12,7 +12,7 @@ set completeopt-=preview
 " set complete-=t
 set autoindent
 set backspace=2
-set colorcolumn=80
+set colorcolumn=121
 set encoding=utf-8
 set fileencoding=utf-8
 set formatoptions=tjrocqn
@@ -117,7 +117,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'moll/vim-bbye', {'on': 'Bdelete'}
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'python/black'
+Plug 'python/black', {'branch': 'master'}
 
 " language help
 Plug 'mattn/emmet-vim'
@@ -139,6 +139,9 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 let g:coc_global_extensions=['coc-python']
+
+" nvim host prog
+let g:python3_host_prog = '/home/kareem/.venv-py3nvim/bin/python'
 
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
@@ -180,7 +183,7 @@ nmap <leader>v <Plug>SlimeConfig
 
 " black
 let g:black_fast = 1
-let g:black_skip_string_normalization = 1
+let g:black_string_normalization = 0
 
 " Neomake
 let g:neomake_javascript_enabled_makers = ['eslint']
@@ -202,7 +205,7 @@ let g:neomake_c_gcc_remove_invalid_entries=1
 " let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything', '-I./']
 
 let g:neomake_python_enabled_makers = ['flake8']
-let g:neomake_python_flake8_args = ['--max-line-length=79']
+let g:neomake_python_flake8_args = ['--max-line-length=120']
 
 let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091']
 

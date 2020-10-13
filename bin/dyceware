@@ -18,9 +18,11 @@ DESCRIPTION:
 
 import os
 import sys
+
 import random
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+
 
 def main():
     """Generate a diceware passphrase."""
