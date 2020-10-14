@@ -12,7 +12,7 @@ set completeopt-=preview
 " set complete-=t
 set autoindent
 set backspace=2
-set colorcolumn=121
+set colorcolumn=80
 set encoding=utf-8
 set fileencoding=utf-8
 set formatoptions=tjrocqn
@@ -125,36 +125,12 @@ Plug 'hynek/vim-python-pep8-indent'
 Plug 'Kareeeeem/python-docstring-comments'
 Plug 'pangloss/vim-javascript'
 Plug 'wlangstroth/vim-racket'
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'neoclide/coc-python'
-" Plug 'neoclide/coc-json'
 
 
 call plug#end()
 
-" COC Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-let g:coc_global_extensions=['coc-python']
-
 " nvim host prog
-let g:python3_host_prog = '/home/kareem/.venv-py3nvim/bin/python'
-
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-" augroup COC
-"     au!
-"     au CursorHold * :call CocAction('doHover')
-" augroup END
+let g:python3_host_prog = '$HOME/.venv-py3nvim/bin/python'
 
 "buftabline
 let g:buftabline_numbers = 1
@@ -192,7 +168,6 @@ let g:neomake_error_sign = {'text': '>>', 'texthl': 'ErrorMsg'}
 let g:neomake_warning_sign = {'text': '>>', 'texthl': 'WarningMsg'}
 let g:neomake_message_sign = {'text': '>>', 'texthl': 'StatusLine'}
 let g:neomake_info_sign = {'text': '>>', 'texthl': 'StatusLine'}
-
 let g:neomake_place_signs = 1
 
 let g:neomake_remove_invalid_entries=1
@@ -205,16 +180,13 @@ let g:neomake_c_gcc_remove_invalid_entries=1
 " let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything', '-I./']
 
 let g:neomake_python_enabled_makers = ['flake8']
-let g:neomake_python_flake8_args = ['--max-line-length=120']
+let g:neomake_python_flake8_args = ['--max-line-length=79']
 
 let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091']
 
 let g:neomake_racket_enabled_makers = ['raco']
 let g:neomake_racket_raco_remove_invalid_entries=1
 
-if PlugLoaded('coc.nvim')
-    set statusline+=\ %{coc#status()}
-endif
 if PlugLoaded('neomake')
     set statusline+=\ %#Error#%{neomake#statusline#LoclistStatus('loc\ ')}%*
 endif
@@ -228,6 +200,7 @@ augroup END
 
 " Emmet
 let g:user_emmet_install_global = 0
+
 augroup emmet
     au!
     au FileType mako,html,css,htmldjango,htmljinja EmmetInstall
@@ -274,11 +247,11 @@ augroup END
 " Work related autocommands
 augroup softwear
     au!
-    au BufWritePre $HOME/projects/softwear/**/*.py execute ':Black'
+    au BufWritePre $HOME/softwear/**/*.py execute ':Black'
+    au BufReadPre,FileReadPre $HOME//softwear/**/*.py
+                \ set colorcolumn=121
     au BufReadPre,FileReadPre $HOME/projects/softwear/**/*.py
-                \ set colorcolumn=88
-    au BufReadPre,FileReadPre $HOME/projects/softwear/**/*.py
-                \ let b:neomake_python_flake8_args = ['--max-line-length=88']
+                \ let b:neomake_python_flake8_args = ['--max-line-length=120']
 augroup END
 
 
@@ -381,10 +354,8 @@ function! ToggleNofrils()
     endif
 endfunction
 
-
 " set the colorscheme last to allow any ColorScheme autocmds to get set.
 colorscheme nofrils-dark
-
 
 " Functions and Commands
 
@@ -394,12 +365,6 @@ function! Preserve(command)
     let w = winsaveview()
     silent execute a:command
     call winrestview(w)
-endfunction
-
-" http://superuser.com/a/558885
-function! SetSigncolumn()
-    sign define dummy
-    execute 'sign place 9999 line=1 name=dummy buffer=' . bufnr('')
 endfunction
 
 " http://vi.stackexchange.com/a/440
