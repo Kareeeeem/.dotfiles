@@ -248,9 +248,9 @@ augroup END
 augroup softwear
     au!
     au BufWritePre $HOME/softwear/**/*.py execute ':Black'
-    au BufReadPre,FileReadPre $HOME//softwear/**/*.py
+    au BufReadPre,FileReadPre $HOME/softwear/**/*.py
                 \ set colorcolumn=121
-    au BufReadPre,FileReadPre $HOME/projects/softwear/**/*.py
+    au BufReadPre,FileReadPre $HOME/softwear/**/*.py
                 \ let b:neomake_python_flake8_args = ['--max-line-length=120']
 augroup END
 

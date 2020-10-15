@@ -14,9 +14,9 @@ _CHOICE=
 if [ -n "$_URLS" -a $_URLCOUNT -eq 1 ]; then
     _CHOICE=$_URLS
 elif [ $_URLCOUNT -gt 1 ]; then
-    _CHOICE=$(tac <<< "$_URLS" | dmenu -i -l $_URLCOUNT || true)
+    _CHOICE=$(tac <<< "$_URLS" | fzf-tmux || true)
 fi
 
 if [ -n "$_CHOICE" ]; then
-    xdg-open "$_CHOICE" &> /dev/null
+    explorer.exe "$_CHOICE" || true
 fi

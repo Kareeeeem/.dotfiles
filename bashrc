@@ -38,9 +38,6 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-# colored manpages with max width 80
-export MANWIDTH=80
-
 # no duplicates or lines starting with space
 HISTCONTROL=ignoreboth:erasedups
 HISTSIZE=1000000
