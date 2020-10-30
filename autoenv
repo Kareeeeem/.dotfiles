@@ -3,9 +3,6 @@
 _AUTOENVFILE=.environment
 _AUTOENVCHECKSUMS=$HOME/.envsums
 
-# Used as a heuristic to see if the directory has changed between invocations.
-_AUTOENV_LAST_PWD=
-
 # can be used outside to see which environment is activated.
 export AUTOENV=
 
@@ -25,10 +22,9 @@ _autoenv () {
 }
 
 _activate_environment () {
-	local slashes current_dir original_dir envfile
+	local slashes current_dir envfile
 
-	original_dir="$PWD"
-	current_dir="$original_dir"
+	current_dir="$PWD"
 	slashes=${current_dir//[^\/]/}
 
     # Bubble up to $HOME to find an .env file
@@ -41,12 +37,12 @@ _activate_environment () {
 
                 # cd to the directory because the env file might refer to
                 # relative paths.
-                cd "$current_dir"
+                pushd "$current_dir" &> /dev/null
 
                 . $_AUTOENVFILE
                 AUTOENV=$envfile
 
-                cd "$original_dir"
+                popd &> /dev/null
             fi
             break;
 		else
@@ -101,6 +97,7 @@ _editenv () {
 	else
 		echo "No environment sourced or envfile has been moved or deleted."
 	fi
+    _reactivate_environment
 }
 
 _init () {

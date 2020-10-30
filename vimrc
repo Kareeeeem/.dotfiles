@@ -28,7 +28,7 @@ set expandtab tabstop=4 softtabstop=4 shiftwidth=4
 set signcolumn=yes
 
 set dir=$HOME/.vim/tmp
-set tags=.git/tags,./tags,../tags
+set tags=.git/tags,./tags,../tags,../.git/tags
 set undofile undodir=$HOME/.vim/undodir/
 
 let c_no_curly_error = 1
@@ -164,10 +164,10 @@ let g:black_string_normalization = 0
 " Neomake
 let g:neomake_javascript_enabled_makers = ['eslint']
 
-let g:neomake_error_sign = {'text': '>>', 'texthl': 'ErrorMsg'}
-let g:neomake_warning_sign = {'text': '>>', 'texthl': 'WarningMsg'}
-let g:neomake_message_sign = {'text': '>>', 'texthl': 'StatusLine'}
-let g:neomake_info_sign = {'text': '>>', 'texthl': 'StatusLine'}
+" let g:neomake_error_sign = {'text': '>>', 'texthl': 'ErrorMsg'}
+" let g:neomake_warning_sign = {'text': '>>', 'texthl': 'WarningMsg'}
+" let g:neomake_message_sign = {'text': '>>', 'texthl': 'StatusLine'}
+" let g:neomake_info_sign = {'text': '>>', 'texthl': 'StatusLine'}
 let g:neomake_place_signs = 1
 
 let g:neomake_remove_invalid_entries=1
@@ -187,9 +187,7 @@ let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091'
 let g:neomake_racket_enabled_makers = ['raco']
 let g:neomake_racket_raco_remove_invalid_entries=1
 
-if PlugLoaded('neomake')
-    set statusline+=\ %#Error#%{neomake#statusline#LoclistStatus('loc\ ')}%*
-endif
+set statusline+=\ %#Error#%{neomake#statusline#LoclistStatus('loc\ ')}%*
 
 augroup neo_make
     au!
@@ -212,7 +210,6 @@ let g:undotree_SetFocusWhenToggle = 1
 
 
 " Autocommands
-
 augroup vimStartup
     au!
     " When editing a file, always jump to the last known cursor position.
@@ -234,6 +231,7 @@ if executable('ctags') && executable('git-tags')
 endif
 
 let ws_blacklist = []
+
 augroup cleanup_ws
     au!
     " strip trailing whitespace.
@@ -258,16 +256,12 @@ augroup END
 augroup languages
     au!
     au BufWritePre *.go call Preserve('%!gofmt')
-
     " vim-racket overrides my K mapping
     au FileType racket nunmap <buffer> K
-
     au FileType *markdown*,text setlocal fo+=t tw=72 wrap
     " au FileType sh setlocal noexpandtab
-
     au FileType python setlocal keywordprg=pydoc
     au FileType python inoremap <buffer> pdb breakpoint()  # noqa<esc>
-
     " au FileType c setlocal commentstring=//\ %s
     " au FileType c setlocal cinoptions+=:0 " Don't indent case
     au FileType awk setlocal commentstring=#\ %s
@@ -275,12 +269,9 @@ augroup languages
     au FileType php setlocal commentstring=//\ %s
     au FileType racket,scheme setlocal commentstring=;\ %s
     au FileType racket,scheme setlocal commentstring=;\ %s
-
     au FileType xdefaults setlocal commentstring=!\ %s
     au FileType rc setlocal commentstring=#\ %s
-
     au FileType yaml,ruby setlocal tabstop=2 softtabstop=2 shiftwidth=2
-
     au BufRead,BufNewFile *.zpl set filetype=zpl
     au FileType zpl setlocal commentstring=^FX\ %s
 augroup END
@@ -305,9 +296,9 @@ function! ModifyColorscheme()
     " Some modifications I like for nofrils-dark
     if (g:colors_name == "nofrils-dark")
         " brighten the comments
-        hi Comment ctermfg=243
+        " hi Comment ctermfg=243
         " dim the normal text a little bit.
-        hi Normal ctermfg=253 ctermbg=NONE
+        " hi Normal ctermfg=253 ctermbg=NONE
 
         hi TODO cterm=bold
 
@@ -355,7 +346,7 @@ function! ToggleNofrils()
 endfunction
 
 " set the colorscheme last to allow any ColorScheme autocmds to get set.
-colorscheme nofrils-dark
+colorscheme nofrils-light
 
 " Functions and Commands
 

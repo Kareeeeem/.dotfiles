@@ -9,7 +9,8 @@ _prompt_command() {
     # Save the status before anything else so $? does not get overwritten.
     local EXIT=$? _status _autoenv_prompt _pwd
     # highlight with gray background.
-    local _hl="\[\e[48;5;237m\]"
+    # local _hl="\[\e[48;5;237m\]"
+    local _hl=""
     # reset all attributes
     local _reset="\[\e[0m\]"
 

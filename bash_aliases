@@ -1,11 +1,12 @@
 #!/usr/bin/bash
 alias vim='nvim'
-alias vi='nvim'
+alias vi='vim'
 alias evim='vim $HOME/.dotfiles/vimrc'
-alias ebash='vim $HOME/.dotfiles/{bashrc,profile,bash_aliases,prompt.sh,bash_functions}'
+alias ebash='vim $HOME/.dotfiles/{bashrc,profile,bash_aliases,prompt,bash_functions}'
 alias ssh='TERM=screen-256color ssh'
+alias localip="ip addr show eth0 | grep -Po 'inet \K[\d.]+'"
 
-alias clip="xclip -sel clip"
+alias clip="clip.exe"
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -17,7 +18,7 @@ alias l='ls -lhF --group-directories-first'
 #            ├─h human readable sizes
 #            └──F classifiers
 
-alias json='python -m json.tool'
+alias json='python3 -m json.tool'
 
 # http://askubuntu.com/a/17279
 alias rcp="rsync -ah -P"

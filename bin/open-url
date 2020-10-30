@@ -18,5 +18,5 @@ elif [ $_URLCOUNT -gt 1 ]; then
 fi
 
 if [ -n "$_CHOICE" ]; then
-    explorer.exe "$_CHOICE" || true
+    wslview "$_CHOICE" || true
 fi
