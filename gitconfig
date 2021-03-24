@@ -11,7 +11,7 @@
     lm = log origin/master.. --pretty=format:*' '%s%n%b
     fr = "!git fetch && git rebase origin/master"
 [push]
-	default = simple
+	default = current
 [log]
     decorate = auto
 [core]

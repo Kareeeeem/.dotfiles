@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
-# Capture urls from a stdin and open the link. If more than one url
-# is available select one with dmenu
+# Capture urls from a stdin and open the link. If more than
+# one url is available select one with a menu.
 
-# Depends on [xurls][0], a distribution of which is included in this repo.
-# [0]: https://github.com/mvdan/xurls
+# Depends on [fzf][0] for providing a menu, and [xurls][1]
+# for extracting urls
+# [0]: https://github.com/junegunn/fzf
+# [1]: https://github.com/mvdan/xurls
 
 
 _URLS="$(xurls <&0 | awk '!seen[$0]++')"

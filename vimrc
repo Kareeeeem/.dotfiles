@@ -3,6 +3,8 @@
 filetype plugin indent on
 syntax on
 
+set clipboard=unnamedplus
+
 set wildmenu
 set showcmd
 
@@ -12,7 +14,7 @@ set completeopt-=preview
 " set complete-=t
 set autoindent
 set backspace=2
-set colorcolumn=80
+set colorcolumn=90
 set encoding=utf-8
 set fileencoding=utf-8
 set formatoptions=tjrocqn
@@ -60,8 +62,8 @@ set statusline+=\ %P         " percentage into file
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 " Because backslash is in a awkward place.
 let mapleader = "\<Space>"
-" I almost never want to go to the ABSOLUTE beginning of a line
-nnoremap 0 ^
+" " I almost never want to go to the ABSOLUTE beginning of a line
+" nnoremap 0 ^
 " break lines on a comma's
 nnoremap <leader>, f,<right>i<cr><ESC>
 " Break line
@@ -118,16 +120,29 @@ Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'moll/vim-bbye', {'on': 'Bdelete'}
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'python/black', {'branch': 'master'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " language help
 Plug 'mattn/emmet-vim'
 Plug 'hynek/vim-python-pep8-indent'
 Plug 'Kareeeeem/python-docstring-comments'
 Plug 'pangloss/vim-javascript'
-Plug 'wlangstroth/vim-racket'
-
+" Plug 'wlangstroth/vim-racket'
 
 call plug#end()
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
 " nvim host prog
 let g:python3_host_prog = '$HOME/.venv-py3nvim/bin/python'
@@ -150,7 +165,7 @@ nnoremap <leader>b :Buffers<cr>
 
 " Slime
 let g:slime_target = 'tmux'
-let g:slime_python_ipython = 1
+" let g:slime_python_ipython = 1
 let g:slime_no_mappings = 1
 
 xmap <leader>s <Plug>SlimeRegionSend
@@ -162,7 +177,7 @@ let g:black_fast = 1
 let g:black_string_normalization = 0
 
 " Neomake
-let g:neomake_javascript_enabled_makers = ['eslint']
+" let g:neomake_javascript_enabled_makers = [build'eslint']
 
 " let g:neomake_error_sign = {'text': '>>', 'texthl': 'ErrorMsg'}
 " let g:neomake_warning_sign = {'text': '>>', 'texthl': 'WarningMsg'}
@@ -180,12 +195,12 @@ let g:neomake_c_gcc_remove_invalid_entries=1
 " let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything', '-I./']
 
 let g:neomake_python_enabled_makers = ['flake8']
-let g:neomake_python_flake8_args = ['--max-line-length=79']
+let g:neomake_python_flake8_args = ['--max-line-length=89']
 
 let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091']
 
-let g:neomake_racket_enabled_makers = ['raco']
-let g:neomake_racket_raco_remove_invalid_entries=1
+" let g:neomake_racket_enabled_makers = ['raco']
+" let g:neomake_racket_raco_remove_invalid_entries=1
 
 set statusline+=\ %#Error#%{neomake#statusline#LoclistStatus('loc\ ')}%*
 
@@ -210,6 +225,7 @@ let g:undotree_SetFocusWhenToggle = 1
 
 
 " Autocommands
+
 augroup vimStartup
     au!
     " When editing a file, always jump to the last known cursor position.
@@ -223,6 +239,7 @@ augroup vimStartup
 augroup END
 
 " Only register these autocommands if the necessary executables are present
+
 if executable('ctags') && executable('git-tags')
     augroup tags
         au!
@@ -243,32 +260,35 @@ augroup cleanup_ws
 augroup END
 
 " Work related autocommands
+
 augroup softwear
     au!
     au BufWritePre $HOME/softwear/**/*.py execute ':Black'
-    au BufReadPre,FileReadPre $HOME/softwear/**/*.py
-                \ set colorcolumn=121
-    au BufReadPre,FileReadPre $HOME/softwear/**/*.py
-                \ let b:neomake_python_flake8_args = ['--max-line-length=120']
+    " au BufNewFile,BufReadPre,FileReadPre $HOME/softwear/**/*.py
+    "             \ set colorcolumn=89
+    " au BufNewFile,BufReadPre,FileReadPre $HOME/softwear/**/*.py
+    "             \ let b:neomake_python_flake8_args = ['--max-line-length=88']
 augroup END
 
 
 augroup languages
     au!
     au BufWritePre *.go call Preserve('%!gofmt')
+
     " vim-racket overrides my K mapping
-    au FileType racket nunmap <buffer> K
+    " au FileType racket nunmap <buffer> K
+    " au FileType racket,scheme setlocal commentstring=;\ %s
+    " au FileType racket,scheme setlocal commentstring=;\ %s
+    "
     au FileType *markdown*,text setlocal fo+=t tw=72 wrap
     " au FileType sh setlocal noexpandtab
     au FileType python setlocal keywordprg=pydoc
-    au FileType python inoremap <buffer> pdb breakpoint()  # noqa<esc>
+    " au FileType python inoremap <buffer> pdb breakpoint()  # noqa<esc>
     " au FileType c setlocal commentstring=//\ %s
     " au FileType c setlocal cinoptions+=:0 " Don't indent case
     au FileType awk setlocal commentstring=#\ %s
     au FileType htmljinja,htmldjango setlocal commentstring={#\ %s\ #}
     au FileType php setlocal commentstring=//\ %s
-    au FileType racket,scheme setlocal commentstring=;\ %s
-    au FileType racket,scheme setlocal commentstring=;\ %s
     au FileType xdefaults setlocal commentstring=!\ %s
     au FileType rc setlocal commentstring=#\ %s
     au FileType yaml,ruby setlocal tabstop=2 softtabstop=2 shiftwidth=2
@@ -294,11 +314,12 @@ augroup END
 
 function! ModifyColorscheme()
     " Some modifications I like for nofrils-dark
-    if (g:colors_name == "nofrils-dark")
+    if (g:colors_name == "nofrils-light")
         " brighten the comments
         " hi Comment ctermfg=243
         " dim the normal text a little bit.
         " hi Normal ctermfg=253 ctermbg=NONE
+        hi Normal ctermbg=NONE
 
         hi TODO cterm=bold
 

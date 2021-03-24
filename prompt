@@ -12,25 +12,26 @@ _prompt_command() {
     # local _hl="\[\e[48;5;237m\]"
     local _hl=""
     # reset all attributes
-    local _reset="\[\e[0m\]"
+    # local _reset="\[\e[0m\]"
+    local _reset=""
 
     if [ "$EXIT" != 0 ]; then
         _status="$EXIT "
     fi
 
     # only auto active environments in tmux sessions
-    if [ -n "$TMUX" ]; then
-        _autoenv
+    # if [ -n "$TMUX" ]; then
+    _autoenv
 
-        if [ -n "$AUTOENV" ]; then
-            if [ -z "$AUTOENV_PROMPT" ]; then
-                _autoenv_prompt="$(basename $(dirname $AUTOENV))"
-            else
-                _autoenv_prompt="${AUTOENV_PROMPT}"
-            fi
-            _autoenv_prompt="${_hl}${_autoenv_prompt}${_reset} "
+    if [ -n "$AUTOENV" ]; then
+        if [ -z "$AUTOENV_PROMPT" ]; then
+            _autoenv_prompt="$(basename $(dirname $AUTOENV))"
+        else
+            _autoenv_prompt="${AUTOENV_PROMPT}"
         fi
+        _autoenv_prompt="${_hl}${_autoenv_prompt}${_reset} "
     fi
+    # fi
 
     _pwd=$(pwd | awk -F/ 'NF <= 3 { printf "%s", $0 } NF > 3 { printf "%s/%s", $(NF-1), $NF  }')
 
