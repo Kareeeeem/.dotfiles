@@ -10,17 +10,17 @@ esac
 
 # colored manpages with max width 80
 export MANWIDTH=80
-# man() {
-# 	env \
-# 		LESS_TERMCAP_mb="$(printf "\e[1;34m")" \
-# 		LESS_TERMCAP_md="$(printf "\e[1;34m")" \
-# 		LESS_TERMCAP_me="$(printf "\e[0m")" \
-# 		LESS_TERMCAP_se="$(printf "\e[0m")" \
-# 		LESS_TERMCAP_so="$(printf "\e[7m")" \
-# 		LESS_TERMCAP_ue="$(printf "\e[0m")" \
-# 		LESS_TERMCAP_us="$(printf "\e[1;36m")" \
-# 			man "$@"
-# }
+man() {
+	env \
+		LESS_TERMCAP_mb="$(printf "\e[1;34m")" \
+		LESS_TERMCAP_md="$(printf "\e[1;34m")" \
+		LESS_TERMCAP_me="$(printf "\e[0m")" \
+		LESS_TERMCAP_se="$(printf "\e[0m")" \
+		LESS_TERMCAP_so="$(printf "\e[7m")" \
+		LESS_TERMCAP_ue="$(printf "\e[0m")" \
+		LESS_TERMCAP_us="$(printf "\e[1;36m")" \
+			man "$@"
+}
 
 
 # make less more friendly for non-text input files, see lesspipe(1)
@@ -53,22 +53,27 @@ shopt -s extglob
 
 stty -ixon            # Disable START/STOP signals
 
-# enable bash completion in interactive shells
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    . /etc/bash_completion
-    if [ -d $HOME/.bash_completion.d ]; then
-        for f in $HOME/.bash_completion.d/* ; do
-            . $f
-        done
-    fi
-fi
+ # enable bash completion in interactive shells
+ if ! shopt -oq posix ; then
+     if [ -f /etc/bash_completion ]; then
+         . /etc/bash_completion
+     fi
+     if [ -d $HOME/.bash_completion.d ]; then
+         for f in $HOME/.bash_completion.d/* ; do
+             . $f
+         done
+     fi
+     if [ -d /opt/homebrew/etc/bash_completion.d ]; then
+         for f in /opt/homebrew/etc/bash_completion.d/* ; do
+             . $f
+         done
+     fi
+ fi
 
-if [ -d $HOME/.dotfiles ]; then
-    . $HOME/.dotfiles/prompt
-    . $HOME/.dotfiles/autoenv
-    . $HOME/.dotfiles/bash_functions
-    . $HOME/.dotfiles/bash_aliases
-    . $HOME/.dotfiles/z/z.sh
-fi
-
-[ -f ~/.fzf.bash ] && . ~/.fzf.bash
+ if [ -d $HOME/.dotfiles ]; then
+     . $HOME/.dotfiles/prompt
+     . $HOME/.dotfiles/autoenv
+     . $HOME/.dotfiles/bash_functions
+     . $HOME/.dotfiles/bash_aliases
+     . $HOME/.dotfiles/z/z.sh
+ fi

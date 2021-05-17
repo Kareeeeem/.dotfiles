@@ -119,8 +119,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'moll/vim-bbye', {'on': 'Bdelete'}
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'python/black', {'branch': 'master'}
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'python/black', {'branch': 'master'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " language help
 Plug 'mattn/emmet-vim'
@@ -319,37 +319,9 @@ function! ModifyColorscheme()
         " hi Comment ctermfg=243
         " dim the normal text a little bit.
         " hi Normal ctermfg=253 ctermbg=NONE
-        hi Normal ctermbg=NONE
+        " hi Normal ctermbg=NONE
 
         hi TODO cterm=bold
-
-        " Nofrils undoes all the links. I want to reestablish some of the
-        " main ones to experiment with some minimal highlighting.
-
-        " hi Statement ctermfg=11
-        " hi link Conditional Statement
-        " hi link Repeat Statement
-        " hi link Label Statement
-        " hi link Operator Statement
-        " hi link Keyword Statement
-        " hi link Exception Statement
-
-        " hi PreProc ctermfg=81
-        " hi link Include PreProc
-        " hi link Define PreProc
-        " hi link Macro PreProc
-        " hi link PreCondit PreProc
-
-        " hi Identifier ctermfg=14
-        " hi link Function Identifier
-
-        " hi Constant ctermbg=233
-        " hi link String Constant
-        " hi link Character Constant
-        " hi link Number Constant
-        " hi link Boolean Constant
-        " hi link Float Constant
-
 
         if (&cursorline)
             hi clear CursorLineNr
