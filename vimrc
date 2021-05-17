@@ -165,7 +165,7 @@ nnoremap <leader>b :Buffers<cr>
 
 " Slime
 let g:slime_target = 'tmux'
-" let g:slime_python_ipython = 1
+let g:slime_python_ipython = 1
 let g:slime_no_mappings = 1
 
 xmap <leader>s <Plug>SlimeRegionSend
@@ -261,12 +261,12 @@ augroup END
 
 " Work related autocommands
 
-augroup softwear
+augroup hal24k
     au!
-    au BufWritePre $HOME/softwear/**/*.py execute ':Black'
-    " au BufNewFile,BufReadPre,FileReadPre $HOME/softwear/**/*.py
+    " au BufWritePre $HOME/hal24k/**/*.py execute ':Black'
+    " au BufNewFile,BufReadPre,FileReadPre $HOME/hal24k/**/*.py
     "             \ set colorcolumn=89
-    " au BufNewFile,BufReadPre,FileReadPre $HOME/softwear/**/*.py
+    " au BufNewFile,BufReadPre,FileReadPre $HOME/hal24k/**/*.py
     "             \ let b:neomake_python_flake8_args = ['--max-line-length=88']
 augroup END
 

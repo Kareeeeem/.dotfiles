@@ -1,12 +1,12 @@
 #!/usr/bin/bash
 alias vim='nvim'
-alias vi='vim'
-alias evim='vim $HOME/.dotfiles/vimrc'
-alias ebash='vim $HOME/.dotfiles/{bashrc,profile,bash_aliases,prompt,bash_functions}'
-alias ssh='TERM=screen-256color ssh'
-alias localip="ip addr show eth0 | grep -Po 'inet \K[\d.]+'"
+alias vi='nvim'
+alias v='nvim'
 
-alias clip="clip.exe"
+alias evim='vim $HOME/.dotfiles/vimrc'
+
+alias ebash='vim $HOME/.dotfiles/{bashrc,profile,bash_aliases,prompt,bash_functions}'
+# alias ssh='TERM=screen-256color ssh'
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -33,12 +33,3 @@ alias rcp="rsync -ah -P"
 #                 └─h human readable numbers
 
 alias rt="rtorrent"
-
-alias tk="tmux kill-session"
-alias tn="tmux new -s"
-
-# This is specific to WSL 2. If the WSL 2 VM goes rogue and decides not to free
-# up memory, this command will free your memory after about 20-30 seconds.
-#   Details: https://github.com/microsoft/WSL/issues/4166#issuecomment-628493643
-alias drop_cache="sudo sh -c \"echo 3 >'/proc/sys/vm/drop_caches' && swapoff -a && swapon -a && printf '\n%s\n' 'Ram-cache and Swap Cleared'\""
-wslsynctime="sudo hwclock -s"

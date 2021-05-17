@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # Serve a directory.
-# param: dir (not required)
 # option -p: port (not required)
 serve() {
 	local port

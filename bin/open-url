@@ -20,5 +20,5 @@ elif [ $_URLCOUNT -gt 1 ]; then
 fi
 
 if [ -n "$_CHOICE" ]; then
-    wslview "$_CHOICE" || true
+    xdg-open "$_CHOICE" &> /dev/null
 fi
