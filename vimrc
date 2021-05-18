@@ -14,7 +14,7 @@ set completeopt-=preview
 " set complete-=t
 set autoindent
 set backspace=2
-set colorcolumn=90
+set colorcolumn=79
 set encoding=utf-8
 set fileencoding=utf-8
 set formatoptions=tjrocqn
@@ -41,9 +41,7 @@ if executable("rg")
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
-" }}}
-
-" Statusline {{{
+" Statusline
 set laststatus=2             " always show
 set statusline=%n            " buffer number
 set statusline+=\ %.50f      " file path
@@ -119,7 +117,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'moll/vim-bbye', {'on': 'Bdelete'}
 Plug 'christoomey/vim-tmux-navigator'
-" Plug 'python/black', {'branch': 'master'}
+Plug 'psf/black', {'branch': 'main'}
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " language help
@@ -195,7 +193,7 @@ let g:neomake_c_gcc_remove_invalid_entries=1
 " let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything', '-I./']
 
 let g:neomake_python_enabled_makers = ['flake8']
-let g:neomake_python_flake8_args = ['--max-line-length=89']
+" let g:neomake_python_flake8_args = ['--max-line-length=89']
 
 let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091']
 
@@ -263,10 +261,10 @@ augroup END
 
 augroup hal24k
     au!
-    " au BufWritePre $HOME/hal24k/**/*.py execute ':Black'
-    " au BufNewFile,BufReadPre,FileReadPre $HOME/hal24k/**/*.py
+    au BufWritePre /Users/kareem/Documents/hal24k/**/*.py execute ':Black'
+    " au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
     "             \ set colorcolumn=89
-    " au BufNewFile,BufReadPre,FileReadPre $HOME/hal24k/**/*.py
+    " au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
     "             \ let b:neomake_python_flake8_args = ['--max-line-length=88']
 augroup END
 

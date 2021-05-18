@@ -27,7 +27,7 @@ man() {
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
+if [ -x /usr/bin/dircolors -o $(uname) == Darwin ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
     alias dir='dir --color=auto'
@@ -55,14 +55,14 @@ stty -ixon            # Disable START/STOP signals
 
  # enable bash completion in interactive shells
  if ! shopt -oq posix ; then
-     if [ -f /etc/bash_completion ]; then
-         . /etc/bash_completion
-     fi
+     [ -f /etc/bash_completion ] && . /etc/bash_completion
+
      if [ -d $HOME/.bash_completion.d ]; then
          for f in $HOME/.bash_completion.d/* ; do
              . $f
          done
      fi
+
      if [ -d /opt/homebrew/etc/bash_completion.d ]; then
          for f in /opt/homebrew/etc/bash_completion.d/* ; do
              . $f
@@ -75,5 +75,6 @@ stty -ixon            # Disable START/STOP signals
      . $HOME/.dotfiles/autoenv
      . $HOME/.dotfiles/bash_functions
      . $HOME/.dotfiles/bash_aliases
+     # z is a submodule, not managed by me.
      . $HOME/.dotfiles/z/z.sh
  fi
