@@ -15,7 +15,7 @@
 [log]
     decorate = auto
 [core]
-	excludesfile = /home/kareem/.gitignore_global
+	excludesfile = ~/.gitignore
 [merge]
 	tool = vimdiff
 	conflictstyle = diff3

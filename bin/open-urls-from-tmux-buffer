@@ -11,4 +11,4 @@ _BUFFER_NAME=url_buffer
 tmux capture-pane -J -b $_BUFFER_NAME
 tmux save-buffer -b $_BUFFER_NAME $_BUFFER_FILE
 
-open-url < $_BUFFER_FILE
+open-url $_BUFFER_FILE

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-_AUTOENVFILE=.environment.env
+_AUTOENVFILE=.environment
 _AUTOENVCHECKSUMS=$HOME/.envsums
 
 # can be used outside to see which environment is activated.
@@ -104,10 +104,11 @@ _editenv () {
 
 _init () {
 	if [ ! -f "$AUTOENV" -a ! -f $_AUTOENVFILE ]; then
-        cat > $_AUTOENVFILE << EOF
+        cat > $_AUTOENVFILE << 'EOF'
 AUTOENV_PROMPT=
 
-. .venv/bin/activate
+# . .venv/bin/activate
+# . $(pipenv --venv)/bin/activate
 
 _deactivate () {
     deactivate
