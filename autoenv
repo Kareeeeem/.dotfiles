@@ -109,6 +109,7 @@ AUTOENV_PROMPT=
 
 # . .venv/bin/activate
 # . $(pipenv --venv)/bin/activate
+# export PYTHONPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )":$PYTHONPATH
 
 _deactivate () {
     deactivate

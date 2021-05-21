@@ -24,8 +24,6 @@ if [ $(uname) == Darwin ]; then
     export HOMEBREW_CELLAR="/opt/homebrew/Cellar"
     export HOMEBREW_REPOSITORY="/opt/homebrew"
 
-    # https://docs.python.org/3/library/site.html#command-line-interface
-    python3 -m site &> /dev/null && PATH="$(python3 -m site --user-base)/bin:$PATH"
 
     # prefer the gnu utilities over mac utilities
     PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
@@ -45,6 +43,10 @@ if [ $(uname) == Darwin ]; then
     MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:"
     INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}"
 
+    # https://docs.python.org/3/library/site.html#command-line-interface
+    # set after setting the homebrew path
+    python3 -m site &> /dev/null && PATH="$(python3 -m site --user-base)/bin:$PATH"
+
 fi
 
 hash rg && export FZF_DEFAULT_COMMAND='rg --files --hidden'
@@ -57,6 +59,3 @@ export CLICOLOR=1
 # https://www.gnu.org/software/coreutils/manual/html_node/Formatting-the-file-names.html
 # https://unix.stackexchange.com/q/258679
 export QUOTING_STYLE=literal
-
-# Pipenv output is unreadable on a light background
-# export PIPENV_COLORBLIND=1

@@ -193,7 +193,7 @@ let g:neomake_c_gcc_remove_invalid_entries=1
 " let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything', '-I./']
 
 let g:neomake_python_enabled_makers = ['flake8']
-" let g:neomake_python_flake8_args = ['--max-line-length=89']
+let g:neomake_python_flake8_args = ['--max-line-length=88']
 
 let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091']
 
@@ -262,10 +262,12 @@ augroup END
 augroup hal24k
     au!
     au BufWritePre /Users/kareem/Documents/hal24k/**/*.py execute ':Black'
-    " au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
-    "             \ set colorcolumn=89
-    " au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
-    "             \ let b:neomake_python_flake8_args = ['--max-line-length=88']
+    au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
+                \ let g:black_string_normalization = 1
+    au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
+                \ set colorcolumn=88
+    au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
+                \ let b:neomake_python_flake8_args = ['--max-line-length=88']
 augroup END
 
 

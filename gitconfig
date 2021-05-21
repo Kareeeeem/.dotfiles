@@ -7,9 +7,7 @@
     ci = commit
     st = status
     lg = log --oneline
-    lgr = log --oneline --graph --all
-    lm = log origin/master.. --pretty=format:*' '%s%n%b
-    fr = "!git fetch && git rebase origin/master"
+    lgg = log --oneline --graph --all
 [push]
 	default = current
 [log]
@@ -25,3 +23,5 @@
 	trustExitCode = false
 [fetch]
 	prune = true
+[includeIf "gitdir/i:~/Documents/hal24k/"]
+    path = ~/.gitconfig-work
