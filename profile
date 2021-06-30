@@ -24,19 +24,30 @@ if [ $(uname) == Darwin ]; then
     export HOMEBREW_CELLAR="/opt/homebrew/Cellar"
     export HOMEBREW_REPOSITORY="/opt/homebrew"
 
-
     # prefer the gnu utilities over mac utilities
     PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
-    PATH="/opt/homebrew/opt/findutils/libexec/gnubin:$PATH"
-    PATH="/opt/homebrew/opt/gnu-tar/libexec/gnubin:$PATH"
-    PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"
-    PATH="/opt/homebrew/opt/findutils/libexec/gnubin:$PATH"
-    PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"
-    PATH="/opt/homebrew/opt/gnu-indent/libexec/gnubin:$PATH"
-    PATH="/opt/homebrew/opt/gawk/libexec/gnubin/:$PATH"
-    PATH="/opt/homebrew/opt/gnu-getopt/libexec/gnubin/:$PATH"
-
     MANPATH="/opt/homebrew/opt/coreutils/libexec/gnuman:$MANPATH"
+
+    PATH="/opt/homebrew/opt/findutils/libexec/gnubin:$PATH"
+    MANPATH="/opt/homebrew/opt/findutils/libexec/gnuman:$MANPATH"
+
+    PATH="/opt/homebrew/opt/gnu-tar/libexec/gnubin:$PATH"
+    MANPATH="/opt/homebrew/opt/gnu-tar/libexec/gnuman:$MANPATH"
+
+    PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"
+    MANPATH="/opt/homebrew/opt/gnu-sed/libexec/gnuman:$MANPATH"
+
+    PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"
+    MANPATH="/opt/homebrew/opt/grep/libexec/gnuman:$MANPATH"
+
+    PATH="/opt/homebrew/opt/gnu-indent/libexec/gnubin/:$PATH"
+    MANPATH="/opt/homebrew/opt/gnu-indent/libexec/gnuman:$MANPATH"
+
+    PATH="/opt/homebrew/opt/gawk/libexec/gnubin/:$PATH"
+    MANPATH="/opt/homebrew/opt/gawk/libexec/gnuman:$MANPATH"
+
+    PATH="/opt/homebrew/opt/gnu-getopt/libexec/bin:$PATH"
+    MANPATH="/opt/homebrew/opt/gnu-getopt/share/man:$MANPATH"
 
     # general homebrew paths
     PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}"

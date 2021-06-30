@@ -87,3 +87,7 @@ _umnt () {
     COMPREPLY=( $(compgen -W "$options" -- $cur) )
 }
 complete -F _umnt umnt
+
+vrg () {
+    vim -q <(rg "$1" --vimgrep)
+}

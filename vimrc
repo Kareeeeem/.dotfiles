@@ -30,7 +30,13 @@ set expandtab tabstop=4 softtabstop=4 shiftwidth=4
 set signcolumn=yes
 
 set dir=$HOME/.vim/tmp
-set tags=.git/tags,./tags,../tags,../.git/tags
+
+set tags=tags
+set tags+=.git/tags
+set tags+=../.git/tags
+set tags+=../../.git./tags
+set tags+=../../../.git/tags
+
 set undofile undodir=$HOME/.vim/undodir/
 
 let c_no_curly_error = 1
@@ -258,7 +264,6 @@ augroup cleanup_ws
 augroup END
 
 " Work related autocommands
-
 augroup hal24k
     au!
     au BufWritePre /Users/kareem/Documents/hal24k/**/*.py execute ':Black'
@@ -360,3 +365,7 @@ function! JoinSpaceless()
         execute 'normal dw'
     endif
 endfunction
+
+if &diff
+    colorscheme blue
+endif

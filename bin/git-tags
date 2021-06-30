@@ -21,14 +21,17 @@ def run_command(command):
     return p.stdout.read().rstrip()
 
 
-project_dir = run_command('git rev-parse --show-toplevel').decode('u8')
-git_dir = os.path.join(project_dir, '.git')
+if os.environ.get('TAG_FILES_IN_PWD'):
+    tag_dir = '.'
+    project_dir = tag_dir
+else:
+    project_dir = run_command('git rev-parse --show-toplevel').decode('u8')
+    tag_dir = os.path.join(project_dir, '.git')
+    if not project_dir:
+        sys.exit(1)
 
-if not project_dir:
-    sys.exit(1)
-
-tags_path = os.path.join(git_dir, 'tags')
-tmp_tags_path = os.path.join(git_dir, 'tags.tmp')
+tags_path = os.path.join(tag_dir, 'tags')
+tmp_tags_path = os.path.join(tag_dir, 'tags.tmp')
 
 try:
     # remove the old temp file if for whatever reason it's still there

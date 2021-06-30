@@ -1,3 +1,5 @@
 .env
 .environment
 .envsum
+tags
+.venv

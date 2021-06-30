@@ -63,8 +63,16 @@ stty -ixon            # Disable START/STOP signals
          done
      fi
 
+     # macos
      if [ -d /opt/homebrew/etc/bash_completion.d ]; then
          for f in /opt/homebrew/etc/bash_completion.d/* ; do
+             . $f
+         done
+     fi
+
+     # macos
+     if [ -d /Applications/Docker.app/Contents/Resources/etc ]; then
+         for f in /Applications/Docker.app/Contents/Resources/etc/*.bash-completion ; do
              . $f
          done
      fi

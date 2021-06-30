@@ -7,7 +7,9 @@
     ci = commit
     st = status
     lg = log --oneline
-    lgg = log --oneline --graph --all
+    lgg = log --oneline --graph
+    rb = rebase
+    rbi = rebase -i
 [push]
 	default = current
 [log]
@@ -21,7 +23,10 @@
 	prompt = false
 [mergetool "vimdiff"]
 	trustExitCode = false
+	path = nvim
 [fetch]
 	prune = true
 [includeIf "gitdir/i:~/Documents/hal24k/"]
     path = ~/.gitconfig-work
+[pull]
+	ff = only
