@@ -14,7 +14,7 @@ set completeopt-=preview
 " set complete-=t
 set autoindent
 set backspace=2
-set colorcolumn=79
+set colorcolumn=88
 set encoding=utf-8
 set fileencoding=utf-8
 set formatoptions=tjrocqn
@@ -138,15 +138,15 @@ call plug#end()
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" function! s:check_back_space() abort
+"     let col = col('.') - 1
+"     return !col || getline('.')[col - 1]  =~# '\s'
+" endfunction
 
 " nvim host prog
 let g:python3_host_prog = '$HOME/.venv-py3nvim/bin/python'
@@ -253,8 +253,9 @@ endif
 
 let ws_blacklist = []
 
-augroup cleanup_ws
+augroup cleanup
     au!
+    au BufWritePre *.py execute ':Black'
     " strip trailing whitespace.
     au BufWritePre * if index(ws_blacklist, &ft) < 0
                 \ | call Preserve('%s/\s\+$//ge')
@@ -266,13 +267,13 @@ augroup END
 " Work related autocommands
 augroup hal24k
     au!
-    au BufWritePre /Users/kareem/Documents/hal24k/**/*.py execute ':Black'
+    " au BufWritePre /Users/kareem/Documents/hal24k/**/*.py execute ':Black'
     au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
                 \ let g:black_string_normalization = 1
-    au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
-                \ set colorcolumn=88
-    au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
-                \ let b:neomake_python_flake8_args = ['--max-line-length=88']
+    " au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
+    "             \ set colorcolumn=88
+    " au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
+    "             \ let b:neomake_python_flake8_args = ['--max-line-length=88']
 augroup END
 
 

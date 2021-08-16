@@ -81,8 +81,8 @@ stty -ixon            # Disable START/STOP signals
  if [ -d $HOME/.dotfiles ]; then
      . $HOME/.dotfiles/prompt
      . $HOME/.dotfiles/autoenv
-     . $HOME/.dotfiles/bash_functions
      . $HOME/.dotfiles/bash_aliases
+     . $HOME/.dotfiles/bash_functions
      # z is a submodule, not managed by me.
      . $HOME/.dotfiles/z/z.sh
  fi

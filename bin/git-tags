@@ -21,7 +21,7 @@ def run_command(command):
     return p.stdout.read().rstrip()
 
 
-if os.environ.get('TAG_FILES_IN_PWD'):
+if os.environ.get('TAG_FILES_IN_PWD', True):
     tag_dir = '.'
     project_dir = tag_dir
 else:
