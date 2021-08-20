@@ -26,7 +26,7 @@
 	path = nvim
 [fetch]
 	prune = true
-[includeIf "gitdir/i:~/Documents/hal24k/"]
+[includeIf "gitdir/i:~/hal24k/"]
     path = ~/.gitconfig-work
 [pull]
 	ff = only

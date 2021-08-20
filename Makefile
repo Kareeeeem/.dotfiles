@@ -20,10 +20,11 @@ symlinks:
 	ln -f -s $(current_dir)/gitconfig $(HOME)/.gitconfig &> /dev/null
 	ln -f -s $(current_dir)/gitconfig-work $(HOME)/.gitconfig-work &> /dev/null
 	ln -f -s $(current_dir)/rgignore $(HOME)/.rgignore &> /dev/null
+	# ln -f -s $(current_dir)/xsessionrc $(HOME)/.xsessionrc &> /dev/null
 
 completions:
 	rm -rf $(HOME)/.bash_completion.d
 	ln -f -s $(current_dir)/bash_completion.d $(HOME)/.bash_completion.d
 
-bin:
-	python3 -m pip install --user -U -r bin/requirements.txt
+# bin:
+# 	python3 -m pip install --user -U -r bin/requirements.txt

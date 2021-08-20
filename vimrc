@@ -22,7 +22,7 @@ set hidden
 set nowrap
 set scrolloff=3
 set pastetoggle=<F6>
-" set number
+set number
 set nojoinspaces  " don't insert double spaces.
 
 set hlsearch ignorecase smartcase incsearch
@@ -67,7 +67,7 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 " Because backslash is in a awkward place.
 let mapleader = "\<Space>"
 " " I almost never want to go to the ABSOLUTE beginning of a line
-" nnoremap 0 ^
+nnoremap 0 ^
 " break lines on a comma's
 nnoremap <leader>, f,<right>i<cr><ESC>
 " Break line
@@ -131,7 +131,6 @@ Plug 'mattn/emmet-vim'
 Plug 'hynek/vim-python-pep8-indent'
 Plug 'Kareeeeem/python-docstring-comments'
 Plug 'pangloss/vim-javascript'
-" Plug 'wlangstroth/vim-racket'
 
 call plug#end()
 
@@ -178,7 +177,7 @@ nmap <leader>v <Plug>SlimeConfig
 
 " black
 let g:black_fast = 1
-let g:black_string_normalization = 0
+let g:black_skip_string_normalization = 1
 
 " Neomake
 " let g:neomake_javascript_enabled_makers = [build'eslint']
@@ -267,9 +266,9 @@ augroup END
 " Work related autocommands
 augroup hal24k
     au!
-    " au BufWritePre /Users/kareem/Documents/hal24k/**/*.py execute ':Black'
-    au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
-                \ let g:black_string_normalization = 1
+    au BufNewFile,BufReadPre,FileReadPre /home/kareem/hal24k/**/*.py
+                \ let g:black_skip_string_normalization=0
+    " au BufWritePre /home/kareem/hal24k/**/*.py execute ':Black'
     " au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
     "             \ set colorcolumn=88
     " au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
@@ -320,19 +319,30 @@ augroup END
 
 function! ModifyColorscheme()
     " Some modifications I like for nofrils-dark
-    if (g:colors_name == "nofrils-light")
-        " brighten the comments
-        " hi Comment ctermfg=243
-        " dim the normal text a little bit.
-        " hi Normal ctermfg=253 ctermbg=NONE
-        " hi Normal ctermbg=NONE
-
-        hi TODO cterm=bold
-
+    if (g:colors_name =~ 'nofrils-.*')
         if (&cursorline)
             hi clear CursorLineNr
             hi link CursorLineNr Normal
+            hi TODO cterm=bold
         endif
+    endif
+
+    if (g:colors_name == 'nofrils-dark')
+        " brighten the comments
+        hi Comment ctermfg=243
+        " dim the normal text a little bit.
+        hi Normal ctermfg=249 ctermbg=NONE
+        hi Normal ctermbg=NONE
+    endif
+    if (g:colors_name == 'nofrils-light')
+        " brighten the comments
+        hi Comment ctermfg=243
+        " dim the normal text a little bit.
+        " hi Normal ctermfg=249 ctermbg=NONE
+        hi Normal ctermbg=253
+        hi ColorColumn ctermbg=251
+        hi LineNr ctermbg=253
+        hi SignColumn ctermbg=253
     endif
 endfunction
 

@@ -33,3 +33,4 @@ alias rcp="rsync -ah -P"
 #                 └─h human readable numbers
 
 alias rt="rtorrent"
+alias drm="docker rm -f \$(docker ps -a -q)"

@@ -8,7 +8,7 @@ export AUTOENV=
 
 _autoenv () {
     # If we did not change directory do nothing.
-	if [[ $AUTOENV_LAST_PWD == $PWD ]]; then
+	if [[ $AUTOENV_LAST_PWD == "$PWD" ]]; then
         return
     fi
     AUTOENV_LAST_PWD=$PWD
@@ -52,8 +52,8 @@ _activate_environment () {
 }
 
 _verify_envfile () {
-    touch $_AUTOENVCHECKSUMS
-    sha256sum -c <(awk -v path="$1" '$2 == path' $_AUTOENVCHECKSUMS) &> /dev/null
+    touch "$_AUTOENVCHECKSUMS"
+    sha256sum -c <(awk -v path="$1" '$2 == path' "$_AUTOENVCHECKSUMS") &> /dev/null
 }
 
 _authorize_envfile () {
@@ -62,10 +62,10 @@ _authorize_envfile () {
     echo  # for the new line
 
 	if [ "${answer,,}" = "y" ]; then
-        touch $_AUTOENVCHECKSUMS
-        awk -v path="$1" '$2 != path' $_AUTOENVCHECKSUMS > tmp \
-            && mv tmp $_AUTOENVCHECKSUMS
-        sha256sum "$1" >> $_AUTOENVCHECKSUMS
+        touch "$_AUTOENVCHECKSUMS"
+        awk -v path="$1" '$2 != path' "$_AUTOENVCHECKSUMS" > tmp \
+            && mv tmp "$_AUTOENVCHECKSUMS"
+        sha256sum "$1" >> "$_AUTOENVCHECKSUMS"
 		return 0
 	fi
     return 1
@@ -103,20 +103,21 @@ _editenv () {
 }
 
 _init () {
-	if [ ! -f "$AUTOENV" -a ! -f $_AUTOENVFILE ]; then
+    echo 'eherewr'
+	if [[ ! -f "$AUTOENV" && ! -f $_AUTOENVFILE ]]; then
         cat > $_AUTOENVFILE << 'EOF'
 AUTOENV_PROMPT=
 
-# . .venv/bin/activate
-# . $(pipenv --venv)/bin/activate
-# export PYTHONPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )":$PYTHONPATH
+. .venv/bin/activate
+export PYTHONPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )":$PYTHONPATH
 
 _deactivate () {
     deactivate
     unset AUTOENV_PROMPT
 }
 EOF
-    vi $_AUTOENVFILE
+        $EDITOR $_AUTOENVFILE
+        _reactivate_environment
 	fi
 }
 
@@ -135,6 +136,6 @@ aue () {
 _aue () {
     local options="activate deactivate reactivate show edit"
     local cur=${COMP_WORDS[COMP_CWORD]}
-    COMPREPLY=( $(compgen -W "$options" -- $cur) )
+    COMPREPLY=( $(compgen -W "$options" -- "$cur") )
 }
 complete -F _aue aue

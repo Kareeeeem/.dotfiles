@@ -60,8 +60,8 @@ if [ $(uname) == Darwin ]; then
 
 fi
 
-hash rg && export FZF_DEFAULT_COMMAND='rg --files --hidden'
-hash nvim && export VISUAL="nvim" && export EDITOR="$VISUAL"
+hash rg &> /dev/null && export FZF_DEFAULT_COMMAND='rg --files --hidden'
+hash nvim &> /dev/null && export VISUAL="nvim" && export EDITOR="$VISUAL"
 
 export FZF_DEFAULT_OPTS='--no-bold --color=bw'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
