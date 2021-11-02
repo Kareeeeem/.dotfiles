@@ -103,7 +103,6 @@ _editenv () {
 }
 
 _init () {
-    echo 'eherewr'
 	if [[ ! -f "$AUTOENV" && ! -f $_AUTOENVFILE ]]; then
         cat > $_AUTOENVFILE << 'EOF'
 AUTOENV_PROMPT=

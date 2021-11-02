@@ -161,6 +161,7 @@ let g:tmux_navigator_disable_when_zoomed=1
 nnoremap <leader>q :Bdelete<cr>
 
 " fzf
+let g:fzf_preview_window = []
 nnoremap <C-p> :Files<cr>
 nnoremap <leader>t :Tags<cr>
 nnoremap <leader>m :History<cr>
@@ -177,7 +178,7 @@ nmap <leader>v <Plug>SlimeConfig
 
 " black
 let g:black_fast = 1
-let g:black_skip_string_normalization = 1
+let g:black_skip_string_normalization = 0
 
 " Neomake
 " let g:neomake_javascript_enabled_makers = [build'eslint']
@@ -266,8 +267,8 @@ augroup END
 " Work related autocommands
 augroup hal24k
     au!
-    au BufNewFile,BufReadPre,FileReadPre /home/kareem/hal24k/**/*.py
-                \ let g:black_skip_string_normalization=0
+    " au BufNewFile,BufReadPre,FileReadPre /home/kareem/hal24k/**/*.py
+    "             \ let g:black_skip_string_normalization=0
     " au BufWritePre /home/kareem/hal24k/**/*.py execute ':Black'
     " au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
     "             \ set colorcolumn=88

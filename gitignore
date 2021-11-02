@@ -3,3 +3,4 @@
 .envsum
 tags
 .venv
+*.pyc
