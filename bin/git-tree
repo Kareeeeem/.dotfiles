@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# uses `rg --files` output as input to `tree` to use rg's use of .gitignore.
+
+set -eu
+
+if [[ -n ${1-} ]]; then
+    rg --files "$1" | tree --fromfile
+else
+    GIT_ROOT=$(git rev-parse --show-prefix)
+    slashes=${GIT_ROOT//[^\/]/}
+    for (( n=${#slashes}; n>0; --n )); do cd ..; done
+    rg --files | tree --fromfile
+fi

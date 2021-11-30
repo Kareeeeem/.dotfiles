@@ -131,6 +131,7 @@ Plug 'mattn/emmet-vim'
 Plug 'hynek/vim-python-pep8-indent'
 Plug 'Kareeeeem/python-docstring-comments'
 Plug 'pangloss/vim-javascript'
+Plug 'stevearc/vim-arduino'
 
 call plug#end()
 
@@ -175,6 +176,13 @@ let g:slime_no_mappings = 1
 xmap <leader>s <Plug>SlimeRegionSend
 nmap <leader>s <Plug>SlimeParagraphSend
 nmap <leader>v <Plug>SlimeConfig
+
+
+
+" arduino
+let g:arduino_use_slime = 1
+let g:arduino_home_dir = "$HOME/.arduino15"
+let g:arduino_dir = "$HOME/.arduino15"
 
 " black
 let g:black_fast = 1
