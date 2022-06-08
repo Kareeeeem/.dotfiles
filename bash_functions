@@ -91,3 +91,17 @@ complete -F _umnt umnt
 vrg () {
     vim -q <(rg "$1" --vimgrep)
 }
+
+
+DBPATH="$HOME/.mongo_db"
+export MONGO_PORT="27017"
+export MONGO_URI="mongodb://localhost:${MONGO_PORT}"
+start_repl_set () {
+    mkdir -p "$DBPATH"
+    mongod  --fork --syslog --port $MONGO_PORT --dbpath $DBPATH --replSet rs0 --bind_ip localhost
+    mongosh --port 27017 --file <<< "rs.initiate()"
+}
+
+stop_repl_set () {
+    mongod --port 27017 --shutdown --dbpath $DBPATH
+}

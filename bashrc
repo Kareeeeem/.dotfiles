@@ -57,6 +57,8 @@ stty -ixon            # Disable START/STOP signals
  if ! shopt -oq posix ; then
      [ -f /etc/bash_completion ] && . /etc/bash_completion
 
+    hash kubectl &> /dev/null && . <(kubectl completion bash)
+
      if [ -d $HOME/.bash_completion.d ]; then
          for f in $HOME/.bash_completion.d/* ; do
              . $f
@@ -86,3 +88,6 @@ stty -ixon            # Disable START/STOP signals
      # z is a submodule, not managed by me.
      . $HOME/.dotfiles/z/z.sh
  fi
+
+# added by fzf install
+[ -f $HOME/.fzf.bash ] && . $HOME/.fzf.bash

@@ -11,7 +11,6 @@ set showcmd
 set updatetime=500
 set breakindent
 set completeopt-=preview
-" set complete-=t
 set autoindent
 set backspace=2
 set colorcolumn=88
@@ -59,7 +58,6 @@ set statusline+=%=           " right alignment from this point
 set statusline+=%l,%c%V      " linenr,columnnr,percentage into file
 set statusline+=\ %P         " percentage into file
 
-
 " Mappings
 
 " Expand `%%` to current directory.
@@ -93,7 +91,10 @@ xnoremap > >gv
 " Navigate buffers
 nnoremap <S-Tab> :bp<cr>
 nnoremap <Tab> :bn<cr>
-" nnoremap <leader>b :ls<cr>:b<space>
+
+nnoremap ]g :lnext<cr>
+nnoremap [g :lprev<cr>
+
 
 " Don't use Ex mode.
 map Q <nop>
@@ -123,30 +124,17 @@ Plug 'junegunn/fzf.vim'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'moll/vim-bbye', {'on': 'Bdelete'}
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'psf/black', {'branch': 'main'}
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " language help
+Plug 'psf/black', {'branch': 'main'}
 Plug 'mattn/emmet-vim'
 Plug 'hynek/vim-python-pep8-indent'
 Plug 'Kareeeeem/python-docstring-comments'
 Plug 'pangloss/vim-javascript'
 Plug 'stevearc/vim-arduino'
-
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? "\<C-n>" :
-"       \ <SID>check_back_space() ? "\<TAB>" :
-"       \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-" function! s:check_back_space() abort
-"     let col = col('.') - 1
-"     return !col || getline('.')[col - 1]  =~# '\s'
-" endfunction
 
 " nvim host prog
 let g:python3_host_prog = '$HOME/.venv-py3nvim/bin/python'
@@ -163,21 +151,18 @@ nnoremap <leader>q :Bdelete<cr>
 
 " fzf
 let g:fzf_preview_window = []
-nnoremap <C-p> :Files<cr>
+nnoremap <leader>p :Files<cr>
 nnoremap <leader>t :Tags<cr>
-nnoremap <leader>m :History<cr>
+nnoremap <leader>h :History<cr>
 nnoremap <leader>b :Buffers<cr>
 
 " Slime
 let g:slime_target = 'tmux'
 let g:slime_python_ipython = 1
 let g:slime_no_mappings = 1
-
 xmap <leader>s <Plug>SlimeRegionSend
 nmap <leader>s <Plug>SlimeParagraphSend
 nmap <leader>v <Plug>SlimeConfig
-
-
 
 " arduino
 let g:arduino_use_slime = 1
@@ -189,39 +174,92 @@ let g:black_fast = 1
 let g:black_skip_string_normalization = 0
 
 " Neomake
-" let g:neomake_javascript_enabled_makers = [build'eslint']
+call neomake#configure#automake({
+  \ 'BufWinEnter': {},
+  \ 'TextChanged': {},
+  \ 'InsertLeave': {},
+  \ 'BufWritePost': {'delay': 0},
+  \ }, 500)
 
-" let g:neomake_error_sign = {'text': '>>', 'texthl': 'ErrorMsg'}
-" let g:neomake_warning_sign = {'text': '>>', 'texthl': 'WarningMsg'}
-" let g:neomake_message_sign = {'text': '>>', 'texthl': 'StatusLine'}
-" let g:neomake_info_sign = {'text': '>>', 'texthl': 'StatusLine'}
 let g:neomake_place_signs = 1
-
 let g:neomake_remove_invalid_entries=1
+let g:neomake_virtualtext_current_error = 0
+let g:neomake_error_sign = {'text': '>>', 'texthl': 'ErrorMsg'}
+let g:neomake_warning_sign = {'text': '>>', 'texthl': 'WarningMsg'}
+let g:neomake_message_sign = {'text': '>>', 'texthl': 'StatusLine'}
+let g:neomake_info_sign = {'text': '>>', 'texthl': 'StatusLine'}
 
-let g:neomake_c_enabled_makers = ['gcc']
-let g:neomake_c_gcc_args = ['-fsyntax-only', '-Wall', '-Wextra', '-I./', '-fno-diagnostics-show-caret']
-" for some reason this global option is not respected so define it here again
-let g:neomake_c_gcc_remove_invalid_entries=1
+set statusline+=\ %#Error#%{neomake#statusline#LoclistStatus('loc\ ')}%*
 
-" let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything', '-I./']
-
-let g:neomake_python_enabled_makers = ['flake8']
+let g:neomake_python_enabled_makers = ['flake8', 'mypy']
 let g:neomake_python_flake8_args = ['--max-line-length=88']
 
 let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091']
 
+" let g:neomake_c_enabled_makers = ['gcc']
+" let g:neomake_c_gcc_args = ['-fsyntax-only', '-Wall', '-Wextra', '-I./', '-fno-diagnostics-show-caret']
+" let g:neomake_c_gcc_remove_invalid_entries=1
+" let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything', '-I./']
+
 " let g:neomake_racket_enabled_makers = ['raco']
 " let g:neomake_racket_raco_remove_invalid_entries=1
 
-set statusline+=\ %#Error#%{neomake#statusline#LoclistStatus('loc\ ')}%*
 
-augroup neo_make
-    au!
-    au BufWritePost * Neomake
-    " au ColorScheme * hi link NeomakeError SpellBad
-    " au ColorScheme * hi link NeomakeWarning SpellCap
-augroup END
+" COC
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ CheckBackspace() ? "\<TAB>" :
+      \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> M :call ShowDocumentation()<CR>
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+function! StatusDiagnostic() abort
+  let info = get(b:, 'coc_diagnostic_info', {})
+  if empty(info) | return '' | endif
+  let msgs = []
+  if get(info, 'error', 0)
+    call add(msgs, 'E' . info['error'])
+  endif
+  if get(info, 'warning', 0)
+    call add(msgs, 'W' . info['warning'])
+  endif
+  return join(msgs, ' '). ' ' . get(g:, 'coc_status', '')
+endfunction
 
 " Emmet
 let g:user_emmet_install_global = 0
@@ -259,29 +297,25 @@ if executable('ctags') && executable('git-tags')
     augroup END
 endif
 
-let ws_blacklist = []
+let whitespace_blacklist = []
 
 augroup cleanup
     au!
     au BufWritePre *.py execute ':Black'
+
     " strip trailing whitespace.
-    au BufWritePre * if index(ws_blacklist, &ft) < 0
+    au BufWritePre * if index(whitespace_blacklist, &ft) < 0
                 \ | call Preserve('%s/\s\+$//ge')
                 \ | endif
     " strip trailing white lines.
     au BufWritePre * call Preserve('v/\n*./d')
+    " au BufWritePost *.py,*.c :silent exe "!tmux send -t 2 'pytest --lf' Enter"
+
 augroup END
 
 " Work related autocommands
 augroup hal24k
     au!
-    " au BufNewFile,BufReadPre,FileReadPre /home/kareem/hal24k/**/*.py
-    "             \ let g:black_skip_string_normalization=0
-    " au BufWritePre /home/kareem/hal24k/**/*.py execute ':Black'
-    " au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
-    "             \ set colorcolumn=88
-    " au BufNewFile,BufReadPre,FileReadPre /Users/kareem/Documents/hal24k/**/*.py
-    "             \ let b:neomake_python_flake8_args = ['--max-line-length=88']
 augroup END
 
 
@@ -296,7 +330,7 @@ augroup languages
     "
     au FileType *markdown*,text setlocal fo+=t tw=72 wrap
     " au FileType sh setlocal noexpandtab
-    au FileType python setlocal keywordprg=pydoc
+    " au FileType python setlocal keywordprg=pydoc
     " au FileType python inoremap <buffer> pdb breakpoint()  # noqa<esc>
     " au FileType c setlocal commentstring=//\ %s
     " au FileType c setlocal cinoptions+=:0 " Don't indent case
@@ -322,18 +356,19 @@ augroup END
 
 augroup nofrils
     au!
-    au ColorScheme * call ModifyColorscheme()
+    au ColorScheme nofrils* call ModifyColorscheme()
     au ColorScheme nofrils* nnoremap <F7> :call ToggleNofrils()<cr>
+    " au ColorScheme * hi CocInfoSign guifg=#000000
+
+    autocmd FileType list set winhighlight=CursorLine:CocUnderline
 augroup END
 
 function! ModifyColorscheme()
-    " Some modifications I like for nofrils-dark
-    if (g:colors_name =~ 'nofrils-.*')
-        if (&cursorline)
-            hi clear CursorLineNr
-            hi link CursorLineNr Normal
-            hi TODO cterm=bold
-        endif
+    " Some modifications I like for nofrils
+    if (&cursorline)
+        hi clear CursorLineNr
+        hi link CursorLineNr Normal
+        hi TODO cterm=bold
     endif
 
     if (g:colors_name == 'nofrils-dark')

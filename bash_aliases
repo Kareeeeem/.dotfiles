@@ -36,7 +36,3 @@ alias rt="rtorrent"
 alias drm="docker rm -f \$(docker ps -a -q)"
 alias py=python
 hash ipython &> /dev/null && alias ipy=ipython
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # --no-use  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

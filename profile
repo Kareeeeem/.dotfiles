@@ -4,6 +4,7 @@
 # see /usr/share/doc/bash/examples/startup-files for examples.
 # the files are located in the bash-doc package.
 
+
 # the default umask is set in /etc/profile; for setting the umask
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
@@ -11,13 +12,16 @@
 export PATH
 export MANPATH
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # --no-use  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 # Bash
 [ -n "$BASH_VERSION" ] && [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
 [ -d "$HOME/.dotfiles/bin" ]  && PATH="$HOME/.dotfiles/bin:$PATH"
 [ -d "$HOME/.local/bin" ]  && PATH="$HOME/.local/bin:$PATH"
 [ -d "$HOME/.npm/bin" ] && PATH="$HOME/.npm/bin:$PATH"
 
-[ -f $HOME/.fzf.bash ] && . $HOME/.fzf.bash
 
 if [ $(uname) == Darwin ]; then
     export HOMEBREW_PREFIX="/opt/homebrew"

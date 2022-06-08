@@ -8,15 +8,12 @@ export AUTOENV=
 
 _autoenv () {
     # If we did not change directory do nothing.
-	if [[ $AUTOENV_LAST_PWD == "$PWD" ]]; then
-        return
-    fi
+	[[ $AUTOENV_LAST_PWD == "$PWD" ]] && return
+
     AUTOENV_LAST_PWD=$PWD
 
     # We don't support activating multiple environments.
-    if [[ -n $AUTOENV ]]; then
-        return
-    fi
+    [[ -n $AUTOENV ]] && return
 
     _activate_environment
 }
@@ -37,12 +34,12 @@ _activate_environment () {
 
                 # cd to the directory because the env file might refer to
                 # relative paths.
-                pushd "$current_dir" &> /dev/null
+                pushd "$current_dir" &> /dev/null || return
 
                 . $_AUTOENVFILE
                 AUTOENV=$envfile
 
-                popd &> /dev/null
+                popd &> /dev/null || return
             fi
             break;
 		else
@@ -105,16 +102,27 @@ _editenv () {
 _init () {
 	if [[ ! -f "$AUTOENV" && ! -f $_AUTOENVFILE ]]; then
         cat > $_AUTOENVFILE << 'EOF'
+#!/usr/bin/env bash
 AUTOENV_PROMPT=
 
 . .venv/bin/activate
-export PYTHONPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )":$PYTHONPATH
+export BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+export PYTHONPATH=$BASE_DIR:$PYTHONPATH
 
 _deactivate () {
     deactivate
     unset AUTOENV_PROMPT
 }
 EOF
+        $EDITOR $_AUTOENVFILE
+        _reactivate_environment
+	fi
+}
+
+_copy_environment () {
+	if [[ ! -f "$AUTOENV" && ! -f $_AUTOENVFILE ]]; then
+        env="$(awk '{print $2}' .envsums | fzf)"
+        cat "$env" > $_AUTOENVFILE
         $EDITOR $_AUTOENVFILE
         _reactivate_environment
 	fi
@@ -128,6 +136,7 @@ aue () {
         s*) _showenv ;;
         e*) _editenv ;;
         i*) _init ;;
+        c*) _copy_environment ;;
         *) echo "[USAGE] e activate|deactivate|reactivate|show|edit" ;;
     esac
 }
