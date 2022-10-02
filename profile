@@ -68,6 +68,7 @@ hash rg &> /dev/null && export FZF_DEFAULT_COMMAND='rg --files --hidden'
 hash nvim &> /dev/null && export VISUAL="nvim" && export EDITOR="$VISUAL"
 
 export FZF_DEFAULT_OPTS='--no-bold --color=bw'
+# export FZF_DEFAULT_COMMAND="${FZF_DEFAULT_COMMAND} -L"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 export CLICOLOR=1

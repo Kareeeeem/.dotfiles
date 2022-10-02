@@ -8,6 +8,7 @@ set clipboard=unnamedplus
 set wildmenu
 set showcmd
 
+set nrformats=
 set updatetime=500
 set breakindent
 set completeopt-=preview
@@ -124,6 +125,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
 Plug 'moll/vim-bbye', {'on': 'Bdelete'}
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'alfredodeza/pytest.vim'
 
 " language help
 Plug 'psf/black', {'branch': 'main'}
@@ -191,7 +193,7 @@ let g:neomake_info_sign = {'text': '>>', 'texthl': 'StatusLine'}
 
 set statusline+=\ %#Error#%{neomake#statusline#LoclistStatus('loc\ ')}%*
 
-let g:neomake_python_enabled_makers = ['flake8', 'mypy']
+let g:neomake_python_enabled_makers = ['flake8'] " , 'mypy']
 let g:neomake_python_flake8_args = ['--max-line-length=88']
 
 let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091']
@@ -210,16 +212,17 @@ let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091'
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ CheckBackspace() ? "\<TAB>" :
-      \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ CheckBackspace() ? "\<TAB>" :
+      \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 " Use <c-space> to trigger completion.
 if has('nvim')
@@ -239,7 +242,7 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" Use K to show documentation in preview window.
+" Use M to show documentation in preview window.
 nnoremap <silent> M :call ShowDocumentation()<CR>
 function! ShowDocumentation()
   if CocAction('hasProvider', 'hover')
@@ -247,18 +250,6 @@ function! ShowDocumentation()
   else
     call feedkeys('K', 'in')
   endif
-endfunction
-function! StatusDiagnostic() abort
-  let info = get(b:, 'coc_diagnostic_info', {})
-  if empty(info) | return '' | endif
-  let msgs = []
-  if get(info, 'error', 0)
-    call add(msgs, 'E' . info['error'])
-  endif
-  if get(info, 'warning', 0)
-    call add(msgs, 'W' . info['warning'])
-  endif
-  return join(msgs, ' '). ' ' . get(g:, 'coc_status', '')
 endfunction
 
 " Emmet
@@ -313,12 +304,6 @@ augroup cleanup
 
 augroup END
 
-" Work related autocommands
-augroup hal24k
-    au!
-augroup END
-
-
 augroup languages
     au!
     au BufWritePre *.go call Preserve('%!gofmt')
@@ -331,7 +316,7 @@ augroup languages
     au FileType *markdown*,text setlocal fo+=t tw=72 wrap
     " au FileType sh setlocal noexpandtab
     " au FileType python setlocal keywordprg=pydoc
-    " au FileType python inoremap <buffer> pdb breakpoint()  # noqa<esc>
+    au FileType python inoremap <buffer> pdb breakpoint()<esc>
     " au FileType c setlocal commentstring=//\ %s
     " au FileType c setlocal cinoptions+=:0 " Don't indent case
     au FileType awk setlocal commentstring=#\ %s
@@ -356,14 +341,14 @@ augroup END
 
 augroup nofrils
     au!
-    au ColorScheme nofrils* call ModifyColorscheme()
+    au ColorScheme nofrils* call ModifyNoFrils()
     au ColorScheme nofrils* nnoremap <F7> :call ToggleNofrils()<cr>
     " au ColorScheme * hi CocInfoSign guifg=#000000
 
     autocmd FileType list set winhighlight=CursorLine:CocUnderline
 augroup END
 
-function! ModifyColorscheme()
+function! ModifyNoFrils()
     " Some modifications I like for nofrils
     if (&cursorline)
         hi clear CursorLineNr
@@ -375,14 +360,12 @@ function! ModifyColorscheme()
         " brighten the comments
         hi Comment ctermfg=243
         " dim the normal text a little bit.
-        hi Normal ctermfg=249 ctermbg=NONE
-        hi Normal ctermbg=NONE
-    endif
-    if (g:colors_name == 'nofrils-light')
-        " brighten the comments
+        hi Normal ctermfg=252
+        hi normal ctermbg=NONE
+        hi LineNr ctermbg=NONE
+        hi SignColumn ctermbg=NONE
+    elseif (g:colors_name == 'nofrils-light')
         hi Comment ctermfg=243
-        " dim the normal text a little bit.
-        " hi Normal ctermfg=249 ctermbg=NONE
         hi Normal ctermbg=253
         hi ColorColumn ctermbg=251
         hi LineNr ctermbg=253
@@ -399,7 +382,8 @@ function! ToggleNofrils()
 endfunction
 
 " set the colorscheme last to allow any ColorScheme autocmds to get set.
-colorscheme nofrils-light
+colorscheme morning
+colorscheme nofrils-dark
 
 " Functions and Commands
 
