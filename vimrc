@@ -51,7 +51,8 @@ endif
 set laststatus=2             " always show
 set statusline=%n            " buffer number
 set statusline+=\ %.50f      " file path
-set statusline+=\ %Y         " file path
+set statusline+=%{&paste?'\ PASTE':''}
+set statusline+=\ %Y         " filetype
 set statusline+=\ %H%M%R     " help / modified / readonly flags
 set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
 set statusline+=\[%{&fileformat}\]
@@ -128,6 +129,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'alfredodeza/pytest.vim'
 
 " language help
+Plug 'benknoble/vim-racket'
 Plug 'psf/black', {'branch': 'main'}
 Plug 'mattn/emmet-vim'
 Plug 'hynek/vim-python-pep8-indent'
@@ -203,8 +205,12 @@ let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091'
 " let g:neomake_c_gcc_remove_invalid_entries=1
 " let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything', '-I./']
 
-" let g:neomake_racket_enabled_makers = ['raco']
-" let g:neomake_racket_raco_remove_invalid_entries=1
+let g:neomake_racket_enabled_makers = ['raco']
+let g:neomake_racket_raco_remove_invalid_entries=1
+
+" vim-racket
+"
+let g:racket_hash_lang_dict = { 'sicp': 'racket' }
 
 
 " COC
@@ -222,7 +228,7 @@ inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ CheckBackspace() ? "\<TAB>" :
       \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 " Use <c-space> to trigger completion.
 if has('nvim')
@@ -266,7 +272,6 @@ let g:undotree_SetFocusWhenToggle = 1
 
 
 " Autocommands
-
 augroup vimStartup
     au!
     " When editing a file, always jump to the last known cursor position.
@@ -309,10 +314,9 @@ augroup languages
     au BufWritePre *.go call Preserve('%!gofmt')
 
     " vim-racket overrides my K mapping
-    " au FileType racket nunmap <buffer> K
-    " au FileType racket,scheme setlocal commentstring=;\ %s
-    " au FileType racket,scheme setlocal commentstring=;\ %s
-    "
+    au FileType racket nunmap <buffer> K
+    au FileType racket,scheme setlocal commentstring=;\ %s
+
     au FileType *markdown*,text setlocal fo+=t tw=72 wrap
     " au FileType sh setlocal noexpandtab
     " au FileType python setlocal keywordprg=pydoc
@@ -382,7 +386,6 @@ function! ToggleNofrils()
 endfunction
 
 " set the colorscheme last to allow any ColorScheme autocmds to get set.
-colorscheme morning
 colorscheme nofrils-dark
 
 " Functions and Commands
