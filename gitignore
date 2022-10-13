@@ -5,3 +5,4 @@ tags
 .venv
 *.pyc
 payloads
+dev_scripts

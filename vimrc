@@ -328,7 +328,7 @@ augroup languages
     au FileType php setlocal commentstring=//\ %s
     au FileType xdefaults setlocal commentstring=!\ %s
     au FileType rc setlocal commentstring=#\ %s
-    au FileType yaml,ruby setlocal tabstop=2 softtabstop=2 shiftwidth=2
+    au FileType yaml,ruby,lisp setlocal tabstop=2 softtabstop=2 shiftwidth=2
     au BufRead,BufNewFile *.zpl set filetype=zpl
     au FileType zpl setlocal commentstring=^FX\ %s
 augroup END
@@ -386,7 +386,7 @@ function! ToggleNofrils()
 endfunction
 
 " set the colorscheme last to allow any ColorScheme autocmds to get set.
-colorscheme nofrils-dark
+colorscheme nofrils-sepia
 
 " Functions and Commands
 
