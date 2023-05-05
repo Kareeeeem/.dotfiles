@@ -1,20 +1,23 @@
 " General settings
 
-filetype plugin indent on
-syntax on
+" nvim python host prog
+let g:python3_host_prog = '$HOME/.venv-py3nvim/bin/python'
 
-set clipboard=unnamedplus
+set clipboard+=unnamedplus
 
 set wildmenu
 set showcmd
 
+set scrolloff=3
 set nrformats=
 set updatetime=500
 set breakindent
+set completeopt+=menuone
 set completeopt-=preview
 set autoindent
 set backspace=2
 set colorcolumn=88
+" set winwidth=92  " taken care of by the lens plugin
 set encoding=utf-8
 set fileencoding=utf-8
 set formatoptions=tjrocqn
@@ -27,17 +30,16 @@ set nojoinspaces  " don't insert double spaces.
 
 set hlsearch ignorecase smartcase incsearch
 set expandtab tabstop=4 softtabstop=4 shiftwidth=4
-set signcolumn=yes
+set signcolumn=number
 
 set dir=$HOME/.vim/tmp
+set undofile undodir=$HOME/.vim/undodir/
 
 set tags=tags
 set tags+=.git/tags
 set tags+=../.git/tags
 set tags+=../../.git./tags
 set tags+=../../../.git/tags
-
-set undofile undodir=$HOME/.vim/undodir/
 
 let c_no_curly_error = 1
 let c_syntax_for_h = 1
@@ -46,19 +48,6 @@ if executable("rg")
     set grepprg=rg\ --vimgrep\ --no-heading
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
-
-" Statusline
-set laststatus=2             " always show
-set statusline=%n            " buffer number
-set statusline+=\ %.50f      " file path
-set statusline+=%{&paste?'\ PASTE':''}
-set statusline+=\ %Y         " filetype
-set statusline+=\ %H%M%R     " help / modified / readonly flags
-set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
-set statusline+=\[%{&fileformat}\]
-set statusline+=%=           " right alignment from this point
-set statusline+=%l,%c%V      " linenr,columnnr,percentage into file
-set statusline+=\ %P         " percentage into file
 
 " Mappings
 
@@ -91,12 +80,11 @@ nnoremap gV `[v`]
 xnoremap < <gv
 xnoremap > >gv
 " Navigate buffers
-nnoremap <S-Tab> :bp<cr>
-nnoremap <Tab> :bn<cr>
+nnoremap <C-p> :bp<cr>
+nnoremap <C-n> :bn<cr>
 
 nnoremap ]g :lnext<cr>
 nnoremap [g :lprev<cr>
-
 
 " Don't use Ex mode.
 map Q <nop>
@@ -113,38 +101,88 @@ endfunction
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'keith/tmux.vim'
+Plug 'nvim-lua/plenary.nvim'  " this is a dependency of many other plugins
+
+Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
+Plug 'moll/vim-bbye', {'on': 'Bdelete'}
 Plug 'ap/vim-buftabline'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'neomake/neomake'
-Plug 'robertmeta/nofrils'
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'camspiers/lens.vim'
+
+" tmux
 Plug 'jpalardy/vim-slime'
-Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
-Plug 'junegunn/fzf.vim'
-Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
-Plug 'moll/vim-bbye', {'on': 'Bdelete'}
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'alfredodeza/pytest.vim'
+
+" fuzzy finding
+" Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
+" Plug 'junegunn/fzf.vim'
+Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 " language help
-Plug 'benknoble/vim-racket'
-Plug 'psf/black', {'branch': 'main'}
-Plug 'mattn/emmet-vim'
+
+" general
+Plug 'nvim-treesitter/nvim-treesitter'
+
+" lsp
+Plug 'neovim/nvim-lspconfig'
+Plug 'jose-elias-alvarez/null-ls.nvim'
+" Plug 'gfanto/fzf-lsp.nvim'
+
+" completion
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
+
+" dap
+Plug 'mfussenegger/nvim-dap'
+Plug 'mfussenegger/nvim-dap-python'
+Plug 'mxsdev/nvim-dap-vscode-js'
+" Plug 'rcarriga/nvim-dap-ui'
+
+" python
+Plug 'alfredodeza/pytest.vim'
+Plug 'psf/black', {'branch': 'stable'}
 Plug 'hynek/vim-python-pep8-indent'
 Plug 'Kareeeeem/python-docstring-comments'
-Plug 'pangloss/vim-javascript'
+
+" racket
+Plug 'benknoble/vim-racket'
+
+" Frontend
+Plug 'mattn/emmet-vim'
+" Plug 'pangloss/vim-javascript'
+
+" arduino
 Plug 'stevearc/vim-arduino'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" colorschemes
+Plug 'robertmeta/nofrils'
+" Plug 'plan9-for-vimspace/acme-colors'
+" Plug 'koron/vim-monochromenote'
+" Plug 'mcchrish/zenbones.nvim'
+" Plug 'rktjmp/lush.nvim'
+" Plug 'preservim/vim-colors-pencil'
+" Plug 'zekzekus/menguless'
+" Plug 'YorickPeterse/vim-paper'
+" Plug 'cideM/yui'
+" Plug 'ntk148v/komau.vim'
+" Plug 'karoliskoncevicius/distilled-vim'
+" Plug 'RRethy/nvim-base16'
+" Plug 'chriskempson/base16-vim'
 call plug#end()
 
+" lens
+let g:lens#disabled_filetypes = ['undotree', 'diff']
+let g:lens#width_resize_max = 92
 
-" nvim host prog
-let g:python3_host_prog = '$HOME/.venv-py3nvim/bin/python'
 
 "buftabline
-let g:buftabline_numbers = 1
+" let g:buftabline_numbers = 1
 let g:buftabline_indicators = 1
 
 " Tmux navigator
@@ -154,15 +192,16 @@ let g:tmux_navigator_disable_when_zoomed=1
 nnoremap <leader>q :Bdelete<cr>
 
 " fzf
-let g:fzf_preview_window = []
-nnoremap <leader>p :Files<cr>
-nnoremap <leader>t :Tags<cr>
-nnoremap <leader>h :History<cr>
-nnoremap <leader>b :Buffers<cr>
+" let g:fzf_preview_window = []
+" nnoremap <leader>p :Files<cr>
+" nnoremap <leader>t :Tags<cr>
+" nnoremap <leader>h :History<cr>
+" nnoremap <leader>b :Buffers<cr>
 
 " Slime
 let g:slime_target = 'tmux'
-let g:slime_python_ipython = 1
+" let g:slime_python_ipython = 1
+let g:slime_bracketed_paste = 1
 let g:slime_no_mappings = 1
 xmap <leader>s <Plug>SlimeRegionSend
 nmap <leader>s <Plug>SlimeParagraphSend
@@ -177,94 +216,17 @@ let g:arduino_dir = "$HOME/.arduino15"
 let g:black_fast = 1
 let g:black_skip_string_normalization = 0
 
-" Neomake
-call neomake#configure#automake({
-  \ 'BufWinEnter': {},
-  \ 'TextChanged': {},
-  \ 'InsertLeave': {},
-  \ 'BufWritePost': {'delay': 0},
-  \ }, 500)
-
-let g:neomake_place_signs = 1
-let g:neomake_remove_invalid_entries=1
-let g:neomake_virtualtext_current_error = 0
-let g:neomake_error_sign = {'text': '>>', 'texthl': 'ErrorMsg'}
-let g:neomake_warning_sign = {'text': '>>', 'texthl': 'WarningMsg'}
-let g:neomake_message_sign = {'text': '>>', 'texthl': 'StatusLine'}
-let g:neomake_info_sign = {'text': '>>', 'texthl': 'StatusLine'}
-
-set statusline+=\ %#Error#%{neomake#statusline#LoclistStatus('loc\ ')}%*
-
-let g:neomake_python_enabled_makers = ['flake8'] " , 'mypy']
-let g:neomake_python_flake8_args = ['--max-line-length=88']
-
-let g:neomake_sh_shellcheck_args = ['-fgcc', '-s', 'bash', '-e', 'SC1090,SC1091']
-
-" let g:neomake_c_enabled_makers = ['gcc']
-" let g:neomake_c_gcc_args = ['-fsyntax-only', '-Wall', '-Wextra', '-I./', '-fno-diagnostics-show-caret']
-" let g:neomake_c_gcc_remove_invalid_entries=1
-" let g:neomake_c_clang_args = ['-fsyntax-only', '-std=c99', '-Weverything', '-I./']
-
-let g:neomake_racket_enabled_makers = ['raco']
-let g:neomake_racket_raco_remove_invalid_entries=1
-
 " vim-racket
-"
 let g:racket_hash_lang_dict = { 'sicp': 'racket' }
 
 
-" COC
-
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ CheckBackspace() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-" Use <c-space> to trigger completion.
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
-
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Use M to show documentation in preview window.
-nnoremap <silent> M :call ShowDocumentation()<CR>
-function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
-endfunction
-
 " Emmet
-let g:user_emmet_install_global = 0
+" let g:user_emmet_install_global = 0
 
-augroup emmet
-    au!
-    au FileType mako,html,css,htmldjango,htmljinja EmmetInstall
-augroup END
+" augroup emmet
+"     au!
+"     au FileType mako,html,css,htmldjango,htmljinja EmmetInstall
+" augroup END
 
 " Undotree
 nnoremap <F5> :UndotreeToggle<cr>
@@ -281,23 +243,19 @@ augroup vimStartup
                 \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft != 'gitcommit'
                 \ | exe "normal! g`\""
                 \ | endif
-    au InsertLeave * if pumvisible() == 0 | pclose | endif
 augroup END
 
-" Only register these autocommands if the necessary executables are present
-
-if executable('ctags') && executable('git-tags')
-    augroup tags
-        au!
-        au BufWritePost *.py,*.c call system('git-tags &')
-    augroup END
-endif
+" " Only register these autocommands if the necessary executables are present
+" if executable('ctags') && executable('git-tags')
+"     augroup tags
+"         au!
+"         au BufWritePost *.py,*.c call system('git-tags &')
+"     augroup END
+" endif
 
 let whitespace_blacklist = []
-
 augroup cleanup
     au!
-    au BufWritePre *.py execute ':Black'
 
     " strip trailing whitespace.
     au BufWritePre * if index(whitespace_blacklist, &ft) < 0
@@ -305,13 +263,14 @@ augroup cleanup
                 \ | endif
     " strip trailing white lines.
     au BufWritePre * call Preserve('v/\n*./d')
-    " au BufWritePost *.py,*.c :silent exe "!tmux send -t 2 'pytest --lf' Enter"
-
 augroup END
 
 augroup languages
     au!
     au BufWritePre *.go call Preserve('%!gofmt')
+
+    au FileType python inoremap <buffer> pdb breakpoint()<esc>
+    au BufWritePre *.py execute ':Black'
 
     " vim-racket overrides my K mapping
     au FileType racket nunmap <buffer> K
@@ -319,8 +278,6 @@ augroup languages
 
     au FileType *markdown*,text setlocal fo+=t tw=72 wrap
     " au FileType sh setlocal noexpandtab
-    " au FileType python setlocal keywordprg=pydoc
-    au FileType python inoremap <buffer> pdb breakpoint()<esc>
     " au FileType c setlocal commentstring=//\ %s
     " au FileType c setlocal cinoptions+=:0 " Don't indent case
     au FileType awk setlocal commentstring=#\ %s
@@ -328,7 +285,11 @@ augroup languages
     au FileType php setlocal commentstring=//\ %s
     au FileType xdefaults setlocal commentstring=!\ %s
     au FileType rc setlocal commentstring=#\ %s
-    au FileType yaml,ruby,lisp setlocal tabstop=2 softtabstop=2 shiftwidth=2
+    au FileType rkt,yaml,ruby,lisp,html,js,typescriptreact,typescript,javascriptreact,javascript setlocal tabstop=2 softtabstop=2 shiftwidth=2
+    au FileType typescript,typescriptreact,javascriptreact setlocal smartindent
+
+    " for writing printer labels, once used it at work. will leave it in the
+    " off chance I might need it again.
     au BufRead,BufNewFile *.zpl set filetype=zpl
     au FileType zpl setlocal commentstring=^FX\ %s
 augroup END
@@ -342,35 +303,28 @@ augroup END
 
 
 " Colorscheme
-
-augroup nofrils
-    au!
-    au ColorScheme nofrils* call ModifyNoFrils()
-    au ColorScheme nofrils* nnoremap <F7> :call ToggleNofrils()<cr>
-    " au ColorScheme * hi CocInfoSign guifg=#000000
-
-    autocmd FileType list set winhighlight=CursorLine:CocUnderline
-augroup END
-
 function! ModifyNoFrils()
     " Some modifications I like for nofrils
     if (&cursorline)
         hi clear CursorLineNr
         hi link CursorLineNr Normal
-        hi TODO cterm=bold
     endif
+
+    hi TODO cterm=bold
 
     if (g:colors_name == 'nofrils-dark')
         " brighten the comments
         hi Comment ctermfg=243
         " dim the normal text a little bit.
-        hi Normal ctermfg=252
-        hi normal ctermbg=NONE
+        hi Normal ctermfg=250
+        hi LineNr ctermfg=243
+        " use my terminal background
+        hi Normal ctermbg=NONE
         hi LineNr ctermbg=NONE
         hi SignColumn ctermbg=NONE
     elseif (g:colors_name == 'nofrils-light')
         hi Comment ctermfg=243
-        hi Normal ctermbg=253
+        hi Normal ctermbg=252
         hi ColorColumn ctermbg=251
         hi LineNr ctermbg=253
         hi SignColumn ctermbg=253
@@ -385,8 +339,18 @@ function! ToggleNofrils()
     endif
 endfunction
 
-" set the colorscheme last to allow any ColorScheme autocmds to get set.
-colorscheme nofrils-sepia
+augroup theme
+    au!
+    au ColorScheme nofrils* call ModifyNoFrils()
+    " au ColorScheme nofrils* nnoremap <F7> :call ToggleNofrils()<cr>
+augroup END
+
+
+if &diff
+    colorscheme blue
+else
+    colorscheme nofrils-dark
+endif
 
 " Functions and Commands
 
@@ -408,6 +372,36 @@ function! JoinSpaceless()
     endif
 endfunction
 
-if &diff
-    colorscheme blue
-endif
+function! QuickFixOpenAll()
+    if empty(getqflist())
+        return
+    endif
+    let s:prev_val = ""
+    for d in getqflist()
+        let s:curr_val = bufname(d.bufnr)
+        if (s:curr_val != s:prev_val)
+            exec "edit " . s:curr_val
+        endif
+        let s:prev_val = s:curr_val
+    endfor
+endfunction
+
+command! QuickFixOpenAll call QuickFixOpenAll()
+
+luafile $HOME/.dotfiles/vimrc.lua
+
+" let g:colors = getcompletion('', 'color')
+" func! NextColors()
+"     let idx = index(g:colors, g:colors_name)
+"     let c = (idx + 1 >= len(g:colors) ? g:colors[0] : g:colors[idx + 1])
+"     echo c
+"     return c
+" endfunc
+" func! PrevColors()
+"     let idx = index(g:colors, g:colors_name)
+"     let c = (idx - 1 < 0 ? g:colors[-1] : g:colors[idx - 1])
+"     echo c
+"     return c
+" endfunc
+" nnoremap <C-n> :exe "colo " .. NextColors()<CR>
+" nnoremap <C-p> :exe "colo " .. PrevColors()<CR>

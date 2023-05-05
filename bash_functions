@@ -43,65 +43,7 @@ _get_hotpluggable_devices () {
             printf "%s %s\n", $3, mntpnt
         }'
 }
-_get_mounted_hotpluggable_devices () {
-    pmount | head -n-1 | tail -n+2 | awk '{ printf "%s %s\n", $1, $3 }'
-}
-
-mnt () {
-    local devices=$(_get_hotpluggable_devices)
-    if [ -n "$1" ]; then
-        devices=$(grep "$1" <<< $devices)
-    fi
-
-    if [ -n "$devices" ]; then
-        while read -r device; do
-            pmount $device && notify-send "Drive mounted" "$device"
-        done <<< "$devices"
-    fi
-}
-
-_mnt () {
-    local options=$(_get_hotpluggable_devices)
-    local cur=${COMP_WORDS[COMP_CWORD]}
-    COMPREPLY=( $(compgen -W "$options" -- $cur) )
-}
-complete -F _mnt mnt
-
-umnt () {
-    local mountpoint mounted=$(_get_mounted_hotpluggable_devices)
-    if [ -n "$1" ]; then
-        mounted=$(grep "$1" <<< $mounted)
-    fi
-
-    if [ -n "$mounted" ]; then
-        while read -r d; do
-            mountpoint=$(cut -f2 -d ' ' <<< $d)
-            pumount $mountpoint && notify-send "Drive unmounted" $mountpoint
-        done <<< "$mounted"
-    fi
-}
-
-_umnt () {
-    local options=$(_get_mounted_hotpluggable_devices)
-    local cur=${COMP_WORDS[COMP_CWORD]}
-    COMPREPLY=( $(compgen -W "$options" -- $cur) )
-}
-complete -F _umnt umnt
 
 vrg () {
     vim -q <(rg "$1" --vimgrep)
-}
-
-
-DBPATH="$HOME/.mongo_db"
-export MONGO_PORT="27017"
-export MONGO_URI="mongodb://localhost:${MONGO_PORT}"
-start_repl_set () {
-    mkdir -p "$DBPATH"
-    mongod  --fork --syslog --port $MONGO_PORT --dbpath $DBPATH --replSet rs0 --bind_ip localhost
-    mongosh --port 27017 --file <<< "rs.initiate()"
-}
-
-stop_repl_set () {
-    mongod --port 27017 --shutdown --dbpath $DBPATH
 }

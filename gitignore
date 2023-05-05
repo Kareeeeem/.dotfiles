@@ -6,3 +6,5 @@ tags
 *.pyc
 payloads
 dev_scripts
+.envrc
+.npmrc

@@ -91,3 +91,7 @@ stty -ixon            # Disable START/STOP signals
 
 # added by fzf install
 [ -f $HOME/.fzf.bash ] && . $HOME/.fzf.bash
+
+eval "$(direnv hook bash)"
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

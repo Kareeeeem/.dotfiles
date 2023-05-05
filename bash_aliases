@@ -3,7 +3,7 @@ alias vim='nvim'
 alias vi='nvim'
 alias v='nvim'
 
-alias evim='vim $HOME/.dotfiles/vimrc'
+alias evim='vim $HOME/.dotfiles/vimrc*'
 
 alias ebash='vim $HOME/.dotfiles/{bashrc,profile,bash_aliases,prompt,bash_functions}'
 # alias ssh='TERM=screen-256color ssh'

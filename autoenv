@@ -2,6 +2,7 @@
 
 _AUTOENVFILE=.environment
 _AUTOENVCHECKSUMS=$HOME/.envsums
+_BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 # can be used outside to see which environment is activated.
 export AUTOENV=

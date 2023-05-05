@@ -20,7 +20,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -n "$BASH_VERSION" ] && [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
 [ -d "$HOME/.dotfiles/bin" ]  && PATH="$HOME/.dotfiles/bin:$PATH"
 [ -d "$HOME/.local/bin" ]  && PATH="$HOME/.local/bin:$PATH"
-[ -d "$HOME/.npm/bin" ] && PATH="$HOME/.npm/bin:$PATH"
+[ -d "$HOME/.config/npm/bin" ] && PATH="$HOME/.config/npm/bin:$PATH"
 
 
 if [ $(uname) == Darwin ]; then

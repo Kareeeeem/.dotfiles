@@ -18,22 +18,22 @@ _prompt_command() {
     fi
 
     # only auto active environments in tmux sessions
-    if [ -n "$TMUX" ]; then
-        _autoenv
+    # if [ -n "$TMUX" ]; then
+    #     _autoenv
 
-        if [ -n "$AUTOENV" ]; then
-            if [ -z "$AUTOENV_PROMPT" ]; then
-                _autoenv_prompt="$(basename "$(dirname "$AUTOENV")")"
-            else
-                _autoenv_prompt="${AUTOENV_PROMPT}"
-            fi
-            _autoenv_prompt="${_hl}${_autoenv_prompt}${_reset} "
-        fi
-    fi
+    #     if [ -n "$AUTOENV" ]; then
+    #         if [ -z "$AUTOENV_PROMPT" ]; then
+    #             _autoenv_prompt="$(basename "$(dirname "$AUTOENV")")"
+    #         else
+    #             _autoenv_prompt="${AUTOENV_PROMPT}"
+    #         fi
+    #         _autoenv_prompt="${_hl}${_autoenv_prompt}${_reset} "
+    #     fi
+    # fi
 
     _pwd=$(pwd | awk -F/ 'NF <= 3 { printf "%s", $0 } NF > 3 { printf "%s/%s", $(NF-1), $NF  }')
 
-    __git_ps1 "${_status}${_autoenv_prompt}" "${_pwd} $ " "%s "
+    __git_ps1 "${_status}" "${_pwd} $ " "%s "
 
     history -a  # Append new lines to history file
     history -c  # Clear the history list
