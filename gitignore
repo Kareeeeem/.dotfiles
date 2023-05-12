@@ -8,3 +8,4 @@ payloads
 dev_scripts
 .envrc
 .npmrc
+typings/

@@ -1,6 +1,5 @@
 -- general vim settings
 vim.diagnostic.config({
-    underline = {severity = 'error'},
     virtual_text = false,
     severity_sort = true,
     float = {
@@ -8,6 +7,16 @@ vim.diagnostic.config({
         severity_sort = false,
     },
 })
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+    vim.lsp.diagnostic.on_publish_diagnostics, {
+        underline = {
+            severity_limit = 'Warning',
+        },
+        signs = {
+            severity_limit = "Warning",
+        },
+    }
+)
 vim.keymap.set('n', '<leader>e', function()
     vim.diagnostic.open_float({ scope = 'line' })
 end)
@@ -108,25 +117,24 @@ lspconfig.pyright.setup {
     settings = {
         python = {
             analysis = {
-                diagnosticSeverityOverrides = {
-                    reportIncompatibleMethodOverride = "error",
-                    reportIncompatibleVariableOverride = true,
-                    reportImportCycles = "warning",
-                    reportUnnecessaryTypeIgnoreComment = "warning",
-                    reportMissingTypeArgument = "none",
-                    reportUnknownArgumentType = "none",
-                    reportUnknownLambdaType = "none",
-                    reportUnknownMemberType = "none",
-                    reportUnknownParameterType = "none",
-                    reportUnknownVariableType = "none",
-                    -- reportUnknownVariableType = "none",
-                    -- reportPropertyTypeMismatch = "error",
-                    -- reportMissingSuperCall = "error",
-                },
+                -- diagnosticSeverityOverrides = {
+                --     reportIncompatibleMethodOverride = "error",
+                --     reportIncompatibleVariableOverride = true,
+                --     reportImportCycles = "warning",
+
+                --     reportUnnecessaryTypeIgnoreComment = "warning",
+                --     reportMissingTypeArgument = "none",
+                --     reportUnknownArgumentType = "none",
+                --     reportUnknownLambdaType = "none",
+                --     reportUnknownMemberType = "none",
+                --     reportUnknownParameterType = "none",
+                --     reportUnknownVariableType = "none",
+
+                -- },
                 autoSearchPaths = true,
                 diagnosticMode = "openFilesOnly",
-                useLibraryCodeForTypes = true,
-                typeCheckingMode = "strict"
+                -- useLibraryCodeForTypes = true,
+                -- typeCheckingMode = "strict",
             }
         }
     }
@@ -156,9 +164,7 @@ null_ls.setup({
         on_attach(client, bufnr)
     end,
     sources = {
-        null_ls.builtins.diagnostics.flake8.with({
-            extra_args = { '--max-line-length=88' },
-        }),
+        null_ls.builtins.diagnostics.flake8,
         null_ls.builtins.diagnostics.eslint_d,
         null_ls.builtins.code_actions.eslint_d,
         null_ls.builtins.formatting.eslint_d,
@@ -273,7 +279,7 @@ table.insert(py_configs, 1, {
 })
 
 require("dap-vscode-js").setup({
-    debugger_path = "~/src/vscode-js-debug-1.77.2",
+    debugger_path = os.getenv('HOME') .. "/src/vscode-js-debug-1.77.2",
     adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' },
 })
 
@@ -291,19 +297,15 @@ for _, language in ipairs({ "typescript", "javascript", "typescriptreact", "java
         },
         {
             type = "pwa-node",
-            request = "launch",
-            name = "Debug Jest Tests",
-            -- trace = true, -- include debugger info
-            runtimeExecutable = "node",
-            runtimeArgs = {
-                "./node_modules/jest/bin/jest.js",
-                "--runInBand",
-            },
-            rootPath = "${workspaceFolder}",
+            request = "attach",
+            name = "Attach",
+            -- processId = function()
+            --     return require'dap.utils'.pick_process({ filter = "node" })
+            -- end,
             cwd = "${workspaceFolder}",
-            console = "integratedTerminal",
-            internalConsoleOptions = "neverOpen",
-        }
+            continueOnAttach = true,
+            -- port = '${env:NODE_INSPECTOR_PORT}',
+        },
     }
 end
 
@@ -316,8 +318,9 @@ vim.keymap.set('n', '<Leader>db', function() require('dap').toggle_breakpoint() 
 vim.keymap.set('n', '<Leader>lp', function()
     require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))
 end)
+vim.keymap.set('n', '<leader>dq', function() require('dap').clear_breakpoints() end)
 vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.toggle() end)
-vim.keymap.set('n', '<Leader>dl', function() require('dap').run_last() end)
+vim.keymap.set('n', '<Leader>dl', function() require('dap').list_breakpoints() end)
 vim.keymap.set('n', '<Leader>ds', function()
     local widgets = require('dap.ui.widgets')
     widgets.centered_float(widgets.scopes)

@@ -51,6 +51,7 @@ endif
 
 " Mappings
 
+tnoremap <Esc> <C-\><C-n>
 " Expand `%%` to current directory.
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 " Because backslash is in a awkward place.
@@ -154,7 +155,7 @@ Plug 'Kareeeeem/python-docstring-comments'
 Plug 'benknoble/vim-racket'
 
 " Frontend
-Plug 'mattn/emmet-vim'
+" Plug 'mattn/emmet-vim'
 " Plug 'pangloss/vim-javascript'
 
 " arduino
