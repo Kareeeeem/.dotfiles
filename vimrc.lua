@@ -24,6 +24,7 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '<leader>l', vim.diagnostic.setloclist)
 
+
 -- language Server Protocol
 
 local function on_attach(client, bufnr)
@@ -45,7 +46,6 @@ local function on_attach(client, bufnr)
             or client.name ~= "null-ls"
         then
             vim.bo[bufnr].formatexpr = "v:lua.vim.lsp.formatexpr()"
-            vim.keymap.set("n", "<leader>gq", "<cmd>lua vim.lsp.buf.format({ async = true })<CR>")
         else
             vim.bo[bufnr].formatexpr = nil
         end
@@ -117,24 +117,8 @@ lspconfig.pyright.setup {
     settings = {
         python = {
             analysis = {
-                -- diagnosticSeverityOverrides = {
-                --     reportIncompatibleMethodOverride = "error",
-                --     reportIncompatibleVariableOverride = true,
-                --     reportImportCycles = "warning",
-
-                --     reportUnnecessaryTypeIgnoreComment = "warning",
-                --     reportMissingTypeArgument = "none",
-                --     reportUnknownArgumentType = "none",
-                --     reportUnknownLambdaType = "none",
-                --     reportUnknownMemberType = "none",
-                --     reportUnknownParameterType = "none",
-                --     reportUnknownVariableType = "none",
-
-                -- },
                 autoSearchPaths = true,
                 diagnosticMode = "openFilesOnly",
-                -- useLibraryCodeForTypes = true,
-                -- typeCheckingMode = "strict",
             }
         }
     }
@@ -164,7 +148,9 @@ null_ls.setup({
         on_attach(client, bufnr)
     end,
     sources = {
-        null_ls.builtins.diagnostics.flake8,
+        null_ls.builtins.diagnostics.flake8.with({
+            extra_args = { '--max-line-length=88' },
+        }),
         null_ls.builtins.diagnostics.eslint_d,
         null_ls.builtins.code_actions.eslint_d,
         null_ls.builtins.formatting.eslint_d,
@@ -271,7 +257,6 @@ table.insert(py_configs, 1, {
     type = 'python',
     request = 'attach',
     name = 'Attach Running APP',
-    dont_terminate_on_exit = true,
     connect = {
         host = '127.0.0.1',
         port = '${env:DEBUGPY_PORT}',
@@ -305,6 +290,13 @@ for _, language in ipairs({ "typescript", "javascript", "typescriptreact", "java
             cwd = "${workspaceFolder}",
             continueOnAttach = true,
             -- port = '${env:NODE_INSPECTOR_PORT}',
+        },
+        {
+            type = "pwa-node",
+            request = "attach",
+            name = "debugtest",
+            -- processId = require'dap.utils'.pick_process,
+            cwd = "${workspaceFolder}",
         },
     }
 end

@@ -10,6 +10,8 @@
     lgg = log --oneline --graph
     rb = rebase
     rbi = rebase -i
+    ph = push origin HEAD
+    phf = push origin HEAD -f
 [push]
 	default = current
 [log]

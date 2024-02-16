@@ -175,6 +175,7 @@ Plug 'robertmeta/nofrils'
 " Plug 'karoliskoncevicius/distilled-vim'
 " Plug 'RRethy/nvim-base16'
 " Plug 'chriskempson/base16-vim'
+Plug 'github/copilot.vim'
 call plug#end()
 
 " lens
