@@ -111,15 +111,13 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'nvim-lualine/lualine.nvim'
-Plug 'camspiers/lens.vim'
+Plug 'camspiers/lens.vim' " auto resizing for buffers
 
 " tmux
 Plug 'jpalardy/vim-slime'
 Plug 'christoomey/vim-tmux-navigator'
 
 " fuzzy finding
-" Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
-" Plug 'junegunn/fzf.vim'
 Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
@@ -127,11 +125,11 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 " general
 Plug 'nvim-treesitter/nvim-treesitter'
+" Plug 'github/copilot.vim'
 
 " lsp
 Plug 'neovim/nvim-lspconfig'
 Plug 'jose-elias-alvarez/null-ls.nvim'
-" Plug 'gfanto/fzf-lsp.nvim'
 
 " completion
 Plug 'hrsh7th/nvim-cmp'
@@ -140,10 +138,9 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 
 " dap
-Plug 'mfussenegger/nvim-dap'
-Plug 'mfussenegger/nvim-dap-python'
-Plug 'mxsdev/nvim-dap-vscode-js'
-" Plug 'rcarriga/nvim-dap-ui'
+" Plug 'mfussenegger/nvim-dap'
+" Plug 'mfussenegger/nvim-dap-python'
+" Plug 'mxsdev/nvim-dap-vscode-js'
 
 " python
 Plug 'alfredodeza/pytest.vim'
@@ -154,28 +151,12 @@ Plug 'Kareeeeem/python-docstring-comments'
 " racket
 Plug 'benknoble/vim-racket'
 
-" Frontend
-" Plug 'mattn/emmet-vim'
-" Plug 'pangloss/vim-javascript'
-
 " arduino
 Plug 'stevearc/vim-arduino'
 
 " colorschemes
 Plug 'robertmeta/nofrils'
-" Plug 'plan9-for-vimspace/acme-colors'
-" Plug 'koron/vim-monochromenote'
-" Plug 'mcchrish/zenbones.nvim'
-" Plug 'rktjmp/lush.nvim'
-" Plug 'preservim/vim-colors-pencil'
-" Plug 'zekzekus/menguless'
-" Plug 'YorickPeterse/vim-paper'
-" Plug 'cideM/yui'
-" Plug 'ntk148v/komau.vim'
-" Plug 'karoliskoncevicius/distilled-vim'
-" Plug 'RRethy/nvim-base16'
-" Plug 'chriskempson/base16-vim'
-Plug 'github/copilot.vim'
+
 call plug#end()
 
 " lens
@@ -183,7 +164,7 @@ let g:lens#disabled_filetypes = ['undotree', 'diff']
 let g:lens#width_resize_max = 92
 
 
-"buftabline
+" buftabline
 " let g:buftabline_numbers = 1
 let g:buftabline_indicators = 1
 
@@ -193,16 +174,9 @@ let g:tmux_navigator_disable_when_zoomed=1
 " vim bbye
 nnoremap <leader>q :Bdelete<cr>
 
-" fzf
-" let g:fzf_preview_window = []
-" nnoremap <leader>p :Files<cr>
-" nnoremap <leader>t :Tags<cr>
-" nnoremap <leader>h :History<cr>
-" nnoremap <leader>b :Buffers<cr>
-
 " Slime
 let g:slime_target = 'tmux'
-" let g:slime_python_ipython = 1
+let g:slime_python_ipython = 1
 let g:slime_bracketed_paste = 1
 let g:slime_no_mappings = 1
 xmap <leader>s <Plug>SlimeRegionSend
@@ -222,13 +196,6 @@ let g:black_skip_string_normalization = 0
 let g:racket_hash_lang_dict = { 'sicp': 'racket' }
 
 
-" Emmet
-" let g:user_emmet_install_global = 0
-
-" augroup emmet
-"     au!
-"     au FileType mako,html,css,htmldjango,htmljinja EmmetInstall
-" augroup END
 
 " Undotree
 nnoremap <F5> :UndotreeToggle<cr>
@@ -246,14 +213,6 @@ augroup vimStartup
                 \ | exe "normal! g`\""
                 \ | endif
 augroup END
-
-" " Only register these autocommands if the necessary executables are present
-" if executable('ctags') && executable('git-tags')
-"     augroup tags
-"         au!
-"         au BufWritePost *.py,*.c call system('git-tags &')
-"     augroup END
-" endif
 
 let whitespace_blacklist = []
 augroup cleanup
@@ -391,19 +350,3 @@ endfunction
 command! QuickFixOpenAll call QuickFixOpenAll()
 
 luafile $HOME/.dotfiles/vimrc.lua
-
-" let g:colors = getcompletion('', 'color')
-" func! NextColors()
-"     let idx = index(g:colors, g:colors_name)
-"     let c = (idx + 1 >= len(g:colors) ? g:colors[0] : g:colors[idx + 1])
-"     echo c
-"     return c
-" endfunc
-" func! PrevColors()
-"     let idx = index(g:colors, g:colors_name)
-"     let c = (idx - 1 < 0 ? g:colors[-1] : g:colors[idx - 1])
-"     echo c
-"     return c
-" endfunc
-" nnoremap <C-n> :exe "colo " .. NextColors()<CR>
-" nnoremap <C-p> :exe "colo " .. PrevColors()<CR>

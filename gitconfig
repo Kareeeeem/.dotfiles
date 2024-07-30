@@ -32,3 +32,5 @@
     path = ~/.gitconfig-work
 [pull]
 	ff = only
+[init]
+	templateDir = ~/.git-templates

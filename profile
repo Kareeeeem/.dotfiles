@@ -74,3 +74,7 @@ export CLICOLOR=1
 # https://www.gnu.org/software/coreutils/manual/html_node/Formatting-the-file-names.html
 # https://unix.stackexchange.com/q/258679
 export QUOTING_STYLE=literal
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"

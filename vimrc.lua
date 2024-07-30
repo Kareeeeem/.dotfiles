@@ -183,10 +183,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
         -- vim.keymap.set('n', '<leader>wl', function()
         --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
         -- end, opts)
+        vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
         vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, opts)
         vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
         vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
-        vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
         vim.keymap.set('n', '<leader>f', function()
             vim.lsp.buf.format { async = true }
         end, opts)
@@ -203,7 +203,7 @@ require('lualine').setup {
     },
     sections = {
         lualine_c = { '%.50f' },  -- filepath
-        lualine_z = { 'location', require 'dap'.status }
+        -- lualine_z = { 'location', require 'dap'.status }
     }
 }
 
@@ -234,86 +234,86 @@ end, {})
 
 -- Debug Adapter Protocol
 
-local dap = require('dap')
-dap.defaults.fallback.terminal_win_cmd = 'enew!'
+-- local dap = require('dap')
+-- dap.defaults.fallback.terminal_win_cmd = 'enew!'
 
-require('dap-python').setup('~/.config/virtualenvs/debugpy/bin/python')
+-- require('dap-python').setup('~/.config/virtualenvs/debugpy/bin/python')
 
-vim.api.nvim_set_hl(0, "DapBreakPoint", { reverse = true })
-vim.api.nvim_set_hl(0, "DapBreakPointCondition", { link = "DapBreakPoint" })
-vim.api.nvim_set_hl(0, "DapLogPoint", { link = "IncSearch" })
-vim.api.nvim_set_hl(0, "DapStopped", { link = "Search" })
-vim.api.nvim_set_hl(0, "DapBreakpointRejected", { link = "ErrorMsg" })
+-- vim.api.nvim_set_hl(0, "DapBreakPoint", { reverse = true })
+-- vim.api.nvim_set_hl(0, "DapBreakPointCondition", { link = "DapBreakPoint" })
+-- vim.api.nvim_set_hl(0, "DapLogPoint", { link = "IncSearch" })
+-- vim.api.nvim_set_hl(0, "DapStopped", { link = "Search" })
+-- vim.api.nvim_set_hl(0, "DapBreakpointRejected", { link = "ErrorMsg" })
 
-vim.fn.sign_define('DapBreakpoint', { text = 'B', texthl = '', linehl = 'DapBreakPoint', numhl = '' })
-vim.fn.sign_define('DapBreakpointCondition', { text = 'C', texthl = '', linehl = 'DapBreakpointCondition', numhl = '' })
-vim.fn.sign_define('DapLogPoint', { text = 'L', texthl = '', linehl = 'DapLogPoint', numhl = '' })
-vim.fn.sign_define('DapStopped', { text = '>', texthl = '', linehl = 'DapStopped', numhl = '' })
-vim.fn.sign_define('DapBreakpointRejected', { text = 'X', texthl = '', linehl = 'DapBreakpointRejected', numhl = '' })
+-- vim.fn.sign_define('DapBreakpoint', { text = 'B', texthl = '', linehl = 'DapBreakPoint', numhl = '' })
+-- vim.fn.sign_define('DapBreakpointCondition', { text = 'C', texthl = '', linehl = 'DapBreakpointCondition', numhl = '' })
+-- vim.fn.sign_define('DapLogPoint', { text = 'L', texthl = '', linehl = 'DapLogPoint', numhl = '' })
+-- vim.fn.sign_define('DapStopped', { text = '>', texthl = '', linehl = 'DapStopped', numhl = '' })
+-- vim.fn.sign_define('DapBreakpointRejected', { text = 'X', texthl = '', linehl = 'DapBreakpointRejected', numhl = '' })
 
-local py_configs = dap.configurations.python or {}
-dap.configurations.python = py_configs
-table.insert(py_configs, 1, {
-    type = 'python',
-    request = 'attach',
-    name = 'Attach Running APP',
-    connect = {
-        host = '127.0.0.1',
-        port = '${env:DEBUGPY_PORT}',
-    },
-})
+-- local py_configs = dap.configurations.python or {}
+-- dap.configurations.python = py_configs
+-- table.insert(py_configs, 1, {
+--     type = 'python',
+--     request = 'attach',
+--     name = 'Attach Running APP',
+--     connect = {
+--         host = '127.0.0.1',
+--         port = '${env:DEBUGPY_PORT}',
+--     },
+-- })
 
-require("dap-vscode-js").setup({
-    debugger_path = os.getenv('HOME') .. "/src/vscode-js-debug-1.77.2",
-    adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' },
-})
+-- require("dap-vscode-js").setup({
+--     debugger_path = os.getenv('HOME') .. "/src/vscode-js-debug-1.77.2",
+--     adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' },
+-- })
 
-for _, language in ipairs({ "typescript", "javascript", "typescriptreact", "javascriptreact" }) do
-    require("dap").configurations[language] = {
-        {
-            type = "pwa-chrome",
-            name = "Attach - Remote Debugging",
-            request = "attach",
-            cwd = vim.fn.getcwd(),
-            sourceMaps = true,
-            protocol = "inspector",
-            port = 9222,
-            webRoot = "${workspaceFolder}",
-        },
-        {
-            type = "pwa-node",
-            request = "attach",
-            name = "Attach",
-            -- processId = function()
-            --     return require'dap.utils'.pick_process({ filter = "node" })
-            -- end,
-            cwd = "${workspaceFolder}",
-            continueOnAttach = true,
-            -- port = '${env:NODE_INSPECTOR_PORT}',
-        },
-        {
-            type = "pwa-node",
-            request = "attach",
-            name = "debugtest",
-            -- processId = require'dap.utils'.pick_process,
-            cwd = "${workspaceFolder}",
-        },
-    }
-end
+-- for _, language in ipairs({ "typescript", "javascript", "typescriptreact", "javascriptreact" }) do
+--     require("dap").configurations[language] = {
+--         {
+--             type = "pwa-chrome",
+--             name = "Attach - Remote Debugging",
+--             request = "attach",
+--             cwd = vim.fn.getcwd(),
+--             sourceMaps = true,
+--             protocol = "inspector",
+--             port = 9222,
+--             webRoot = "${workspaceFolder}",
+--         },
+--         {
+--             type = "pwa-node",
+--             request = "attach",
+--             name = "Attach",
+--             -- processId = function()
+--             --     return require'dap.utils'.pick_process({ filter = "node" })
+--             -- end,
+--             cwd = "${workspaceFolder}",
+--             continueOnAttach = true,
+--             -- port = '${env:NODE_INSPECTOR_PORT}',
+--         },
+--         {
+--             type = "pwa-node",
+--             request = "attach",
+--             name = "debugtest",
+--             -- processId = require'dap.utils'.pick_process,
+--             cwd = "${workspaceFolder}",
+--         },
+--     }
+-- end
 
-vim.keymap.set('n', '<leader>dc', function() require('dap').continue() end)
-vim.keymap.set('n', '<leader>dn', function() require('dap').step_over() end)
-vim.keymap.set('n', '<leader>di', function() require('dap').step_into() end)
-vim.keymap.set('n', '<leader>do', function() require('dap').step_out() end)
-vim.keymap.set('n', '<leader>df', function() require('dap').focus_frame() end)
-vim.keymap.set('n', '<Leader>db', function() require('dap').toggle_breakpoint() end)
-vim.keymap.set('n', '<Leader>lp', function()
-    require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))
-end)
-vim.keymap.set('n', '<leader>dq', function() require('dap').clear_breakpoints() end)
-vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.toggle() end)
-vim.keymap.set('n', '<Leader>dl', function() require('dap').list_breakpoints() end)
-vim.keymap.set('n', '<Leader>ds', function()
-    local widgets = require('dap.ui.widgets')
-    widgets.centered_float(widgets.scopes)
-end)
+-- vim.keymap.set('n', '<leader>dc', function() require('dap').continue() end)
+-- vim.keymap.set('n', '<leader>dn', function() require('dap').step_over() end)
+-- vim.keymap.set('n', '<leader>di', function() require('dap').step_into() end)
+-- vim.keymap.set('n', '<leader>do', function() require('dap').step_out() end)
+-- vim.keymap.set('n', '<leader>df', function() require('dap').focus_frame() end)
+-- vim.keymap.set('n', '<Leader>db', function() require('dap').toggle_breakpoint() end)
+-- vim.keymap.set('n', '<Leader>lp', function()
+--     require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))
+-- end)
+-- vim.keymap.set('n', '<leader>dq', function() require('dap').clear_breakpoints() end)
+-- vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.toggle() end)
+-- vim.keymap.set('n', '<Leader>dl', function() require('dap').list_breakpoints() end)
+-- vim.keymap.set('n', '<Leader>ds', function()
+--     local widgets = require('dap.ui.widgets')
+--     widgets.centered_float(widgets.scopes)
+-- end)

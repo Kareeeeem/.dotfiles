@@ -95,3 +95,5 @@ stty -ixon            # Disable START/STOP signals
 eval "$(direnv hook bash)"
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+eval "$(pyenv virtualenv-init -)"
