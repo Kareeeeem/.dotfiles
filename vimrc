@@ -4,6 +4,7 @@
 let g:python3_host_prog = '$HOME/.venv-py3nvim/bin/python'
 
 set clipboard+=unnamedplus
+set notermguicolors
 
 set wildmenu
 set showcmd
@@ -35,12 +36,6 @@ set signcolumn=number
 set dir=$HOME/.vim/tmp
 set undofile undodir=$HOME/.vim/undodir/
 
-set tags=tags
-set tags+=.git/tags
-set tags+=../.git/tags
-set tags+=../../.git./tags
-set tags+=../../../.git/tags
-
 let c_no_curly_error = 1
 let c_syntax_for_h = 1
 
@@ -67,6 +62,16 @@ nnoremap M K
 " Original J on leader j
 nnoremap <leader>j J
 " Join lines without whitespace
+" http://vi.stackexchange.com/a/440
+" Like gJ, but always remove spaces
+function! JoinSpaceless()
+    execute 'normal gJ'
+    " Character under cursor is whitespace remove it.
+    if matchstr(getline('.'), '\%' . col('.') . 'c.') =~ '\s'
+        execute 'normal dw'
+    endif
+endfunction
+
 nnoremap <silent> J :call JoinSpaceless()<cr>
 " Toggle search highlighting
 nnoremap <BS> :nohl<cr>
@@ -237,6 +242,7 @@ augroup languages
     au FileType racket nunmap <buffer> K
     au FileType racket,scheme setlocal commentstring=;\ %s
 
+
     au FileType *markdown*,text setlocal fo+=t tw=72 wrap
     " au FileType sh setlocal noexpandtab
     " au FileType c setlocal commentstring=//\ %s
@@ -321,16 +327,6 @@ function! Preserve(command)
     let w = winsaveview()
     silent execute a:command
     call winrestview(w)
-endfunction
-
-" http://vi.stackexchange.com/a/440
-" Like gJ, but always remove spaces
-function! JoinSpaceless()
-    execute 'normal gJ'
-    " Character under cursor is whitespace remove it.
-    if matchstr(getline('.'), '\%' . col('.') . 'c.') =~ '\s'
-        execute 'normal dw'
-    endif
 endfunction
 
 function! QuickFixOpenAll()

@@ -8,7 +8,7 @@ all: symlinks completions bin
 
 symlinks:
 	mkdir -p $(HOME)/.config/nvim
-	ln -f -s $(current_dir)/ctags $(HOME)/.ctags &> /dev/null
+	# ln -f -s $(current_dir)/ctags $(HOME)/.ctags &> /dev/null
 	ln -f -s $(current_dir)/vimrc $(HOME)/.config/nvim/init.vim &> /dev/null
 	ln -f -s $(current_dir)/tmux.conf $(HOME)/.tmux.conf &> /dev/null
 	ln -f -s $(current_dir)/rtorrent.rc $(HOME)/.rtorrent.rc &> /dev/null

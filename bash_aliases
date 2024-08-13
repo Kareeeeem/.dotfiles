@@ -4,9 +4,7 @@ alias vi='nvim'
 alias v='nvim'
 
 alias evim='vim $HOME/.dotfiles/vimrc*'
-
 alias ebash='vim $HOME/.dotfiles/{bashrc,profile,bash_aliases,prompt,bash_functions}'
-# alias ssh='TERM=screen-256color ssh'
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -17,8 +15,6 @@ alias l='ls -lhF --group-directories-first'
 #            ├l long listing
 #            ├─h human readable sizes
 #            └──F classifiers
-
-alias json='python3 -m json.tool'
 
 # http://askubuntu.com/a/17279
 alias rcp="rsync -ah -P"

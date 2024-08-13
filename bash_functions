@@ -29,21 +29,6 @@ vclean () {
     find $HOME/.vim/tmp -type f -delete
 }
 
-_get_hotpluggable_devices () {
-    lsblk --output HOTPLUG,TYPE,NAME,MODEL,MAJ:MIN,MOUNTPOINT --path --raw | \
-    awk -F '[ ]' '
-        $1 != 1 { next }
-        $2 == "disk" {
-            gsub(/\\x20/,"",$4)
-            name=tolower($4);
-        }
-            $2 == "part" && $6 == "" {
-            sub(":","",$5);
-            mntpnt="/media/"name$5;
-            printf "%s %s\n", $3, mntpnt
-        }'
-}
-
 vrg () {
     vim -q <(rg "$1" --vimgrep)
 }
