@@ -1,5 +1,0 @@
-flake8
-isort
-httpie
-black
-ipython

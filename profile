@@ -21,12 +21,10 @@ export NVM_DIR="$HOME/.nvm"
 [ -d "$HOME/.dotfiles/bin" ]  && PATH="$HOME/.dotfiles/bin:$PATH"
 [ -d "$HOME/.local/bin" ]  && PATH="$HOME/.local/bin:$PATH"
 [ -d "$HOME/.config/npm/bin" ] && PATH="$HOME/.config/npm/bin:$PATH"
+[ -d "$HOME/work/bin" ] && PATH="$HOME/work/bin:$PATH"
 
 hash rg &> /dev/null && export FZF_DEFAULT_COMMAND='rg --files --hidden'
 hash nvim &> /dev/null && export VISUAL="nvim" && export EDITOR="$VISUAL"
-
-export FZF_DEFAULT_OPTS='--no-bold --color=bw'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 export CLICOLOR=1
 # https://www.gnu.org/software/coreutils/manual/html_node/Formatting-the-file-names.html
@@ -34,7 +32,5 @@ export CLICOLOR=1
 export QUOTING_STYLE=literal
 
 export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+[ -d $PYENV_ROOT/bin ] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
-
-test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"

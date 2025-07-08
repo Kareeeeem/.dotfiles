@@ -53,44 +53,24 @@ shopt -s extglob
 
 stty -ixon            # Disable START/STOP signals
 
- # enable bash completion in interactive shells
- if ! shopt -oq posix ; then
-     [ -f /etc/bash_completion ] && . /etc/bash_completion
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
+fi
 
-    hash kubectl &> /dev/null && . <(kubectl completion bash)
-
-     if [ -d $HOME/.bash_completion.d ]; then
-         for f in $HOME/.bash_completion.d/* ; do
-             . $f
-         done
-     fi
-
-     # macos
-     if [ -d /opt/homebrew/etc/bash_completion.d ]; then
-         for f in /opt/homebrew/etc/bash_completion.d/* ; do
-             . $f
-         done
-     fi
-
-     # macos
-     if [ -d /Applications/Docker.app/Contents/Resources/etc ]; then
-         for f in /Applications/Docker.app/Contents/Resources/etc/*.bash-completion ; do
-             . $f
-         done
-     fi
- fi
-
- if [ -d $HOME/.dotfiles ]; then
-     . $HOME/.dotfiles/prompt
-     . $HOME/.dotfiles/autoenv
-     . $HOME/.dotfiles/bash_aliases
-     . $HOME/.dotfiles/bash_functions
-     # z is a submodule, not managed by me.
-     . $HOME/.dotfiles/z/z.sh
- fi
-
-# added by fzf install
-[ -f $HOME/.fzf.bash ] && . $HOME/.fzf.bash
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+if [ -d $HOME/.dotfiles ]; then
+ . $HOME/.dotfiles/prompt
+ . $HOME/.dotfiles/bash_aliases
+ . $HOME/.dotfiles/bash_functions
+ # z is a submodule, not managed by me.
+ . $HOME/.dotfiles/z/z.sh
+fi
 
 eval "$(direnv hook bash)"
+source /usr/share/doc/fzf/examples/key-bindings.bash

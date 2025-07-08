@@ -1,94 +1,130 @@
--- general vim settings
-vim.diagnostic.config({
-    virtual_text = false,
-    severity_sort = true,
-    float = {
-        source = true,
-        severity_sort = false,
-    },
-})
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, {
-        underline = {
-            min = 'Warning',
-        },
-        signs = {
-            min = "Warning",
-        },
-    }
-)
-vim.keymap.set('n', '<leader>e', function()
-    vim.diagnostic.open_float({ scope = 'line' })
-end)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<leader>l', vim.diagnostic.setloclist)
+-- completion
 
-
--- language Server Protocol
-
-local function on_attach(client, bufnr)
-    if client.name == "tsserver" then
-        client.server_capabilities.documentFormattingProvider = false
-    end
-    local function is_null_ls_formatting_enabled(bufnr_)
-        local file_type = vim.api.nvim_buf_get_option(bufnr_, "filetype")
-        local generators = require("null-ls.generators").get_available(
-            file_type,
-            require("null-ls.methods").internal.FORMATTING
-        )
-        return #generators > 0
-    end
-
-    if client.server_capabilities.documentFormattingProvider then
-        if
-            client.name == "null-ls" and is_null_ls_formatting_enabled(bufnr)
-            or client.name ~= "null-ls"
-        then
-            vim.bo[bufnr].formatexpr = "v:lua.vim.lsp.formatexpr()"
-        else
-            vim.bo[bufnr].formatexpr = nil
-        end
-    end
-end
-
-local lspconfig = require('lspconfig')
 local cmp = require('cmp')
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
+local cmp_lsp = require("cmp_nvim_lsp")
+local capabilities = vim.tbl_deep_extend(
+    "force",
+    {},
+    vim.lsp.protocol.make_client_capabilities(),
+    cmp_lsp.default_capabilities())
 
 cmp.setup({
     mapping = cmp.mapping.preset.insert({
+        ['<C-p>'] = cmp.mapping.select_prev_item(),
+        ['<C-n>'] = cmp.mapping.select_next_item(),
         ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+        ["<C-Space>"] = cmp.mapping.complete(),
     }),
     sources = cmp.config.sources({
         { name = 'nvim_lsp_signature_help' },
         { name = 'nvim_lsp' },
-        {
-            name = 'buffer',
-            option = {
-                get_bufnrs = function()
-                    return vim.api.nvim_list_bufs()
-                end
-            }
-        },
+        { name = 'buffer' },
+        { name = 'path' },
     })
 })
 
-
--- lspconfig.racket_langserver.setup {
---     on_attach = on_attach,
---     capabilities = capabilities,
---     filetypes = { "racket", "scheme", "sicp" },
--- }
-
-lspconfig.tsserver.setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
+-- search
+local telescope = require('telescope')
+telescope.setup {
+    defaults = {
+        layout_strategy = 'vertical',
+        layout_config = {
+            preview_cutoff = 60
+        }
+    }
 }
+telescope.load_extension('fzf')
 
-lspconfig.lua_ls.setup {
-    on_attach = on_attach,
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>c', builtin.colorscheme, {})
+vim.keymap.set('n', '<leader>p', builtin.find_files, {})
+vim.keymap.set('n', '<leader>g', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>b', builtin.buffers, {})
+vim.keymap.set('n', '<leader>h', builtin.oldfiles, {})
+vim.keymap.set('n', '<leader>t', function()
+    require 'telescope.builtin'.lsp_dynamic_workspace_symbols({
+        show_line = true,
+        ignore_symbols = {
+            'variable',
+        }
+    })
+end, {})
+
+-- diagnostics
+vim.diagnostic.config({
+    -- virtual_text = true,
+    -- virtual_lines = true,
+    severity_sort = true,
+    float = {
+        source = true,
+        severity_sort = true,
+        focusable = false,
+        -- header = "",
+        -- prefix = "",
+        style = "minimal",
+        border = "single",
+    },
+})
+
+-- lsp
+vim.api.nvim_create_autocmd('LspAttach', {
+    group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+    callback = function(ev)
+        local opts = { buffer = ev.buf }
+
+        vim.keymap.set('n', '<leader>f', function()
+            vim.lsp.buf.format { async = true }
+        end, opts)
+        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+        vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+        -- vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover({ border = "single" })<cr>', opts)
+        vim.keymap.set('n', 'gk', vim.lsp.buf.signature_help, opts)
+        -- vim.keymap.set('n', 'gk', '<cmd>lua vim.lsp.buf.signature_help({ border = "single" })<cr>', opts)
+        vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+
+        vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+
+        vim.keymap.set('n', '<leader>l', vim.diagnostic.setloclist, opts)
+        vim.keymap.set('n', '<leader>e', function()
+            vim.diagnostic.open_float({ scope = 'line' })
+        end, opts)
+    end,
+})
+
+vim.lsp.config('bashls', {
     capabilities = capabilities,
+})
+vim.lsp.enable('bashls')
+
+vim.lsp.config('ts_ls', {
+    capabilities = capabilities,
+})
+vim .lsp.enable('ts_ls')
+
+vim.lsp.config('pyright', {
+    capabilities = capabilities,
+})
+vim.lsp.enable('pyright')
+
+vim.lsp.enable('ruff')
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client == nil then
+      return
+    end
+    if client.name == 'ruff' then
+      -- Disable hover in favor of Pyright
+      client.server_capabilities.hoverProvider = false
+    end
+  end,
+  desc = 'LSP: Disable hover capability from Ruff',
+})
+
+
+vim.lsp.config('lua_ls', {
     settings = {
         Lua = {
             runtime = {
@@ -109,213 +145,79 @@ lspconfig.lua_ls.setup {
             },
         },
     },
+})
+vim.lsp.enable('lua_ls')
+
+-- linting
+require('lint').linters_by_ft = {
+    javascript = {'eslint_d'},
+    javascriptreact = {'eslint_d'},
+    typescript = {'eslint_d'},
+    typescriptreact = {'eslint_d'},
 }
 
-lspconfig.pyright.setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-    settings = {
-        python = {
-            analysis = {
-                autoSearchPaths = true,
-                diagnosticMode = "openFilesOnly",
-            }
-        }
-    }
-}
-
-local null_ls = require("null-ls")
-
-null_ls.setup({
-    on_attach = function(client, bufnr)
-        if client.supports_method("textDocument/formatting") then
-            local formatting_augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-            vim.api.nvim_clear_autocmds({ group = formatting_augroup, buffer = bufnr })
-            vim.api.nvim_create_autocmd("BufWritePre", {
-                group = formatting_augroup,
-                buffer = bufnr,
-                callback = function()
-                    vim.lsp.buf.format({
-                        async = false,
-                        bufnr = bufnr,
-                        filter = function(client_)
-                            return client_.name == "null-ls"
-                        end
-                    })
-                end,
-            })
-        end
-        on_attach(client, bufnr)
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
+    callback = function()
+        require("lint").try_lint()
     end,
-    sources = {
-        null_ls.builtins.diagnostics.flake8.with({
-            extra_args = { '--max-line-length=88' },
-        }),
-        null_ls.builtins.diagnostics.eslint_d,
-        null_ls.builtins.code_actions.eslint_d,
-        null_ls.builtins.formatting.eslint_d,
-        null_ls.builtins.formatting.prettierd,
-        -- null_ls.builtins.diagnostics.mypy
-    },
 })
 
--- Use LspAttach autocommand to only map the following keys
--- after the language server attaches to the current buffer
-vim.api.nvim_create_autocmd('LspAttach', {
-    group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-    callback = function(ev)
-        -- Enable completion triggered by <c-x><c-o>
-        -- vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-        -- Buffer local mappings.
-        -- See `:help vim.lsp.*` for documentation on any of the below functions
-        local opts = { buffer = ev.buf }
-        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-        vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-        vim.keymap.set('n', 'gk', vim.lsp.buf.signature_help, opts)
-        -- vim.keymap.set('n', 'gs', function ()
-        --     vim.lsp.buf.workspace_symbol()
-        -- end,opts)
-        -- vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
-        -- vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
-        -- vim.keymap.set('n', '<leader>wl', function()
-        --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-        -- end, opts)
-        vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-        vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, opts)
-        vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
-        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
-        vim.keymap.set('n', '<leader>f', function()
-            vim.lsp.buf.format { async = true }
-        end, opts)
-    end,
+-- formatting
+require("conform").setup({
+    formatters_by_ft = {
+        python = { "ruff_format", "ruff_organize_imports" },
+        javascript = {'prettierd'},
+        javascriptreact = {'prettierd'},
+        typescript = {'prettierd'},
+        typescriptreact = {'prettierd'},
+        ["*"] = { "trim_whitespace" },
+    },
+    notify_on_error = false,
+    format_on_save = {
+        -- These options will be passed to conform.format()
+        timeout_ms = 500,
+        lsp_format = "fallback",
+    },
 })
 
 -- statusline
 require('lualine').setup {
     options = {
-        theme = '16color',
+        theme = 'material',
         icons_enabled = false,
         section_separators = '',
         component_separators = '',
     },
     sections = {
-        lualine_c = { '%.50f' },  -- filepath
-        -- lualine_z = { 'location', require 'dap'.status }
-    }
-}
+        lualine_b = {
+            "branch",
+            {
+                "diff",
+                colored = false,  -- the colors are really bad for some reason
+            },
+            "diagnostics"
+        },
+        lualine_c = {
+            {
+                'filename',
+                file_status = true,      -- Displays file status (readonly status, modified status)
+                newfile_status = false,  -- Display new file status (new file means no write after created)
+                path = 3,                -- 0: Just the filename
+                -- 1: Relative path
+                -- 2: Absolute path
+                -- 3: Absolute path, with tilde as the home directory
+                -- 4: Filename and parent dir, with tilde as the home directory
 
-local telescope = require('telescope')
-telescope.setup {
-    defaults = {
-        layout_strategy = 'vertical',
-        layout_config = {
-            preview_cutoff = 60
+                shorting_target = 40,    -- Shortens path to leave 40 spaces in the window
+                -- for other components. (terrible name, any suggestions?)
+                symbols = {
+                    modified = '[+]',      -- Text to show when the file is modified.
+                    readonly = '[-]',      -- Text to show when the file is non-modifiable or readonly.
+                    unnamed = '[No Name]', -- Text to show for unnamed buffers.
+                    newfile = '[New]',     -- Text to show for newly created file before first write
+                }
+            }
         }
     }
 }
-telescope.load_extension('fzf')
-
-local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>p', builtin.find_files, {})
-vim.keymap.set('n', '<leader>g', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>b', builtin.buffers, {})
-vim.keymap.set('n', '<leader>h', builtin.oldfiles, {})
-vim.keymap.set('n', '<leader>t', function()
-    require 'telescope.builtin'.lsp_dynamic_workspace_symbols({
-        show_line = true,
-        ignore_symbols = {
-            'variable',
-        }
-    })
-end, {})
-
--- Debug Adapter Protocol
-
--- local dap = require('dap')
--- dap.defaults.fallback.terminal_win_cmd = 'enew!'
-
--- require('dap-python').setup('~/.config/virtualenvs/debugpy/bin/python')
-
--- vim.api.nvim_set_hl(0, "DapBreakPoint", { reverse = true })
--- vim.api.nvim_set_hl(0, "DapBreakPointCondition", { link = "DapBreakPoint" })
--- vim.api.nvim_set_hl(0, "DapLogPoint", { link = "IncSearch" })
--- vim.api.nvim_set_hl(0, "DapStopped", { link = "Search" })
--- vim.api.nvim_set_hl(0, "DapBreakpointRejected", { link = "ErrorMsg" })
-
--- vim.fn.sign_define('DapBreakpoint', { text = 'B', texthl = '', linehl = 'DapBreakPoint', numhl = '' })
--- vim.fn.sign_define('DapBreakpointCondition', { text = 'C', texthl = '', linehl = 'DapBreakpointCondition', numhl = '' })
--- vim.fn.sign_define('DapLogPoint', { text = 'L', texthl = '', linehl = 'DapLogPoint', numhl = '' })
--- vim.fn.sign_define('DapStopped', { text = '>', texthl = '', linehl = 'DapStopped', numhl = '' })
--- vim.fn.sign_define('DapBreakpointRejected', { text = 'X', texthl = '', linehl = 'DapBreakpointRejected', numhl = '' })
-
--- local py_configs = dap.configurations.python or {}
--- dap.configurations.python = py_configs
--- table.insert(py_configs, 1, {
---     type = 'python',
---     request = 'attach',
---     name = 'Attach Running APP',
---     connect = {
---         host = '127.0.0.1',
---         port = '${env:DEBUGPY_PORT}',
---     },
--- })
-
--- require("dap-vscode-js").setup({
---     debugger_path = os.getenv('HOME') .. "/src/vscode-js-debug-1.77.2",
---     adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' },
--- })
-
--- for _, language in ipairs({ "typescript", "javascript", "typescriptreact", "javascriptreact" }) do
---     require("dap").configurations[language] = {
---         {
---             type = "pwa-chrome",
---             name = "Attach - Remote Debugging",
---             request = "attach",
---             cwd = vim.fn.getcwd(),
---             sourceMaps = true,
---             protocol = "inspector",
---             port = 9222,
---             webRoot = "${workspaceFolder}",
---         },
---         {
---             type = "pwa-node",
---             request = "attach",
---             name = "Attach",
---             -- processId = function()
---             --     return require'dap.utils'.pick_process({ filter = "node" })
---             -- end,
---             cwd = "${workspaceFolder}",
---             continueOnAttach = true,
---             -- port = '${env:NODE_INSPECTOR_PORT}',
---         },
---         {
---             type = "pwa-node",
---             request = "attach",
---             name = "debugtest",
---             -- processId = require'dap.utils'.pick_process,
---             cwd = "${workspaceFolder}",
---         },
---     }
--- end
-
--- vim.keymap.set('n', '<leader>dc', function() require('dap').continue() end)
--- vim.keymap.set('n', '<leader>dn', function() require('dap').step_over() end)
--- vim.keymap.set('n', '<leader>di', function() require('dap').step_into() end)
--- vim.keymap.set('n', '<leader>do', function() require('dap').step_out() end)
--- vim.keymap.set('n', '<leader>df', function() require('dap').focus_frame() end)
--- vim.keymap.set('n', '<Leader>db', function() require('dap').toggle_breakpoint() end)
--- vim.keymap.set('n', '<Leader>lp', function()
---     require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))
--- end)
--- vim.keymap.set('n', '<leader>dq', function() require('dap').clear_breakpoints() end)
--- vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.toggle() end)
--- vim.keymap.set('n', '<Leader>dl', function() require('dap').list_breakpoints() end)
--- vim.keymap.set('n', '<Leader>ds', function()
---     local widgets = require('dap.ui.widgets')
---     widgets.centered_float(widgets.scopes)
--- end)
-
-require'nvim-treesitter.configs'.setup{highlight={enable=true}}

@@ -1,7 +1,5 @@
 #!/usr/bin/bash
 alias vim='nvim'
-alias vi='nvim'
-alias v='nvim'
 
 alias evim='vim $HOME/.dotfiles/vimrc*'
 alias ebash='vim $HOME/.dotfiles/{bashrc,profile,bash_aliases,prompt,bash_functions}'
@@ -29,6 +27,5 @@ alias rcp="rsync -ah -P"
 #                 └─h human readable numbers
 
 alias rt="rtorrent"
-alias drm="docker rm -f \$(docker ps -a -q)"
 alias py=python
 hash ipython &> /dev/null && alias ipy=ipython

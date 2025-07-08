@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-# delete newlines from the input
-tr -d "\n" <<< "$@" | \
-    xclip -sel clip
-
-hash notify-send && notify-send "Copied to clipboard" "$(xclip -o -sel clip)"
