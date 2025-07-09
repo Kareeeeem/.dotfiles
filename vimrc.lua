@@ -189,16 +189,15 @@ require('lualine').setup {
     component_separators = '',
   },
   tabline = {
-    lualine_a = {
-      {
-        'buffers',
-        mode = 4,
-        symbols = {
-          modified = '+',
-          alternate_file = '#',
-        },
-      }
-    }
+    -- lualine_a = {
+    --   {
+    --     'buffers',
+    --     symbols = {
+    --       modified = '+',
+    --       alternate_file = '#',
+    --     },
+    --   }
+    -- }
   },
   sections = {
     lualine_a = {
