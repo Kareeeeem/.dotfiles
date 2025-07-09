@@ -15,6 +15,7 @@ set hidden
 set nowrap
 set scrolloff=3
 set number
+set relativenumber
 set nojoinspaces  " don't insert double spaces.
 
 set hlsearch ignorecase smartcase incsearch
@@ -151,10 +152,10 @@ function! ModifyNoFrils()
         hi link CursorLineNr Normal
     endif
 
-    hi TODO cterm=bold
+    hi TODO gui=bold cterm=bold
 
     if (g:colors_name == 'nofrils-dark')
-        hi Normal guibg=NONE
+        hi Normal guibg=NONE ctermbg=NONE
     endif
 endfunction
 

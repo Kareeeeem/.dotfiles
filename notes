@@ -11,21 +11,21 @@ https://github.com/PagalSarthak/Remove-snap-in-ubuntu/blob/main/remove_snap.sh
 # Function to remove Snapd service
 remove_snapd() {
     echo "Stopping and disabling snapd service..."
-    sudo systemctl stop snapd || true
-    sudo systemctl disable snapd || true
-    sudo systemctl mask snapd || true
+        sudo systemctl stop snapd || true
+        sudo systemctl disable snapd || true
+        sudo systemctl mask snapd || true
 
-    echo "Removing Snapd service..."
-    sudo apt-get purge -y snapd || true
+        echo "Removing Snapd service..."
+        sudo apt-get purge -y snapd || true
 }
 
 
 # Function to create a preference file to prevent Snap from being reinstalled
 create_preference_file() {
     echo "Creating preference file to prevent Snap from being reinstalled..."
-    echo "Package: snapd" | sudo tee /etc/apt/preferences.d/nosnap.pref > /dev/null
-    echo "Pin: release a=*" | sudo tee -a /etc/apt/preferences.d/nosnap.pref > /dev/null
-    echo "Pin-Priority: -10" | sudo tee -a /etc/apt/preferences.d/nosnap.pref > /dev/null
+        echo "Package: snapd" | sudo tee /etc/apt/preferences.d/nosnap.pref > /dev/null
+        echo "Pin: release a=*" | sudo tee -a /etc/apt/preferences.d/nosnap.pref > /dev/null
+        echo "Pin-Priority: -10" | sudo tee -a /etc/apt/preferences.d/nosnap.pref > /dev/null
 }
 ```
 
@@ -33,3 +33,7 @@ create_preference_file() {
 addtional dependencies needed for python using pyenv
 
 `sudo apt install zlib1g zlib1g-dev libssl-dev libbz2-dev libsqlite3-dev libffi-dev`
+
+fix speaker auto mute whenever i plug in headphones on frontIO: run
+`alsamixer`, select audio card with <F6>, navigate to and disable auto mute
+After that save the settings `sudo alsactl store`

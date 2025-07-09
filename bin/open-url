@@ -8,11 +8,7 @@
 # [0]: https://github.com/junegunn/fzf
 # [1]: https://github.com/mvdan/xurls
 
-if [ $(uname) == Darwin ]; then
-    _URLS="$(xurls_v2.2.0_darwin_amd64 $1 | awk '!seen[$0]++')"
-else
-    _URLS="$(xurls_v1.1.0_linux_amd64 $1 | awk '!seen[$0]++')"
-fi
+_URLS="$(xurls $1 | awk '!seen[$0]++')"
 
 _URLCOUNT=$(echo "$_URLS" | wc -l)
 _CHOICE=
@@ -24,9 +20,7 @@ elif [ $_URLCOUNT -gt 1 ]; then
 fi
 
 if [ -n "$_CHOICE" ]; then
-    if [ $(uname) == Darwin ]; then
-        open "$_CHOICE" &> /dev/null
-    elif [ -x wslview ]; then
+    if [ -x wslview ]; then
         wslview "$_CHOICE" || true
     else
         xdg-open "$_CHOICE" &> /dev/null
