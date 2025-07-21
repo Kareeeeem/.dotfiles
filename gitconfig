@@ -18,6 +18,7 @@
     decorate = auto
 [core]
 	excludesfile = ~/.gitignore
+	attributesfile = ~/.gitattributes
 [merge]
 	tool = vimdiff
 	conflictstyle = diff3
@@ -28,9 +29,9 @@
 	path = nvim
 [fetch]
 	prune = true
-[includeIf "gitdir/i:~/hal24k/"]
+[includeIf "gitdir/i:~/work/"]
     path = ~/.gitconfig-work
 [pull]
 	ff = only
-[init]
-	templateDir = ~/.git-templates
+[filter "clean-npmrc"]
+	clean = strip-dimension-registry

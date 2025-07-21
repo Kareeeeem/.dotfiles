@@ -37,3 +37,10 @@ addtional dependencies needed for python using pyenv
 fix speaker auto mute whenever i plug in headphones on frontIO: run
 `alsamixer`, select audio card with <F6>, navigate to and disable auto mute
 After that save the settings `sudo alsactl store`
+
+disable animations
+`gsettings set org.gnome.desktop.interface enable-animations false`
+
+
+for dual boot make linux use local time
+`timedatectl set-local-rtc 1 --adjust-system-clock`

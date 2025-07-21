@@ -11,6 +11,8 @@ local capabilities = vim.tbl_deep_extend(
 
 cmp.setup({
   mapping = cmp.mapping.preset.insert({
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-n>'] = cmp.mapping.select_next_item(),
     ['<C-y>'] = cmp.mapping.confirm({ select = true }),
@@ -19,7 +21,14 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'nvim_lsp_signature_help' },
     { name = 'nvim_lsp' },
-    { name = 'buffer' },
+    {
+      name = 'buffer',
+      option = {
+        get_bufnrs = function()
+          return vim.api.nvim_list_bufs()
+        end
+      }
+    },
     { name = 'path' },
   })
 })
@@ -91,19 +100,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-vim.lsp.config('bashls', {
-  capabilities = capabilities,
-})
+vim.lsp.config('bashls', { capabilities = capabilities })
 vim.lsp.enable('bashls')
 
-vim.lsp.config('ts_ls', {
-  capabilities = capabilities,
-})
+vim.lsp.config('ts_ls', { capabilities = capabilities })
 vim .lsp.enable('ts_ls')
 
-vim.lsp.config('pyright', {
-  capabilities = capabilities,
-})
+vim.lsp.config('pyright', { capabilities = capabilities })
 vim.lsp.enable('pyright')
 
 vim.lsp.enable('ruff')
@@ -147,6 +150,8 @@ vim.lsp.config('lua_ls', {
 })
 vim.lsp.enable('lua_ls')
 
+vim.lsp.enable('emmet_language_server')
+
 -- linting
 require('lint').linters_by_ft = {
   javascript = {'eslint_d'},
@@ -170,7 +175,7 @@ require("conform").setup({
     javascriptreact = {'prettierd'},
     typescript = {'prettierd'},
     typescriptreact = {'prettierd'},
-    ["*"] = { "trim_whitespace" },
+    ["*"] = { "trim_whitespace", "trim_newlines" },
   },
   notify_on_error = false,
   format_on_save = {
@@ -188,17 +193,17 @@ require('lualine').setup {
     section_separators = '',
     component_separators = '',
   },
-  tabline = {
-    -- lualine_a = {
-    --   {
-    --     'buffers',
-    --     symbols = {
-    --       modified = '+',
-    --       alternate_file = '#',
-    --     },
-    --   }
-    -- }
-  },
+  -- tabline = {
+  --   lualine_a = {
+  --     {
+  --       'buffers',
+  --       symbols = {
+  --         modified = '+',
+  --         alternate_file = '#',
+  --       },
+  --     }
+  --   }
+  -- },
   sections = {
     lualine_a = {
       {

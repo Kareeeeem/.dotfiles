@@ -2,7 +2,7 @@
 mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 current_dir := $(patsubst %/,%,$(dir $(mkfile_path)))
 
-.PHONY: symlinks 
+.PHONY: symlinks
 
 all: symlinks
 
@@ -16,5 +16,6 @@ symlinks:
 	ln -f -s $(current_dir)/inputrc $(HOME)/.inputrc &> /dev/null
 	ln -f -s $(current_dir)/gitignore $(HOME)/.gitignore &> /dev/null
 	ln -f -s $(current_dir)/gitconfig $(HOME)/.gitconfig &> /dev/null
+	ln -f -s $(current_dir)/gitattributes $(HOME)/.gitattributes &> /dev/null
 	ln -f -s $(current_dir)/gitconfig-work $(HOME)/.gitconfig-work &> /dev/null
 	ln -f -s $(current_dir)/rgignore $(HOME)/.rgignore &> /dev/null

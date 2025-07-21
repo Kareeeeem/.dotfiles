@@ -93,15 +93,7 @@ Plug 'stevearc/conform.nvim'
 Plug 'mfussenegger/nvim-lint'
 
 " colorschemes
-Plug 'https://git.sr.ht/~romainl/vim-bruin'
-Plug 'LuRsT/austere.vim'
-Plug 'andreypopp/vim-colors-plain'
-Plug 'pbrisbin/vim-colors-off'
-Plug 'chriskempson/base16-vim'
 Plug 'robertmeta/nofrils'
-Plug 'huyvohcmc/atlas.vim'
-Plug 'plan9-for-vimspace/acme-colors'
-Plug 'rose-pine/neovim'
 
 " search
 Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
@@ -116,7 +108,7 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 
 " python
-Plug 'hynek/vim-python-pep8-indent'
+" Plug 'hynek/vim-python-pep8-indent'
 Plug 'Kareeeeem/python-docstring-comments'
 
 call plug#end()
