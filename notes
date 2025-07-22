@@ -29,7 +29,7 @@ create_preference_file() {
 }
 ```
 
-`sudo apt install gnome-tweaks curl git build-essential ripgrep tmux direnv xclip tree pipx`
+`sudo apt install git tmux build-essential gnome-tweaks curl git build-essential ripgrep tmux direnv xclip tree pipx`
 
 addtional dependencies needed for python using pyenv
 
@@ -45,3 +45,10 @@ disable animations
 
 for dual boot make linux use local time
 `timedatectl set-local-rtc 1 --adjust-system-clock`
+
+https://www.reddit.com/r/Ubuntu/comments/mjrqxy/how_to_export_gnome_terminal_settings_profiles/
+
+Gnome terminal is a bit of a jerk and does not save settings in a local dotfile which makes it super annoying to do this. So you have to use dconf to dump and then import the settings:
+`dconf dump /org/gnome/terminal/ > gnome_terminal_settings.txt`
+And then
+`dconf load /org/gnome/terminal/ < gnome_terminal_settings.txt`
