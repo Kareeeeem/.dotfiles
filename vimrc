@@ -72,6 +72,8 @@ nnoremap <C-n> :bn<cr>
 " Don't use Ex mode.
 map Q <nop>
 
+" sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+"        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 call plug#begin()
 Plug 'nvim-lua/plenary.nvim'  " this is a dependency of many other plugins
 

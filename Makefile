@@ -19,3 +19,4 @@ symlinks:
 	ln -f -s $(current_dir)/gitattributes $(HOME)/.gitattributes &> /dev/null
 	ln -f -s $(current_dir)/gitconfig-work $(HOME)/.gitconfig-work &> /dev/null
 	ln -f -s $(current_dir)/rgignore $(HOME)/.rgignore &> /dev/null
+	ln -f -s $(current_dir)/direnvrc $(HOME)/.direnvrc &> /dev/null

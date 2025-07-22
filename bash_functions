@@ -9,11 +9,7 @@ serve() {
 		shift 2
 	fi
 
-    IP=$(ip addr show eth0 | grep -Po 'inet \K[\d.]+')
-
-    # This makes it easier to open the link.
-    echo Will serve HTTP on http://$IP:${port:-8000} ...
-	(cd "${1:-$PWD}" && python3 -m http.server "${port:-8000}" > /dev/null)
+	cd "${1:-$PWD}" && python3 -m http.server "${port:-8000}"
 }
 
 mkcd () {

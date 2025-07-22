@@ -12,18 +12,14 @@
 export PATH
 export MANPATH
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # --no-use  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-PATH="$(dirname $(nvm which default)):$PATH"
-
 # Bash
 [ -n "$BASH_VERSION" ] && [ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
 [ -d "$HOME/.dotfiles/bin" ]  && PATH="$HOME/.dotfiles/bin:$PATH"
 [ -d "$HOME/.local/bin" ]  && PATH="$HOME/.local/bin:$PATH"
-[ -d "$HOME/.config/npm/bin" ] && PATH="$HOME/.config/npm/bin:$PATH"
 [ -d "$HOME/work/bin" ] && PATH="$HOME/work/bin:$PATH"
+
+# default
+PATH="$HOME/.nvm/versions/node/v24.4.1/bin/node:$PATH"
 
 hash rg &> /dev/null && export FZF_DEFAULT_COMMAND='rg --files --hidden'
 hash nvim &> /dev/null && export VISUAL="nvim" && export EDITOR="$VISUAL"

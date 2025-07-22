@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 alias vim='nvim'
+alias v='nvim'
 
 alias evim='vim $HOME/.dotfiles/vimrc*'
 alias ebash='vim $HOME/.dotfiles/{bashrc,profile,bash_aliases,prompt,bash_functions}'

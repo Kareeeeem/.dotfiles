@@ -29,6 +29,7 @@ create_preference_file() {
 }
 ```
 
+`sudo apt install gnome-tweaks curl git build-essential ripgrep tmux direnv xclip tree pipx`
 
 addtional dependencies needed for python using pyenv
 
