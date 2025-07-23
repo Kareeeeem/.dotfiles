@@ -18,8 +18,7 @@ export MANPATH
 [ -d "$HOME/.local/bin" ]  && PATH="$HOME/.local/bin:$PATH"
 [ -d "$HOME/work/bin" ] && PATH="$HOME/work/bin:$PATH"
 
-# default
-PATH="$HOME/.nvm/versions/node/v24.4.1/bin/node:$PATH"
+PATH=$(dirname $(nvm which default)):$PATH
 
 hash rg &> /dev/null && export FZF_DEFAULT_COMMAND='rg --files --hidden'
 hash nvim &> /dev/null && export VISUAL="nvim" && export EDITOR="$VISUAL"

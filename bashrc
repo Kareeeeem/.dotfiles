@@ -76,7 +76,6 @@ eval "$(direnv hook bash)"
 
 eval "$(fzf --bash)"
 
-# would rather keep this in .profile but nvm won't be available for some reason
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use  # no-use makes it lazy
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"

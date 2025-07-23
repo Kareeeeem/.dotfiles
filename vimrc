@@ -69,6 +69,9 @@ xnoremap > >gv
 nnoremap <C-p> :bp<cr>
 nnoremap <C-n> :bn<cr>
 
+" companion map to builtin ZZ
+nnoremap ZS :w<cr>
+
 " Don't use Ex mode.
 map Q <nop>
 
