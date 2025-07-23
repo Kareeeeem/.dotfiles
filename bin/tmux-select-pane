@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -euf -o pipefail
+
+trap 'clean-exit' ERR
+
+export PREVIEW_WINDOW_HEIGHT=10
+
+clean-exit() {
+    # fzf exits with 130 if aborted with esc
+    if [ $? -eq 130 ]; then
+        exit 0
+    fi
+}
+
+if [ -z ${TMUX:-''} ]; then
+    exit 1
+fi
+
+echo-pane() {
+    pane=$(awk '{print $1}' <<< $1)
+    tmux capture-pane -p -t $pane |\
+        # strip whitelines
+        awk NF |\
+        tail -n $PREVIEW_WINDOW_HEIGHT
+    }
+export -f echo-pane
+
+selection=$(tmux list-panes -s -F '#{session_name}:#{window_name}.#{pane_index} - #{pane_current_command} - #{pane_current_path}' \
+    | fzf --cycle --tmux --preview 'echo-pane {}' --preview-window=up,$PREVIEW_WINDOW_HEIGHT \
+    | awk '{print $1}'
+)
+
+tmux select-pane -t $selection
+tmux select-window -t $selection
