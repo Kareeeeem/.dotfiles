@@ -18,7 +18,11 @@ export MANPATH
 [ -d "$HOME/.local/bin" ]  && PATH="$HOME/.local/bin:$PATH"
 [ -d "$HOME/work/bin" ] && PATH="$HOME/work/bin:$PATH"
 
-PATH=$(dirname $(nvm which default)):$PATH
+# Setup a manual symlink to the default nvm version
+# I previously had the following but it didnt work in this setup (where nvm is
+# loaded in the .bashrc
+# PATH=$(dirname $(nvm which default)):$PATH
+PATH=$HOME/.nvm_default_bin:$PATH
 
 hash rg &> /dev/null && export FZF_DEFAULT_COMMAND='rg --files --hidden'
 hash nvim &> /dev/null && export VISUAL="nvim" && export EDITOR="$VISUAL"
