@@ -86,9 +86,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end, opts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    -- vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover({ border = "single" })<cr>', opts)
     vim.keymap.set('n', 'gk', vim.lsp.buf.signature_help, opts)
-    -- vim.keymap.set('n', 'gk', '<cmd>lua vim.lsp.buf.signature_help({ border = "single" })<cr>', opts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
@@ -103,7 +101,7 @@ vim.lsp.config('bashls', { capabilities = capabilities })
 vim.lsp.enable('bashls')
 
 vim.lsp.config('ts_ls', { capabilities = capabilities })
-vim .lsp.enable('ts_ls')
+vim.lsp.enable('ts_ls')
 
 vim.lsp.config('pyright', { capabilities = capabilities })
 vim.lsp.enable('pyright')
@@ -153,10 +151,10 @@ vim.lsp.enable('emmet_language_server')
 
 -- linting
 require('lint').linters_by_ft = {
-  javascript = {'eslint_d'},
-  javascriptreact = {'eslint_d'},
-  typescript = {'eslint_d'},
-  typescriptreact = {'eslint_d'},
+  javascript = { 'eslint_d' },
+  javascriptreact = { 'eslint_d' },
+  typescript = { 'eslint_d' },
+  typescriptreact = { 'eslint_d' },
 }
 
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
@@ -170,10 +168,10 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
 require("conform").setup({
   formatters_by_ft = {
     python = { "ruff_format", "ruff_organize_imports" },
-    javascript = {'prettierd'},
-    javascriptreact = {'prettierd'},
-    typescript = {'prettierd'},
-    typescriptreact = {'prettierd'},
+    javascript = { 'prettierd' },
+    javascriptreact = { 'prettierd' },
+    typescript = { 'prettierd' },
+    typescriptreact = { 'prettierd' },
     ["*"] = { "trim_whitespace", "trim_newlines" },
   },
   notify_on_error = false,
@@ -215,7 +213,7 @@ require('lualine').setup {
       "branch",
       {
         "diff",
-        colored = false,  -- the default colors of my colorscheme suck for this
+        colored = false, -- the default colors of my colorscheme suck for this
       },
       {
         "diagnostics",
