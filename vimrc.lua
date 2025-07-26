@@ -33,14 +33,20 @@ cmp.setup({
   })
 })
 
--- search
+-- telescope
+local actions = require("telescope.actions")
 local telescope = require('telescope')
 telescope.setup {
   defaults = {
     layout_strategy = 'vertical',
     layout_config = {
       preview_cutoff = 60
-    }
+    },
+    mappings = {
+      i = {
+        ["<esc>"] = actions.close
+      },
+    },
   }
 }
 telescope.load_extension('fzf')

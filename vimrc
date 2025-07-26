@@ -6,6 +6,7 @@ set showcmd
 set scrolloff=3
 set nrformats=
 
+set timeoutlen=250
 set updatetime=50
 "set breakindent
 set smartindent
@@ -29,7 +30,6 @@ set undofile undodir=$HOME/.vim/undodir/
 
 " Mappings
 
-tnoremap <Esc> <C-\><C-n>
 " Expand `%%` to current directory.
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 " Because backslash is in a awkward place.
@@ -81,12 +81,12 @@ call plug#begin()
 Plug 'nvim-lua/plenary.nvim'  " this is a dependency of many other plugins
 
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
-Plug 'moll/vim-bbye', {'on': 'Bdelete'}
+Plug 'moll/vim-bbye', {'on': 'Bwipeout'}
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'nvim-lualine/lualine.nvim'
-Plug 'camspiers/lens.vim' " auto resizing for buffers
+" Plug 'camspiers/lens.vim' " auto resizing for buffers
 
 " tmux
 Plug 'jpalardy/vim-slime'
@@ -118,14 +118,14 @@ Plug 'Kareeeeem/python-docstring-comments'
 call plug#end()
 
 " lens
-let g:lens#disabled_filetypes = ['undotree', 'diff']
-let g:lens#width_resize_max = 92
+" let g:lens#disabled_filetypes = ['undotree', 'diff']
+" let g:lens#width_resize_max = 92
 
 " Tmux navigator
 let g:tmux_navigator_disable_when_zoomed=1
 
 " vim bbye
-nnoremap <leader>q :Bdelete<cr>
+nnoremap <leader>q :Bwipeout<cr>
 
 " Slime
 let g:slime_target = 'tmux'
@@ -176,8 +176,8 @@ augroup languages
     au FileType rc setlocal commentstring=#\ %s
     au FileType lua,rkt,yaml,ruby,lisp,html,js,typescriptreact,typescript,javascriptreact,javascript setlocal tabstop=2 softtabstop=2 shiftwidth=2
 
-    " for writing printer labels, once used it at work. will leave it in the
-    " off chance I might need it again.
+    " for writing printer labels, will leave it in the off chance I might need
+    " it again.
     au BufRead,BufNewFile *.zpl set filetype=zpl
     au FileType zpl setlocal commentstring=^FX\ %s
 augroup END
