@@ -3,10 +3,12 @@ set clipboard+=unnamedplus
 
 set showcmd
 
+set complete+=i
 set scrolloff=3
 set nrformats=
 
-set timeoutlen=250
+set wildignorecase
+" set timeoutlen=250
 set updatetime=50
 "set breakindent
 set smartindent
@@ -81,7 +83,7 @@ call plug#begin()
 Plug 'nvim-lua/plenary.nvim'  " this is a dependency of many other plugins
 
 Plug 'mbbill/undotree', {'on': 'UndotreeToggle'}
-Plug 'moll/vim-bbye', {'on': 'Bwipeout'}
+Plug 'moll/vim-bbye', {'on': ['Bdelete', 'Bwipeout']}
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -105,9 +107,9 @@ Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 " completion
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/nvim-cmp'
+" Plug 'hrsh7th/cmp-nvim-lsp'
+" Plug 'hrsh7th/cmp-buffer'
+" Plug 'hrsh7th/nvim-cmp'
 
 " python
 " Plug 'hynek/vim-python-pep8-indent'
@@ -172,6 +174,9 @@ augroup languages
     au FileType *markdown*,text setlocal fo+=t tw=72 wrap
 
     au FileType awk setlocal commentstring=#\ %s
+    au FileType awk setlocal commentstring=#\ %s
+    au FileType vhdl setlocal commentstring=//\ %s
+    au FileType python setlocal keywordprg=pydoc3
 
     au FileType rc setlocal commentstring=#\ %s
     au FileType lua,rkt,yaml,ruby,lisp,html,js,typescriptreact,typescript,javascriptreact,javascript setlocal tabstop=2 softtabstop=2 shiftwidth=2

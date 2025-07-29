@@ -1,37 +1,40 @@
+  vim.keymap.set('n', '<leader>l', vim.diagnostic.setloclist, opts)
+  vim.keymap.set('n', '<leader>e', function()
+    vim.diagnostic.open_float({ scope = 'line' })
+  end, opts)
 -- completion
 
-local cmp = require('cmp')
-local cmp_lsp = require("cmp_nvim_lsp")
-local capabilities = vim.tbl_deep_extend(
-  "force",
-  {},
-  vim.lsp.protocol.make_client_capabilities(),
-  cmp_lsp.default_capabilities()
-)
+-- local cmp = require('cmp')
+-- local cmp_lsp = require("cmp_nvim_lsp")
+-- local capabilities = vim.tbl_deep_extend(
+--   "force",
+--   {},
+--   vim.lsp.protocol.make_client_capabilities(),
+--   cmp_lsp.default_capabilities()
+-- )
 
-cmp.setup({
-  mapping = cmp.mapping.preset.insert({
-    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-y>'] = cmp.mapping.confirm({ select = true }),
-    ["<C-Space>"] = cmp.mapping.complete(),
-  }),
-  sources = cmp.config.sources({
-    { name = 'nvim_lsp_signature_help' },
-    { name = 'nvim_lsp' },
-    {
-      name = 'buffer',
-      option = {
-        get_bufnrs = function()
-          return vim.api.nvim_list_bufs()
-        end
-      }
-    },
-    { name = 'path' },
-  })
-})
+-- cmp.setup({
+--   mapping = cmp.mapping.preset.insert({
+--     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+--     ['<C-f>'] = cmp.mapping.scroll_docs(4),
+--     ['<C-p>'] = cmp.mapping.select_prev_item(),
+--     ['<C-n>'] = cmp.mapping.select_next_item(),
+--     ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+--     ["<C-Space>"] = cmp.mapping.complete(),
+--   }),
+--   sources = cmp.config.sources({
+--     { name = 'nvim_lsp' },
+--     {
+--       name = 'buffer',
+--       option = {
+--         get_bufnrs = function()
+--           return vim.api.nvim_list_bufs()
+--         end
+--       }
+--     },
+--     { name = 'path' },
+--   })
+-- })
 
 -- telescope
 local actions = require("telescope.actions")
@@ -87,22 +90,19 @@ vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(ev)
     local opts = { buffer = ev.buf }
 
-    vim.keymap.set('n', '<leader>f', function()
+      vim.keymap.set('n', '<leader>f', function()
       vim.lsp.buf.format { async = true }
     end, opts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    vim.keymap.set('n', 'gk', vim.lsp.buf.signature_help, opts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+    -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    -- vim.keymap.set('n', 'gk', vim.lsp.buf.signature_help, opts)
+    -- vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+    -- vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
-    vim.keymap.set('n', '<leader>l', vim.diagnostic.setloclist, opts)
-    vim.keymap.set('n', '<leader>e', function()
-      vim.diagnostic.open_float({ scope = 'line' })
-    end, opts)
   end,
 })
 
+local capabilities = vim.lsp.protocol.make_client_capabilities()
 vim.lsp.config('bashls', { capabilities = capabilities })
 vim.lsp.enable('bashls')
 
@@ -130,6 +130,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 
 vim.lsp.config('lua_ls', {
+  capabilities = capabilities,
   settings = {
     Lua = {
       runtime = {
@@ -196,17 +197,6 @@ require('lualine').setup {
     section_separators = '',
     component_separators = '',
   },
-  -- tabline = {
-  --   lualine_a = {
-  --     {
-  --       'buffers',
-  --       symbols = {
-  --         modified = '+',
-  --         alternate_file = '#',
-  --       },
-  --     }
-  --   }
-  -- },
   sections = {
     lualine_a = {
       {
@@ -217,10 +207,10 @@ require('lualine').setup {
     },
     lualine_b = {
       "branch",
-      {
-        "diff",
-        colored = false, -- the default colors of my colorscheme suck for this
-      },
+      -- {
+      --   "diff",
+      --   colored = false, -- the default colors of my colorscheme suck for this
+      -- },
       {
         "diagnostics",
         fmt = function(str)
