@@ -1,7 +1,21 @@
-  vim.keymap.set('n', '<leader>l', vim.diagnostic.setloclist, opts)
-  vim.keymap.set('n', '<leader>e', function()
-    vim.diagnostic.open_float({ scope = 'line' })
-  end, opts)
+-- diagnostics
+vim.diagnostic.config({
+  severity_sort = true,
+  virtual_text = {
+    current_line = true,
+  },
+  float = {
+    source = true,
+    severity_sort = true,
+    focusable = false,
+  },
+})
+
+vim.keymap.set('n', '<leader>l', vim.diagnostic.setloclist)
+vim.keymap.set('n', '<leader>e', function()
+  vim.diagnostic.open_float({ scope = 'line' })
+end)
+
 -- completion
 
 -- local cmp = require('cmp')
@@ -68,39 +82,23 @@ vim.keymap.set('n', '<leader>t', function()
   })
 end, {})
 
--- diagnostics
-vim.diagnostic.config({
-  -- virtual_text = true,
-  -- virtual_lines = true,
-  severity_sort = true,
-  float = {
-    source = true,
-    severity_sort = true,
-    focusable = false,
-    -- header = "",
-    -- prefix = "",
-    -- style = "minimal",
-    -- border = "single",
-  },
-})
-
 -- lsp
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-  callback = function(ev)
-    local opts = { buffer = ev.buf }
+-- vim.api.nvim_create_autocmd('LspAttach', {
+--   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+--   callback = function(ev)
+--     local opts = { buffer = ev.buf }
 
-      vim.keymap.set('n', '<leader>f', function()
-      vim.lsp.buf.format { async = true }
-    end, opts)
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    -- vim.keymap.set('n', 'gk', vim.lsp.buf.signature_help, opts)
-    -- vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    -- vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
-    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
-  end,
-})
+--       vim.keymap.set('n', '<leader>f', function()
+--       vim.lsp.buf.format { async = true }
+--     end, opts)
+--     -- vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+--     -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+--     -- vim.keymap.set('n', 'gk', vim.lsp.buf.signature_help, opts)
+--     -- vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+--     -- vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+--     -- vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+--   end,
+-- })
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 vim.lsp.config('bashls', { capabilities = capabilities })
@@ -112,7 +110,17 @@ vim.lsp.enable('ts_ls')
 vim.lsp.config('pyright', { capabilities = capabilities })
 vim.lsp.enable('pyright')
 
+vim.lsp.config('ruff', {
+  init_options = {
+    settings = {
+      lint = {
+        enable = false
+      }
+    }
+  }
+})
 vim.lsp.enable('ruff')
+
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
   callback = function(args)
