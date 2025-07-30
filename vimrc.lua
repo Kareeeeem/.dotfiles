@@ -11,10 +11,34 @@ vim.diagnostic.config({
   },
 })
 
-vim.keymap.set('n', '<leader>l', vim.diagnostic.setloclist)
+vim.keymap.set('n', '<leader>l', function ()
+  local winid = vim.api.nvim_get_current_win()
+  local lwinid = vim.fn.getloclist(0, { winid = winid }).winid
+
+  if lwinid == 0 then
+    vim.cmd.lopen()
+  else
+    vim.cmd.lclose()
+  end
+end)
+
 vim.keymap.set('n', '<leader>e', function()
   vim.diagnostic.open_float({ scope = 'line' })
 end)
+
+vim.diagnostic.handlers.loclist = {
+  show = function(_, _, _, opts)
+    -- Generally don't want it to open on every update
+    ---@diagnostic disable-next-line: undefined-field
+    opts.loclist.open = opts.loclist.open or false
+    ---@diagnostic disable-next-line: undefined-field
+    opts.loclist.severity = { severity = { min = vim.diagnostic.severity.WARN } }
+    ---@diagnostic disable-next-line: undefined-field
+    vim.diagnostic.setloclist(opts.loclist)
+    local winid = vim.api.nvim_get_current_win()
+    vim.api.nvim_set_current_win(winid)
+  end
+}
 
 -- completion
 
@@ -110,33 +134,6 @@ vim.lsp.enable('ts_ls')
 vim.lsp.config('pyright', { capabilities = capabilities })
 vim.lsp.enable('pyright')
 
-vim.lsp.config('ruff', {
-  init_options = {
-    settings = {
-      lint = {
-        enable = false
-      }
-    }
-  }
-})
-vim.lsp.enable('ruff')
-
-vim.api.nvim_create_autocmd("LspAttach", {
-  group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
-  callback = function(args)
-    local client = vim.lsp.get_client_by_id(args.data.client_id)
-    if client == nil then
-      return
-    end
-    if client.name == 'ruff' then
-      -- Disable hover in favor of Pyright
-      client.server_capabilities.hoverProvider = false
-    end
-  end,
-  desc = 'LSP: Disable hover capability from Ruff',
-})
-
-
 vim.lsp.config('lua_ls', {
   capabilities = capabilities,
   settings = {
@@ -164,6 +161,34 @@ vim.lsp.enable('lua_ls')
 
 vim.lsp.enable('emmet_language_server')
 
+-- vim.lsp.config('ruff', {
+--   init_options = {
+--     settings = {
+--       lint = {
+--         enable = false
+--       }
+--     }
+--   }
+-- })
+-- vim.lsp.enable('ruff')
+
+-- vim.api.nvim_create_autocmd("LspAttach", {
+--   group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
+--   callback = function(args)
+--     local client = vim.lsp.get_client_by_id(args.data.client_id)
+--     if client == nil then
+--       return
+--     end
+--     if client.name == 'ruff' then
+--       -- Disable hover in favor of Pyright
+--       client.server_capabilities.hoverProvider = false
+--     end
+--   end,
+--   desc = 'LSP: Disable hover capability from Ruff',
+-- })
+
+
+
 -- linting
 require('lint').linters_by_ft = {
   javascript = { 'eslint_d' },
@@ -177,7 +202,6 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
     require("lint").try_lint()
   end,
 })
-
 
 -- formatting
 require("conform").setup({

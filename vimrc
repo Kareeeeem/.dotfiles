@@ -2,7 +2,9 @@
 set clipboard+=unnamedplus
 
 set showcmd
+set mouse=
 
+set completeopt+=fuzzy,noinsert
 set complete+=i
 set scrolloff=3
 set nrformats=
@@ -145,13 +147,7 @@ let g:undotree_SetFocusWhenToggle = 1
 " Colorscheme
 function! ModifyNoFrils()
     " Some modifications I like for nofrils
-    if (&cursorline)
-        hi clear CursorLineNr
-        hi link CursorLineNr Normal
-    endif
-
     hi TODO gui=bold cterm=bold
-
     if (g:colors_name == 'nofrils-dark')
         hi Normal guibg=NONE ctermbg=NONE
     endif
@@ -174,8 +170,6 @@ augroup languages
     au FileType *markdown*,text setlocal fo+=t tw=72 wrap
 
     au FileType awk setlocal commentstring=#\ %s
-    au FileType awk setlocal commentstring=#\ %s
-    au FileType vhdl setlocal commentstring=//\ %s
     au FileType python setlocal keywordprg=pydoc3
 
     au FileType rc setlocal commentstring=#\ %s
