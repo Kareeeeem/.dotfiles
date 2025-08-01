@@ -10,7 +10,6 @@ set scrolloff=3
 set nrformats=
 
 set wildignorecase
-" set timeoutlen=250
 set updatetime=50
 "set breakindent
 set smartindent
@@ -21,7 +20,6 @@ set nowrap
 set scrolloff=3
 set number
 set relativenumber
-set nojoinspaces  " don't insert double spaces.
 
 set hlsearch ignorecase smartcase incsearch
 set expandtab tabstop=4 softtabstop=4 shiftwidth=4
@@ -74,10 +72,18 @@ nnoremap <C-p> :bp<cr>
 nnoremap <C-n> :bn<cr>
 
 " companion map to builtin ZZ
-nnoremap ZS :w<cr>
+nnoremap ZS :update<cr>
+
+nnoremap <leader>w :update<cr>
+
+" omnicomplete
+inoremap <C-space> <C-x><C-o>
 
 " Don't use Ex mode.
 map Q <nop>
+
+command SilentMake execute "silent make!"
+nnoremap <leader>m :SilentMake<cr>
 
 " sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
 "        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'

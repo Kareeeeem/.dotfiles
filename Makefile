@@ -9,6 +9,7 @@ all: symlinks
 symlinks:
 	mkdir -p $(HOME)/.config/nvim
 	ln -f -s $(current_dir)/vimrc $(HOME)/.config/nvim/init.vim &> /dev/null
+	ln -f -s $(current_dir)/alacritty.toml $(HOME)/.alacritty.toml &> /dev/null
 	ln -f -s $(current_dir)/tmux.conf $(HOME)/.tmux.conf &> /dev/null
 	ln -f -s $(current_dir)/rtorrent.rc $(HOME)/.rtorrent.rc &> /dev/null
 	ln -f -s $(current_dir)/bashrc $(HOME)/.bashrc &> /dev/null

@@ -4,6 +4,8 @@
 [alias]
     co = checkout
     br = branch
+    a = add
+    d = diff
     ci = commit
     st = status
     lg = log --oneline
@@ -35,3 +37,5 @@
 	ff = only
 [filter "clean-npmrc"]
 	clean = strip-dimension-registry
+[init]
+	defaultBranch = master
