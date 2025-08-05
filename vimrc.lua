@@ -8,34 +8,11 @@ vim.diagnostic.config({
   },
 })
 
-vim.keymap.set('n', '<leader>l', function ()
-  local winid = vim.api.nvim_get_current_win()
-  local lwinid = vim.fn.getloclist(0, { winid = winid }).winid
-
-  if lwinid == 0 then
-    vim.cmd.lopen()
-  else
-    vim.cmd.lclose()
-  end
-end)
+vim.keymap.set('n', '<leader>d', vim.diagnostic.setloclist, {})
 
 vim.keymap.set('n', '<leader>e', function()
   vim.diagnostic.open_float({ scope = 'line' })
 end)
-
-vim.diagnostic.handlers.loclist = {
-  show = function(_, _, _, opts)
-    -- Generally don't want it to open on every update
-    ---@diagnostic disable-next-line: undefined-field
-    opts.loclist.open = opts.loclist.open or false
-    ---@diagnostic disable-next-line: undefined-field
-    opts.loclist.severity = { severity = { min = vim.diagnostic.severity.WARN } }
-    ---@diagnostic disable-next-line: undefined-field
-    vim.diagnostic.setloclist(opts.loclist)
-    local winid = vim.api.nvim_get_current_win()
-    vim.api.nvim_set_current_win(winid)
-  end
-}
 
 -- telescope
 local actions = require("telescope.actions")
