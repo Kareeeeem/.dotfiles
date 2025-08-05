@@ -22,3 +22,8 @@ symlinks:
 	ln -f -s $(current_dir)/rgignore $(HOME)/.rgignore &> /dev/null
 	ln -f -s $(current_dir)/direnvrc $(HOME)/.direnvrc &> /dev/null
 	ln -f -s $(current_dir)/keynavrc $(HOME)/.keynavrc &> /dev/null
+
+
+# sudo apt install interception-caps2esc interception-tools
+udevmon:
+	cp $(current_dir)/caps2esc.yaml /etc/interception/udevmon.d/caps2esc.yaml
