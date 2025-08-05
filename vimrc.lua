@@ -1,9 +1,6 @@
 -- diagnostics
 vim.diagnostic.config({
   severity_sort = true,
-  virtual_text = {
-    current_line = true,
-  },
   float = {
     source = true,
     severity_sort = true,

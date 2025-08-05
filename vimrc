@@ -4,8 +4,7 @@ set clipboard+=unnamedplus
 set showcmd
 set mouse=
 
-set completeopt+=fuzzy,noinsert,menuone
-set complete+=i
+set completeopt+=fuzzy,menuone,noinsert,nosort
 set scrolloff=3
 set nrformats=
 
