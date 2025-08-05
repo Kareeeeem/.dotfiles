@@ -1,8 +1,11 @@
 #!/usr/bin/bash
 
 alias vim='nvim'
+alias vi='nvim'
 alias v='nvim'
 alias g='git'
+
+alias t='tmux'
 
 alias evim='vim $HOME/.dotfiles/vimrc*'
 alias ebash='vim $HOME/.dotfiles/{bashrc,profile,bash_aliases,prompt,bash_functions}'
@@ -31,4 +34,5 @@ alias rcp="rsync -ah -P"
 
 alias rt="rtorrent"
 alias py=python
+
 hash ipython &> /dev/null && alias ipy=ipython

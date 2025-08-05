@@ -40,40 +40,6 @@ vim.diagnostic.handlers.loclist = {
   end
 }
 
--- completion
-
--- local cmp = require('cmp')
--- local cmp_lsp = require("cmp_nvim_lsp")
--- local capabilities = vim.tbl_deep_extend(
---   "force",
---   {},
---   vim.lsp.protocol.make_client_capabilities(),
---   cmp_lsp.default_capabilities()
--- )
-
--- cmp.setup({
---   mapping = cmp.mapping.preset.insert({
---     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
---     ['<C-f>'] = cmp.mapping.scroll_docs(4),
---     ['<C-p>'] = cmp.mapping.select_prev_item(),
---     ['<C-n>'] = cmp.mapping.select_next_item(),
---     ['<C-y>'] = cmp.mapping.confirm({ select = true }),
---     ["<C-Space>"] = cmp.mapping.complete(),
---   }),
---   sources = cmp.config.sources({
---     { name = 'nvim_lsp' },
---     {
---       name = 'buffer',
---       option = {
---         get_bufnrs = function()
---           return vim.api.nvim_list_bufs()
---         end
---       }
---     },
---     { name = 'path' },
---   })
--- })
-
 -- telescope
 local actions = require("telescope.actions")
 local telescope = require('telescope')
@@ -107,22 +73,16 @@ vim.keymap.set('n', '<leader>t', function()
 end, {})
 
 -- lsp
--- vim.api.nvim_create_autocmd('LspAttach', {
---   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
---   callback = function(ev)
---     local opts = { buffer = ev.buf }
-
---       vim.keymap.set('n', '<leader>f', function()
---       vim.lsp.buf.format { async = true }
---     end, opts)
---     -- vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
---     -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
---     -- vim.keymap.set('n', 'gk', vim.lsp.buf.signature_help, opts)
---     -- vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
---     -- vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
---     -- vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
---   end,
--- })
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  callback = function(args)
+    local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+    -- Enable auto-completion.
+    if client:supports_method('textDocument/completion') then
+      vim.lsp.completion.enable(true, client.id, args.buf, {autotrigger = true})
+    end
+  end,
+})
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 vim.lsp.config('bashls', { capabilities = capabilities })
@@ -160,34 +120,6 @@ vim.lsp.config('lua_ls', {
 vim.lsp.enable('lua_ls')
 
 vim.lsp.enable('emmet_language_server')
-
--- vim.lsp.config('ruff', {
---   init_options = {
---     settings = {
---       lint = {
---         enable = false
---       }
---     }
---   }
--- })
--- vim.lsp.enable('ruff')
-
--- vim.api.nvim_create_autocmd("LspAttach", {
---   group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
---   callback = function(args)
---     local client = vim.lsp.get_client_by_id(args.data.client_id)
---     if client == nil then
---       return
---     end
---     if client.name == 'ruff' then
---       -- Disable hover in favor of Pyright
---       client.server_capabilities.hoverProvider = false
---     end
---   end,
---   desc = 'LSP: Disable hover capability from Ruff',
--- })
-
-
 
 -- linting
 require('lint').linters_by_ft = {

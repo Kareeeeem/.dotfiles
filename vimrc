@@ -30,6 +30,11 @@ set nobackup
 set dir=$HOME/.vim/tmp
 set undofile undodir=$HOME/.vim/undodir/
 
+if executable("rg")
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+
 " Mappings
 
 " Expand `%%` to current directory.
