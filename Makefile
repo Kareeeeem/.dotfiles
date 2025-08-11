@@ -28,10 +28,10 @@ symlinks:
 udevmon:
 	cp $(current_dir)/caps2esc.yaml /etc/interception/udevmon.d/caps2esc.yaml
 
-# https://github.com/rvaiya
+# https://github.com/rvaiya/keyd
 keyd:
 	cp $(current_dir)/keyd.conf /etc/keyd/default.conf
-	cp $(current_dir)/local-overrides.quirks /etc/libinput/local-overrides.quirks
+	# cp $(current_dir)/local-overrides.quirks /etc/libinput/local-overrides.quirks
 	systemctl enable keyd --now
 
 	# run reload after changing the config
