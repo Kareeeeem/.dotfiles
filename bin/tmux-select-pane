@@ -2,36 +2,35 @@
 
 set -euf -o pipefail
 
-if [ -z ${TMUX:-''} ]; then
+if [ -z "${TMUX:-''}" ]; then
     exit 1
 fi
 
 export PREVIEW_WINDOW_HEIGHT=10
 
-
 echo-pane() {
-    tmux capture-pane -p -t $1 \
-        | awk NF \
-        | tail -n $PREVIEW_WINDOW_HEIGHT
-    }
+    tmux capture-pane -p -t "$1" |
+        awk NF |
+        tail -n $PREVIEW_WINDOW_HEIGHT
+}
 export -f echo-pane
 
 current_window=$(tmux display-message -p '#{session_name}:#{window_index}')
 
-options=$(tmux list-panes -s -F '#{pane_active}#{window_activity}  #{session_name}:#{window_index}.#{pane_index} #{window_name} #{window_index}.#{pane_index}active:#{pane_active} #{pane_current_command} #{pane_current_path}' \
-    | awk '!/'$current_window'/' \
-    | sort -rk1 -n \
-    | cut -f1 -d" " --complement \
-    | sed -e "s|$HOME|~|" -e "s|active:1|*|" -e "s|active:0||" \
+options=$(
+    tmux list-panes -s -F '#{pane_active}#{window_activity}  #{session_name}:#{window_index}.#{pane_index} #{window_name} #{window_index}.#{pane_index}active:#{pane_active} #{pane_current_command} #{pane_current_path}' |
+        awk '!/'"$current_window"'/' |
+        sort -rk1 -n |
+        cut -f1 -d" " --complement |
+        sed -e "s|$HOME|~|" -e "s|active:1|*|" -e "s|active:0||"
 )
 
 if [ -z "$options" ]; then
     exit 0
 fi
 
-
 echo "$options" | fzf --cycle --tmux --preview 'echo-pane {1}' --preview-window=up,$PREVIEW_WINDOW_HEIGHT \
-       --accept-nth=1 \
-       --bind 'esc:become:' \
-       --with-nth=2.. \
-    | tee >(tmux select-pane -t $(cat)) >(tmux select-window -t $(cat)) > /dev/null
+    --accept-nth=1 \
+    --bind 'esc:become:' \
+    --with-nth=2.. |
+    tee >(tmux select-pane -t "$(cat)") >(tmux select-window -t "$(cat)") >/dev/null

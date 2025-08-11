@@ -8,7 +8,7 @@ vim.diagnostic.config({
   },
 })
 
-vim.keymap.set('n', '<leader>d', vim.diagnostic.setloclist, {})
+vim.keymap.set('n', '<leader>d', vim.diagnostic.setloclist)
 
 vim.keymap.set('n', '<leader>e', function()
   vim.diagnostic.open_float({ scope = 'line' })
@@ -117,6 +117,8 @@ require("conform").setup({
     javascriptreact = { 'prettierd' },
     typescript = { 'prettierd' },
     typescriptreact = { 'prettierd' },
+    sh = { 'shfmt' },
+    json = { 'jq' },
     ["*"] = { "trim_whitespace", "trim_newlines" },
   },
   notify_on_error = false,

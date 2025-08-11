@@ -10,8 +10,8 @@ set nrformats=
 
 set wildignorecase
 set updatetime=50
-"set breakindent
-set smartindent
+" set breakindent
+" set smartindent
 set colorcolumn=88
 "set formatoptions=tjrocqn
 set hidden
@@ -124,7 +124,7 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 " Plug 'hrsh7th/nvim-cmp'
 
 " python
-" Plug 'hynek/vim-python-pep8-indent'
+Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'Kareeeeem/python-docstring-comments'
 
 " Plug 'ziglang/zig.vim'
@@ -183,7 +183,7 @@ augroup languages
     au FileType python setlocal keywordprg=pydoc3
 
     au FileType rc setlocal commentstring=#\ %s
-    au FileType lua,rkt,yaml,ruby,lisp,html,js,typescriptreact,typescript,javascriptreact,javascript setlocal tabstop=2 softtabstop=2 shiftwidth=2
+    au FileType lua,rkt,yaml,ruby,lisp,html,json,js,typescriptreact,typescript,javascriptreact,javascript setlocal tabstop=2 softtabstop=2 shiftwidth=2
 
     " for writing printer labels, will leave it in the off chance I might need
     " it again.
