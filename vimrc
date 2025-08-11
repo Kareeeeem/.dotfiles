@@ -42,6 +42,7 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 let mapleader = "\<Space>"
 " " I almost never want to go to the ABSOLUTE beginning of a line
 nnoremap 0 ^
+nnoremap ^ 0
 " break lines on a comma's
 nnoremap <leader>, f,<right>i<cr><ESC>
 " " Break line
