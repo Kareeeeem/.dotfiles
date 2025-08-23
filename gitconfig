@@ -14,8 +14,6 @@
     rbi = rebase -i
     ps = push
     pl = pull
-[push]
-	default = current
 [log]
     decorate = auto
 [core]
@@ -33,7 +31,10 @@
 	prune = true
 [includeIf "gitdir/i:~/work/"]
     path = ~/.gitconfig-work
+[push]
+	default = current
 [pull]
+	default = current
 	ff = only
 [filter "clean-npmrc"]
 	clean = strip-dimension-registry
