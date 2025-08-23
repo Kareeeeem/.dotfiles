@@ -36,8 +36,8 @@ endif
 
 " Mappings
 
-nnoremap <C-d> <C-d>zz
-nnoremap <C-u> <C-u>zz
+" nnoremap <C-d> <C-d>zz
+" nnoremap <C-u> <C-u>zz
 
 " Expand `%%` to current directory.
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
