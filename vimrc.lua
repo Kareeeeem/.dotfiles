@@ -9,7 +9,6 @@ vim.diagnostic.config({
 })
 
 vim.keymap.set('n', '<leader>d', vim.diagnostic.setloclist)
-
 vim.keymap.set('n', '<leader>e', function()
   vim.diagnostic.open_float({ scope = 'line' })
 end)
@@ -123,7 +122,6 @@ require("conform").setup({
   },
   notify_on_error = false,
   format_on_save = {
-    -- These options will be passed to conform.format()
     timeout_ms = 500,
     lsp_format = "fallback",
   },
@@ -147,10 +145,6 @@ require('lualine').setup {
     },
     lualine_b = {
       "branch",
-      -- {
-      --   "diff",
-      --   colored = false, -- the default colors of my colorscheme suck for this
-      -- },
       {
         "diagnostics",
         fmt = function(str)
@@ -164,14 +158,7 @@ require('lualine').setup {
       }
     },
     lualine_c = {
-      {
-        'filename',
-        path = 3,
-        -- 1: Relative path
-        -- 2: Absolute path
-        -- 3: Absolute path, with tilde as the home directory
-        -- 4: Filename and parent dir, with tilde as the home directory
-      }
+      { 'filename', path = 3 }
     }
   }
 }

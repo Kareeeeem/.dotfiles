@@ -52,3 +52,43 @@ Gnome terminal is a bit of a jerk and does not save settings in a local dotfile 
 `dconf dump /org/gnome/terminal/ > gnome_terminal_settings.txt`
 And then
 `dconf load /org/gnome/terminal/ < gnome_terminal_settings.txt`
+
+ alacritty
+ build-essential
+ cmake
+ curl
+ direnv
+ entr
+ fzf
+ git
+ gnome-tweaks
+ imagemagick
+ interception-*
+ interception-tools
+ jq
+ keynav
+ pipx
+ pkg-config
+ python-is-python3
+ ripgrep
+ shellcheck
+ shfmt
+ tldr
+ tmux
+ tree
+ xclip
+ zlib1g zlib1g-dev libssl-dev libbz2-dev libsqlite3-dev libffi-dev
+
+# Kinesis
+
+Move all arrow keys to the bottom right and mimic vim hjkl order [left down up right]
+Move [] to the original left right location
+Caps = Ctrl
+Backspace = Space
+Delete = Backspace
+Space = Enter
+
+I also need to find a good setup for ctrl/alt/windows on the thumb cluster
+
+I don't really need delete so this may become the kb layer shift, meaning I
+could build something like a symbol layer

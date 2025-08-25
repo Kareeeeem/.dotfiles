@@ -10,8 +10,6 @@ set nrformats=
 
 set wildignorecase
 set updatetime=50
-" set breakindent
-" set smartindent
 set colorcolumn=88
 "set formatoptions=tjrocqn
 set hidden
@@ -104,7 +102,6 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'nvim-lualine/lualine.nvim'
-" Plug 'camspiers/lens.vim' " auto resizing for buffers
 
 " tmux
 Plug 'jpalardy/vim-slime'
@@ -122,22 +119,18 @@ Plug 'robertmeta/nofrils'
 Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
-" completion
-" Plug 'hrsh7th/cmp-nvim-lsp'
-" Plug 'hrsh7th/cmp-buffer'
-" Plug 'hrsh7th/nvim-cmp'
-
 " python
 Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'Kareeeeem/python-docstring-comments'
 
 " Plug 'ziglang/zig.vim'
 
+Plug 'windwp/nvim-autopairs'
 call plug#end()
 
-" lens
-" let g:lens#disabled_filetypes = ['undotree', 'diff']
-" let g:lens#width_resize_max = 92
+lua << EOF
+require("nvim-autopairs").setup {}
+EOF
 
 " Tmux navigator
 let g:tmux_navigator_disable_when_zoomed=1
