@@ -1,0 +1,73 @@
+#!/bin/sh
+#
+# ijq - interactive jq
+#
+# usage: ijq [jq options] < file
+#
+#   e.g. curl ... | ijq | tee output.json
+#
+# Copyright (c) 2023 Akinori MUSHA
+#
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+
+set -e
+
+json=$(mktemp "${TMPDIR:-/tmp}/${0##*/}.XXXXXX")
+cleanup () {
+    rm -f "$json"
+}
+trap cleanup 1 2 3 15
+
+sq_quote () {
+    awk -v q="'" '
+        BEGIN {
+            n = ARGC - 1
+            for (i = 1; i <= n; i++) {
+                s = ARGV[i]
+                gsub(q, q "\\" q q, s)
+                printf " %s%s%s", q, s, q
+            }
+            exit 0
+        }
+    ' "$@"
+}
+
+(
+    set -e
+    cat >"$json"
+    qargs=$(sq_quote "$@")
+    query=$(
+        FZF_DEFAULT_COMMAND=true \
+            fzf --print-query --sync --query=. \
+            --preview-window=up,99%,border-none \
+            --no-info --no-separator \
+            --preview "jq -C {q} $qargs $json || jq -C . $json"
+    ) || case $? in 130) exit 130; esac
+
+    echo "jq$(sq_quote "$@" "$query")" >&2
+    jq "$@" "$query" "$json"
+)
+ret=$?
+cleanup
+exit $ret
