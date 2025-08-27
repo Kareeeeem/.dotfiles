@@ -4,24 +4,23 @@
 
 # If not running interactively, don't do anything
 case $- in
-    *i*) ;;
-      *) return;;
+*i*) ;;
+*) return ;;
 esac
 
 # colored manpages with max width 80
 export MANWIDTH=80
 man() {
-	env \
-		LESS_TERMCAP_mb="$(printf "\e[1;34m")" \
-		LESS_TERMCAP_md="$(printf "\e[1;34m")" \
-		LESS_TERMCAP_me="$(printf "\e[0m")" \
-		LESS_TERMCAP_se="$(printf "\e[0m")" \
-		LESS_TERMCAP_so="$(printf "\e[7m")" \
-		LESS_TERMCAP_ue="$(printf "\e[0m")" \
-		LESS_TERMCAP_us="$(printf "\e[1;36m")" \
-			man "$@"
+    env \
+        LESS_TERMCAP_mb="$(printf "\e[1;34m")" \
+        LESS_TERMCAP_md="$(printf "\e[1;34m")" \
+        LESS_TERMCAP_me="$(printf "\e[0m")" \
+        LESS_TERMCAP_se="$(printf "\e[0m")" \
+        LESS_TERMCAP_so="$(printf "\e[7m")" \
+        LESS_TERMCAP_ue="$(printf "\e[0m")" \
+        LESS_TERMCAP_us="$(printf "\e[1;36m")" \
+        man "$@"
 }
-
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -51,7 +50,7 @@ shopt -s autocd       # cd without typing cd
 shopt -s cmdhist      # save multiline commands as one
 shopt -s extglob
 
-stty -ixon            # Disable START/STOP signals
+stty -ixon # Disable START/STOP signals
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -65,11 +64,11 @@ if ! shopt -oq posix; then
 fi
 
 if [ -d $HOME/.dotfiles ]; then
- . $HOME/.dotfiles/prompt
- . $HOME/.dotfiles/bash_aliases
- . $HOME/.dotfiles/bash_functions
- # z is a submodule, not managed by me.
- . $HOME/.dotfiles/z/z.sh
+    . $HOME/.dotfiles/prompt
+    . $HOME/.dotfiles/bash_aliases
+    . $HOME/.dotfiles/bash_functions
+    # z is a submodule, not managed by me.
+    . $HOME/.dotfiles/z/z.sh
 fi
 
 eval "$(direnv hook bash)"
@@ -77,5 +76,5 @@ eval "$(direnv hook bash)"
 eval "$(fzf --bash)"
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use  # no-use makes it lazy
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use # no-use makes it lazy
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"

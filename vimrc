@@ -132,6 +132,12 @@ call plug#end()
 
 " Tmux navigator
 let g:tmux_navigator_disable_when_zoomed=1
+let g:tmux_navigator_no_mappings = 1
+
+nnoremap <silent> <M-h> :<C-U>TmuxNavigateLeft<cr>
+nnoremap <silent> <M-j> :<C-U>TmuxNavigateDown<cr>
+nnoremap <silent> <M-k> :<C-U>TmuxNavigateUp<cr>
+nnoremap <silent> <M-l> :<C-U>TmuxNavigateRight<cr>
 
 " vim bbye
 nnoremap <leader>q :Bwipeout<cr>
