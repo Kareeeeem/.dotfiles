@@ -77,10 +77,8 @@ xnoremap > >gv
 nnoremap <C-p> :bp<cr>
 nnoremap <C-n> :bn<cr>
 
-" companion map to builtin ZZ
-nnoremap ZS :update<cr>
-
 nnoremap <leader>w :update<cr>
+nnoremap <leader>z :wqa<cr>
 
 " omnicomplete
 inoremap <C-space> <C-x><C-o>
@@ -125,12 +123,12 @@ Plug 'Kareeeeem/python-docstring-comments'
 
 " Plug 'ziglang/zig.vim'
 
-Plug 'windwp/nvim-autopairs'
+" Plug 'windwp/nvim-autopairs'
 call plug#end()
 
-lua << EOF
-require("nvim-autopairs").setup {}
-EOF
+" lua << EOF
+" require("nvim-autopairs").setup {}
+" EOF
 
 " Tmux navigator
 let g:tmux_navigator_disable_when_zoomed=1
