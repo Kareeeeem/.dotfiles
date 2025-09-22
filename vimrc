@@ -42,8 +42,8 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 " Because backslash is in a awkward place.
 let mapleader = "\<Space>"
 " " I almost never want to go to the ABSOLUTE beginning of a line
-nnoremap 0 ^
-nnoremap ^ 0
+" nnoremap 0 ^
+" nnoremap ^ 0
 " break lines on a comma's
 nnoremap <leader>, f,<right>i<cr><ESC>
 " " Break line
@@ -132,12 +132,12 @@ call plug#end()
 
 " Tmux navigator
 let g:tmux_navigator_disable_when_zoomed=1
-let g:tmux_navigator_no_mappings = 1
+" let g:tmux_navigator_no_mappings = 1
 
-nnoremap <silent> <M-h> :<C-U>TmuxNavigateLeft<cr>
-nnoremap <silent> <M-j> :<C-U>TmuxNavigateDown<cr>
-nnoremap <silent> <M-k> :<C-U>TmuxNavigateUp<cr>
-nnoremap <silent> <M-l> :<C-U>TmuxNavigateRight<cr>
+" nnoremap <silent> <M-h> :<C-U>TmuxNavigateLeft<cr>
+" nnoremap <silent> <M-j> :<C-U>TmuxNavigateDown<cr>
+" nnoremap <silent> <M-k> :<C-U>TmuxNavigateUp<cr>
+" nnoremap <silent> <M-l> :<C-U>TmuxNavigateRight<cr>
 
 " vim bbye
 nnoremap <leader>q :Bwipeout<cr>

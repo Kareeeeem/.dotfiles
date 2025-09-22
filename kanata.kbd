@@ -2,6 +2,7 @@
   process-unmapped-keys yes
 )
 (defsrc)
+
 (defvar
   tap-time 200
   hold-time 150
@@ -9,6 +10,8 @@
 (deflayermap (base)
   caps (tap-hold-press $tap-time $hold-time esc lctl)
   lctl (tap-hold-press $tap-time $hold-time esc lctl)
+  lctl (tap-hold-press $tap-time $hold-time esc lctl)
   lshft (one-shot-press 500 lshft)
   rshft (one-shot-press 500 rshft)
+  lmeta (one-shot-press 500 lmeta)
 )
