@@ -3,11 +3,11 @@
     name = Mohammed Kareem
 [alias]
     co = checkout
-    br = branch
+    ci = commit
+    cia = commit --amend
+    b = branch
     a = add
     d = diff
-    ci = commit
-    cam = commit --amend
     st = status
     lg = log --oneline
     lgg = log --oneline --graph

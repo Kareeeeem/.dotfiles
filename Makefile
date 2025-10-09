@@ -22,6 +22,7 @@ symlinks:
 	ln -f -s $(current_dir)/rgignore $(HOME)/.rgignore &> /dev/null
 	ln -f -s $(current_dir)/direnvrc $(HOME)/.direnvrc &> /dev/null
 	ln -f -s $(current_dir)/keynavrc $(HOME)/.keynavrc &> /dev/null
+	ln -f -s $(current_dir)/ruff.toml $(HOME)/.ruff.toml &> /dev/null
 
 
 # sudo apt install interception-caps2esc interception-tools

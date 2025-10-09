@@ -13,38 +13,6 @@ vim.keymap.set('n', '<leader>e', function()
   vim.diagnostic.open_float({ scope = 'line' })
 end)
 
--- telescope
-local actions = require("telescope.actions")
-local telescope = require('telescope')
-telescope.setup {
-  defaults = {
-    layout_strategy = 'vertical',
-    layout_config = {
-      preview_cutoff = 60
-    },
-    mappings = {
-      i = {
-        ["<esc>"] = actions.close
-      },
-    },
-  }
-}
-telescope.load_extension('fzf')
-
-local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>p', builtin.find_files, {})
-vim.keymap.set('n', '<leader>g', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>b', builtin.buffers, {})
-vim.keymap.set('n', '<leader>h', builtin.oldfiles, {})
-vim.keymap.set('n', '<leader>t', function()
-  require 'telescope.builtin'.lsp_dynamic_workspace_symbols({
-    show_line = true,
-    ignore_symbols = {
-      'variable',
-    }
-  })
-end, {})
-
 -- lsp
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -52,13 +20,24 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
     -- Enable auto-completion.
     if client:supports_method('textDocument/completion') then
-      -- Optional: trigger autocompletion on EVERY keypress. May be slow!
-      -- local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
-      -- client.server_capabilities.completionProvider.triggerCharacters = chars
-
       vim.lsp.completion.enable(true, client.id, args.buf, {autotrigger = true})
     end
   end,
+})
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client == nil then
+      return
+    end
+    if client.name == 'ruff' then
+      -- Disable hover in favor of Pyright
+      client.server_capabilities.hoverProvider = false
+    end
+  end,
+  desc = 'LSP: Disable hover capability from Ruff',
 })
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -70,6 +49,8 @@ vim.lsp.enable('ts_ls')
 
 vim.lsp.config('pyright', { capabilities = capabilities })
 vim.lsp.enable('pyright')
+
+vim.lsp.enable('ruff')
 
 vim.lsp.config('lua_ls', {
   capabilities = capabilities,
@@ -106,7 +87,7 @@ require('lint').linters_by_ft = {
   typescriptreact = { 'eslint_d' },
 }
 
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
+vim.api.nvim_create_autocmd({ "InsertLeave", "BufEnter", "BufWritePost" }, {
   callback = function()
     require("lint").try_lint()
   end,

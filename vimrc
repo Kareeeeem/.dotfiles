@@ -34,9 +34,6 @@ endif
 
 " Mappings
 
-" nnoremap <C-d> <C-d>zz
-" nnoremap <C-u> <C-u>zz
-
 " Expand `%%` to current directory.
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 " Because backslash is in a awkward place.
@@ -114,30 +111,24 @@ Plug 'mfussenegger/nvim-lint'
 Plug 'robertmeta/nofrils'
 
 " search
-Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
-
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 " python
 Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'Kareeeeem/python-docstring-comments'
 
-" Plug 'ziglang/zig.vim'
-
-" Plug 'windwp/nvim-autopairs'
 call plug#end()
-
-" lua << EOF
-" require("nvim-autopairs").setup {}
-" EOF
 
 " Tmux navigator
 let g:tmux_navigator_disable_when_zoomed=1
-" let g:tmux_navigator_no_mappings = 1
 
-" nnoremap <silent> <M-h> :<C-U>TmuxNavigateLeft<cr>
-" nnoremap <silent> <M-j> :<C-U>TmuxNavigateDown<cr>
-" nnoremap <silent> <M-k> :<C-U>TmuxNavigateUp<cr>
-" nnoremap <silent> <M-l> :<C-U>TmuxNavigateRight<cr>
+" fzf
+nnoremap <leader>p :Files<cr>
+nnoremap <leader>g :Rg<cr>
+nnoremap <leader>b :Buffers<cr>
+nnoremap <leader>h :History<cr>
+let g:fzf_vim = {}
+let g:fzf_vim.preview_window = ['up,50%']
 
 " vim bbye
 nnoremap <leader>q :Bwipeout<cr>
