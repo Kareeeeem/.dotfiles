@@ -32,6 +32,10 @@ udevmon:
 # https://github.com/rvaiya/keyd
 keyd:
 	cp $(current_dir)/keyd.conf /etc/keyd/default.conf
+	cp $(current_dir)/keyd_common /etc/keyd/keyd_common
+	cp $(current_dir)/keyd_sofle.conf /etc/keyd/keyd_sofle.conf
+
 	cp $(current_dir)/local-overrides.quirks /etc/libinput/local-overrides.quirks || true
+
 	systemctl enable keyd --now
 	keyd reload
