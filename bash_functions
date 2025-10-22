@@ -3,28 +3,28 @@
 # Serve a directory.
 # option -p: port (not required)
 serve() {
-	local port
-	if [ "$1" = "-p" ]; then
-		port="$2"
-		shift 2
-	fi
+    local port
+    if [ "$1" = "-p" ]; then
+        port="$2"
+        shift 2
+    fi
 
-	cd "${1:-$PWD}" && python3 -m http.server "${port:-8000}"
+    cd "${1:-$PWD}" && python3 -m http.server "${port:-8000}"
 }
 
-mkcd () {
-	mkdir -p "./$1" && cd "./$1" || exit
+mkcd() {
+    mkdir -p "./$1" && cd "./$1" || exit
 }
 
-pyclean () {
+pyclean() {
     find . -name *.pyc -type f -delete
     find . -name __pycache__ -type d -delete
 }
 
-vclean () {
+vclean() {
     find $HOME/.vim/tmp -type f -delete
 }
 
-vrg () {
-    vim -q <(rg "$1" --vimgrep)
+vrg() {
+    vim -q <(rg "$@" --vimgrep)
 }

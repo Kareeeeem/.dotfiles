@@ -128,7 +128,12 @@ nnoremap <leader>g :Rg<cr>
 nnoremap <leader>b :Buffers<cr>
 nnoremap <leader>h :History<cr>
 let g:fzf_vim = {}
+
 let g:fzf_vim.preview_window = ['up,50%']
+let g:fzf_vim.files_options = ['--cycle']
+let g:fzf_vim.rg_options = ['--cycle']
+let g:fzf_vim.buffers_options = ['--cycle']
+let g:fzf_vim.history_options = ['--cycle']
 
 " vim bbye
 nnoremap <leader>q :Bwipeout<cr>

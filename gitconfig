@@ -34,9 +34,10 @@
     path = ~/.gitconfig-work
 [push]
 	default = current
+    autoSetupRemote = true
 [pull]
-	default = current
 	ff = only
+	rebase = true
 [filter "clean-npmrc"]
 	clean = strip-dimension-registry
 [init]
